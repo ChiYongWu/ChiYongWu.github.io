@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://chiyongwu.github.io</id>
     <title>SwordPal&apos;s blog</title>
-    <updated>2021-01-03T16:38:54.954Z</updated>
+    <updated>2021-01-13T21:17:44.888Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://chiyongwu.github.io"/>
     <link rel="self" href="https://chiyongwu.github.io/atom.xml"/>
@@ -10,6 +10,54 @@
     <logo>https://chiyongwu.github.io/images/avatar.png</logo>
     <icon>https://chiyongwu.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, SwordPal&apos;s blog</rights>
+    <entry>
+        <title type="html"><![CDATA[git终端代理设置]]></title>
+        <id>https://chiyongwu.github.io/post/git-zhong-duan-dai-li-she-zhi/</id>
+        <link href="https://chiyongwu.github.io/post/git-zhong-duan-dai-li-she-zhi/">
+        </link>
+        <updated>2021-01-13T21:16:31.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="git设置和取消代理">git设置和取消代理</h3>
+<h4 id="方法1永久设置">方法1：永久设置</h4>
+<pre><code># 设置ss
+git config --global http.proxy 'socks5://127.0.0.1:端口号'
+
+git config --global https.proxy 'socks5://127.0.0.1:端口号'
+
+# 设置代理
+git config --global https.proxy http://127.0.0.1:端口号
+
+git config --global https.proxy https://127.0.0.1:端口号
+
+# 取消代理
+git config --global --unset http.proxy
+
+git config --global --unset https.proxy
+</code></pre>
+<h4 id="方法2临时设置">方法2：临时设置</h4>
+<pre><code># 设置ss
+export http_proxy=&quot;socks5://127.0.0.1:端口号&quot;
+export https_proxy=&quot;socks5://127.0.0.1:端口号&quot;
+
+# 设置代理
+export http_proxy='http://127.0.0.1:端口号'
+export https_proxy='http://127.0.0.1:端口号'
+</code></pre>
+<h4 id="方法3直接修改gitconfig文件">方法3：直接修改.gitconfig文件</h4>
+<pre><code># 打开该文件，追加以下内容：
+
+[http &quot;https://github.com&quot;]
+    proxy = socks5://127.0.0.1:端口号
+</code></pre>
+<h4 id="方法4第三方平台代理下载">方法4：第三方平台代理下载</h4>
+<pre><code>http://gitd.cc/
+
+https://gitclone.com/
+</code></pre>
+<h4 id="方法5利用gitee克隆导入github项目">方法5：利用gitee克隆/导入github项目</h4>
+<pre><code>https://zhuanlan.zhihu.com/p/112697807
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[nvm安装配置教程]]></title>
         <id>https://chiyongwu.github.io/post/nvm-an-zhuang-pei-zhi-jiao-cheng/</id>
