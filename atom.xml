@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://chiyongwu.github.io</id>
     <title>SwordPal&apos;s blog</title>
-    <updated>2021-01-13T21:18:55.911Z</updated>
+    <updated>2021-01-17T06:11:37.399Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://chiyongwu.github.io"/>
     <link rel="self" href="https://chiyongwu.github.io/atom.xml"/>
@@ -10,6 +10,84 @@
     <logo>https://chiyongwu.github.io/images/avatar.png</logo>
     <icon>https://chiyongwu.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, SwordPal&apos;s blog</rights>
+    <entry>
+        <title type="html"><![CDATA[yarn使用教程]]></title>
+        <id>https://chiyongwu.github.io/post/yarn-shi-yong-jiao-cheng/</id>
+        <link href="https://chiyongwu.github.io/post/yarn-shi-yong-jiao-cheng/">
+        </link>
+        <updated>2021-01-17T06:09:19.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="一-yarn的简介">一、yarn的简介：</h3>
+<p>Yarn是facebook发布的一款取代npm的包管理工具。</p>
+<h3 id="二-yarn的特点">二、yarn的特点：</h3>
+<p>1.速度超快。<br>
+Yarn 缓存了每个下载过的包，所以再次使用时无需重复下载。 同时利用并行下载以最大化资源利用率，因此安装速度更快。<br>
+2.超级安全。<br>
+在执行代码之前，Yarn 会通过算法校验每个安装包的完整性。<br>
+3.超级可靠。<br>
+使用详细、简洁的锁文件格式和明确的安装算法，Yarn 能够保证在不同系统上无差异的工作。</p>
+<h3 id="三-yarn的安装">三、yarn的安装:</h3>
+<h5 id="下载nodejs使用npm安装">下载node.js，使用npm安装</h5>
+<p>npm install -g yarn</p>
+<h5 id="查看版本">查看版本：</h5>
+<p>yarn --version</p>
+<h5 id="yarn-淘宝源安装">Yarn 淘宝源安装</h5>
+<p>yarn config set registry <a href="https://registry.npm.taobao.org/">https://registry.npm.taobao.org</a> -g<br>
+yarn config set sass_binary_site http://cdn.npm.taobao.org/dist/node-sass -g</p>
+<h3 id="四-yarn的常用命令">四、yarn的常用命令：</h3>
+<p>安装yarn<br>
+npm install -g yarn<br>
+安装成功后，查看版本号：<br>
+yarn --version<br>
+创建文件夹 yarn<br>
+md yarn<br>
+进入yarn文件夹<br>
+cd yarn<br>
+初始化项目<br>
+yarn init // 同npm init，执行输入信息后，会生成package.json文件<br>
+yarn的配置项：<br>
+yarn config list // 显示所有配置项<br>
+yarn config get //显示某配置项<br>
+yarn config delete //删除某配置项<br>
+yarn config set [-g|--global] //设置配置项<br>
+安装包：<br>
+yarn install <a href="https://xn--package-4g6m3574a.xn--json-8h0gt02f9uhek3g/">//安装package.json里所有包</a>，并将包及它的所有依赖项保存进yarn.lock<br>
+yarn install --flat //安装一个包的单一版本<br>
+yarn install --force //强制重新下载所有包<br>
+yarn install --production //只安装dependencies里的包<br>
+yarn install --no-lockfile <a href="https://xn--yarn-fb5fm02ao2zmbx542a609b.lock/">//不读取或生成yarn.lock</a><br>
+yarn install --pure-lockfile <a href="https://xn--yarn-fb5f137h141a.lock/">//不生成yarn.lock</a><br>
+添加包（会更新package.json和yarn.lock）：</p>
+<p>yarn add [package] // 在当前的项目中添加一个依赖包，会自动更新到package.json和yarn.lock文件中<br>
+yarn add [package]@[version] // 安装指定版本，这里指的是主要版本，如果需要精确到小版本，使用-E参数<br>
+yarn add [package]@[tag] // 安装某个tag（比如beta,next或者latest）<br>
+//不指定依赖类型默认安装到dependencies里，你也可以指定依赖类型：</p>
+<p>yarn add --dev/-D // 加到 devDependencies<br>
+yarn add --peer/-P // 加到 peerDependencies<br>
+yarn add --optional/-O // 加到 optionalDependencies<br>
+//默认安装包的主要版本里的最新版本，下面两个命令可以指定版本：</p>
+<p>yarn add --exact/-E // 安装包的精确版本。例如yarn add foo@1.2.3会接受1.9.1版，但是yarn add foo@1.2.3 --exact只会接受1.2.3版<br>
+yarn add --tilde/-T // 安装包的次要版本里的最新版。例如yarn add foo@1.2.3 --tilde会接受1.2.9，但不接受1.3.0<br>
+发布包</p>
+<p>yarn publish<br>
+移除一个包<br>
+yarn remove ：移除一个包，会自动更新package.json和yarn.lock<br>
+更新一个依赖<br>
+yarn upgrade 用于更新包到基于规范范围的最新版本<br>
+运行脚本<br>
+yarn run 用来执行在 package.json 中 scripts 属性下定义的脚本<br>
+显示某个包的信息<br>
+yarn info 可以用来查看某个模块的最新版本信息<br>
+缓存<br>
+yarn cache<br>
+yarn cache list # 列出已缓存的每个包<br>
+yarn cache dir # 返回 全局缓存位置<br>
+yarn cache clean # 清除缓存</p>
+<h3 id="五-npm-与-yarn命令比较">五、npm 与 yarn命令比较:</h3>
+<p>比如说你的项目模块依赖是图中描述的，@1.2.1代表这个模块的版本。在你安装A的时候需要安装依赖C和D，很多依赖不会指定版本号，默认会安装最新的版本，这样就会出现问题：比如今天安装模块的时候C和D是某一个版本，而当以后C、D更新的时候，再次安装模块就会安装C和D的最新版本，如果新的版本无法兼容你的项目，你的程序可能就会出BUG，甚至无法运行。这就是npm的弊端，而yarn为了解决这个问题推出了yarn.lock的机制，这是作者项目中的yarn.lock文件。</p>
+<p>大家会看到，这个文件已经把依赖模块的版本号全部锁定，当你执行yarn install的时候，yarn会读取这个文件获得依赖的版本号，然后依照这个版本号去安装对应的依赖模块，这样依赖就会被锁定，以后再也不用担心版本号的问题了。其他人或者其他环境下使用的时候，把这个yarn.lock拷贝到相应的环境项目下再安装即可。<br>
+注意：这个文件不要手动修改它，当你使用一些操作如yarn add时，yarn会自动更新yarn.lock。</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[git终端代理设置]]></title>
         <id>https://chiyongwu.github.io/post/git-zhong-duan-dai-li-she-zhi/</id>
