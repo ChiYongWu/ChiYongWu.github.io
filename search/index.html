@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
     <meta charset="utf-8" />
@@ -28,10 +28,38 @@
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.css">
             <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.js"></script>
             
+    <script src="//cdn.jsdelivr.net/gh/tangkaichuan/gridea-search/lib/fuse.js"></script>
+    <script src="//cdn.jsdelivr.net/gh/tangkaichuan/gridea-search/lib/ejs.min.js"></script>
+    <script src="//cdn.jsdelivr.net/gh/tangkaichuan/gridea-search/lib/gridea-search.min.js"></script>
+    <script src="//cdn.jsdelivr.net/gh/tangkaichuan/gridea-search/example/assets/media/gridea-search/result-template.ejs" type="text/ejs"></script>
+    <style>
+            .main_ {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                height: 90vh;
+            }
+            
+            .result-box {
+                margin-top: 50px;
+                display: flex;
+                border-radius: 5px;
+                -webkit-box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                box-sizing: border-box;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        </style>
 </head>
 
 <body>
-    <div class="wrapper">
+    <style>
+        .searched-keyword {
+            background-color: green;
+        }
+    </style>
+    <div class="main_">
         <header>
     <nav class="navbar">
         <div class="container">
@@ -138,137 +166,15 @@
 
     }
 </script>
-            <div class="main">
-                <div class="container">
-                    <article class="post-wrap">
-                        <header class="post-header">
-                            <h1 class="post-title">
-                                git终端代理设置
-                            </h1>
-                            
-                                    <!--zh-->
-                                    <div class="post-meta zh">
-                                        &#x4F5C;&#x8005;:
-                                        <a itemprop="author" rel="author" href="/">
-                                            SwordPal's blog
-                                        </a>
-                                        <span class="post-time">&#x65E5;&#x671F;: <a href="#">2021-01-14</a></span>
-                                        <span class="post-readtime">&#x9605;&#x8BFB;&#x65F6;&#x95F4;:<a
-                                    href="#">1.1
-                                    &#x5206;&#x949F;</a></span>
-                                        <span class="post-words">&#x5B57;&#x6570;:<a href="#">221</a></span>
-                                        
-                                            <span class="post-category">&#x5206;&#x7C7B;:
-                                
-                                <a href="https://chiyongwu.github.io/tag/PhZ-BplBh/">git</a>
-                                
-                            </span>
-                                            
-                                    </div>
-                                    
-                        </header>
-                        
-                        <div class="post-content">
-                            <h3 id="git设置和取消代理">git设置和取消代理</h3>
-<h4 id="方法1永久设置">方法1：永久设置</h4>
-<pre><code># 设置ss
-git config --global http.proxy 'socks5://127.0.0.1:端口号'
-
-git config --global https.proxy 'socks5://127.0.0.1:端口号'
-
-# 设置代理
-git config --global https.proxy http://127.0.0.1:端口号
-
-git config --global https.proxy https://127.0.0.1:端口号
-
-# 取消代理
-git config --global --unset http.proxy
-
-git config --global --unset https.proxy
-</code></pre>
-<h4 id="方法2临时设置">方法2：临时设置</h4>
-<pre><code># 设置ss
-export http_proxy=&quot;socks5://127.0.0.1:端口号&quot;
-export https_proxy=&quot;socks5://127.0.0.1:端口号&quot;
-
-# 设置代理
-export http_proxy='http://127.0.0.1:端口号'
-export https_proxy='http://127.0.0.1:端口号'
-</code></pre>
-<h4 id="方法3直接修改gitconfig文件">方法3：直接修改.gitconfig文件</h4>
-<pre><code># 打开该文件，追加以下内容：
-
-[http &quot;https://github.com&quot;]
-    proxy = socks5://127.0.0.1:端口号
-</code></pre>
-<h4 id="方法4第三方平台代理下载">方法4：第三方平台代理下载</h4>
-<pre><code>http://gitd.cc/
-
-https://gitclone.com/
-</code></pre>
-<h4 id="方法5利用gitee克隆导入github项目">方法5：利用gitee克隆/导入github项目</h4>
-<pre><code>https://zhuanlan.zhihu.com/p/112697807
-</code></pre>
-
-                        </div>
-                        
-                                
-                                                    
-                                                                    <!--Share-->
-                                                                    <span style="margin-right:15px">
-                        <i class="post-share"></i>
-                        <span>&#x5206;&#x4EAB;:</span>
-                                                                    <a title="QR 码" target="_blank" href="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://chiyongwu.github.io/post/git-zhong-duan-dai-li-she-zhi/"><i class="fa fa-qrcode"></i></a>
-                                                                    <a title="QQ" target="_blank" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=https://chiyongwu.github.io/post/git-zhong-duan-dai-li-she-zhi/&sharesource=qzone&title=git终端代理设置&pics=https://chiyongwu.github.io/images/avatar.png?v=1611194270532&summary="><i class="fa fa-qq"></i></a>
-                                                                    <a title="新浪微博" target="_blank" href="https://service.weibo.com/share/share.php?url=https://chiyongwu.github.io/post/git-zhong-duan-dai-li-she-zhi/&sharesource=weibo&title=git终端代理设置 + " - " + &pic="https://chiyongwu.github.io/images/avatar.png?v=1611194270532 "><i class="fa fa-weibo "></i></a>
-
-                                                                    </span>
-                                                                    
-                                                                            <!--zh-->
-                                                                            <section class="post-tags zh ">
-                                                                                <div>
-                                                                                    <span>&#x6807;&#x7B7E;:</span>
-                                                                                    <span class="tag ">
-                        
-                        
-                        <a href="https://chiyongwu.github.io/tag/PhZ-BplBh/">#
-                    git
-                        </a>
-                        
-                            
-                                </span>
-                                                                                </div>
-                                                                                <div>
-                                                                                    <a href="javascript:window.history.back();">
-                        &#x8FD4;&#x56DE;</a>
-                                                                                    <span>&dot;</span>
-                                                                                    <a href="#">&#x4E3B;&#x9875;</a>
-                                                                                </div>
-                                                                            </section>
-
-                                                                            
-                                                                                <!---->
-                                                                                <section class="post-nav">
-                                                                                    
-                                                                                        <a class="prev" rel="prev" href="https://chiyongwu.github.io/post/yarn-shi-yong-jiao-cheng/">
-                                                                                            yarn使用教程
-                                                                                        </a>
-                                                                                        
-                                                                                            
-                                                                                                <a class="next" rel="next" href="https://chiyongwu.github.io/post/nvm-an-zhuang-pei-zhi-jiao-cheng/">
-                                                                                                    nvm安装配置教程
-                                                                                                </a>
-                                                                                                
-                                                                                </section>
-                    </article>
+            <div class="result-box">
+                <div id="gridea-search-result">
+                    <p class="searching">搜索中......</p>
+                    <p class="no-result" style="display:none">未搜索到相关文章</p>
                 </div>
-                
-                                            
             </div>
     </div>
-    </div>
-    </div>
-    
+</body>
+
         <footer id="footer" class="footer">
             <div class="copyright">
                 
@@ -324,10 +230,5 @@ https://gitclone.com/
                     console.log("\n %c \u26a1Theme:Chic Author's Blog:https://blog.itjoker.cn  Write By ITJoker  \n\n", "color: #ffffff; background: rgba(49, 49, 49, 0.85); padding:5px 0;border-radius:5px;");
                 </script>
                 
-        </div>
-</body>
-<script>
-    scroll();
-</script>
 
 </html>
