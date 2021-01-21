@@ -1,96 +1,571 @@
-<html lang="en">
+<!DOCTYPE html>
+<html>
+
 <head>
-  <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta charset="UTF-8" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="keywords" content="">
+<meta name="description" content="等候未来的你">
+<meta name="theme-color" content="">
 <title>SwordPal&#39;s blog</title>
-<link rel="shortcut icon" href="https://chiyongwu.github.io/favicon.ico">
-<link href="https://cdn.jsdelivr.net/npm/remixicon@2.2.0/fonts/remixicon.css" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css">
-<link rel="stylesheet" href="https://chiyongwu.github.io/media/css/tailwind.css">
-<link rel="stylesheet" href="https://chiyongwu.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="SwordPal&#39;s blog - Atom Feed" href="https://chiyongwu.github.io/atom.xml">
+<link rel="shortcut icon" href="/favicon.ico?v=1611194193982">
+<link rel="stylesheet" href="/styles/main.css">
+<link rel="stylesheet" href="/media/css/pisces.css">
 
-    
+<link rel="stylesheet" href="/media/fonts/font-awesome.css">
+<link
+  href="//fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Rosario:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext"
+  rel="stylesheet" type="text/css">
 
-  <meta name="description" content="等候未来的你" />
+<link href="/media/hljs/styles/github.css"
+  rel="stylesheet">
+
+<script src="/media/hljs/highlight.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.0/velocity.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.0/velocity.ui.min.js"></script>
+
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+
 </head>
-<body>
-  <div class="antialiased flex flex-col min-h-screen" id="app">
 
-    <div class="nav py-3 md:py-8 fixed w-full z-10 bg-gray-50 dark:bg-gray-700 transition-all duration-300" :class="{ 'scroll': scrolled }">
-  <div class="flex justify-end px-4">
-    <div class="w-8 h-8 flex justify-center items-center rounded-full md:hidden" @click="showMenu = !showMenu">
-      <i class="ri-close-line" v-show="showMenu"></i>
-      <i class="ri-menu-3-line" v-show="!showMenu"></i>
+<body>
+  <div class="head-top-line"></div>
+  <div class="header-box">
+    
+<div class="pisces">
+  <header class="header  ">
+    <div class="blog-header box-shadow-wrapper bg-color " id="header">
+      <div class="nav-toggle" id="nav_toggle">
+        <div class="toggle-box">
+          <div class="line line-top"></div>
+          <div class="line line-center"></div>
+          <div class="line line-bottom"></div>
+        </div>
+      </div>
+      <div class="site-meta">       
+        <div class="site-title">
+          
+            <a href="/" class="brand">
+              <span>SwordPal&#39;s blog</span>
+            </a>  
+          
+        </div>
+        
+      </div>
+      <nav class="site-nav" id="site_nav">
+        <ul id="nav_ul">
+          
+            
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/" target="_self">
+                  <i class="fa fa-home"></i> 首页
+                </a>
+              
+            </li>
+          
+            
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/archives/" target="_self">
+                  <i class="fa fa-archive"></i> 归档
+                </a>
+              
+            </li>
+          
+            
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/tags/" target="_self">
+                  <i class="fa fa-tags"></i> 标签
+                </a>
+              
+            </li>
+          
+            
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/post/about/" target="_self">
+                  <i class="fa fa-user"></i> 关于
+                </a>
+              
+            </li>
+          
+          
+        </ul>
+      </nav>
     </div>
-  </div>
-  <nav class="max-w-4xl w-full mx-auto text-center flex flex-col md:flex-row justify-center md:block" :class="`${ showMenu ? 'block' : 'hidden' }`">
-    
-      <a href="/" target="" class="py-2 md:py-1 px-4 mx-4 inline-flex transition font-semibold rounded dark:hover:bg-gray-600 hover:bg-gray-200">
-        首页
-      </a>
-    
-      <a href="/archives" target="" class="py-2 md:py-1 px-4 mx-4 inline-flex transition font-semibold rounded dark:hover:bg-gray-600 hover:bg-gray-200">
-        归档
-      </a>
-    
-      <a href="/tags" target="" class="py-2 md:py-1 px-4 mx-4 inline-flex transition font-semibold rounded dark:hover:bg-gray-600 hover:bg-gray-200">
-        标签
-      </a>
-    
-      <a href="/post/about" target="" class="py-2 md:py-1 px-4 mx-4 inline-flex transition font-semibold rounded dark:hover:bg-gray-600 hover:bg-gray-200">
-        关于
-      </a>
-    
-    <a href="https://chiyongwu.github.io/atom.xml" target="_blank" class="py-2 md:py-1 px-4 mx-4 inline-flex transition font-semibold rounded dark:hover:bg-gray-600 hover:bg-gray-200">
-      RSS
-    </a>
-  </nav>
+  </header>
 </div>
 
-    <div class="max-w-4xl w-full mx-auto pt-32">
-      <h1 class="text-2xl font-bold pb-8 flex justify-center items-center">
-        <i class="ri-hashtag"></i>
-        Nginx
-      </h1>
-      <div class="shadow-box bg-white dark:bg-gray-600 border-gray-300 rounded-none md:rounded-lg -mx-1 md:mx-0 md:px-0">
-        
-  <div class="p-8 border-b border-gray-200 dark:border-gray-700 flex relative overflow-hidden flex-col md:flex-row animated fadeIn">
+<script type="text/javascript"> 
+ 
+  let showNav = true;
+
+  let navToggle = document.querySelector('#nav_toggle'),
+  siteNav = document.querySelector('#site_nav');
+  
+  function navClick() {
+    let sideBar = document.querySelector('.sidebar');
+    let navUl = document.querySelector('#nav_ul');
+    navToggle.classList.toggle('nav-toggle-active');
+    siteNav.classList.toggle('nav-menu-active');
+    if (siteNav.classList.contains('nav-menu-active')) {
+      siteNav.style = "height: " + (navUl.children.length * 42) +"px !important";
+    } else {
+      siteNav.style = "";
+    }
+  }
+
+  navToggle.addEventListener('click',navClick);  
+</script>
+  </div>
+  <div class="main-continer">
     
-    <div class="flex-1 order-2 md:order-1">
-      <h2 class="text-2xl font-semibold mb-4">
-        <a href="https://chiyongwu.github.io/post/nginx-fan-xiang-dai-li/" class="text-gray-700 dark:text-gray-200 border-b-2 border-dotted border-gray-200 dark:border-gray-400 dark:hover:border-gray-200 hover:border-gray-600 transition-all duration-100">
-          Nginx反向代理
-        </a>
-      </h2>
-      <div class="mb-4 text-xs text-gray-500">2021-01-21</div>
-      <div class="mb-4 text-gray-500 dark:text-gray-300">
-        <h3 id="1-代理">1. 代理</h3>
-<p>​		Nginx 主要能够代理如下几种协议，其中用到的最多的就是做Http代理服务器。</p>
-<figure data-type="image" tabindex="1"><img src="https://gitee.com/WuChiYong/markdown_picture/raw/master/img/20210121090820.png" alt="img" loading="lazy"></figure>
-<h4 id="11-正向代理">1.1. 正向代理</h4>
-<p>​		大家都知道，现在国内是访问不了 Google的，那么怎么才能访问 Google呢？我们又想，美国人不是能访问 Google吗（这不废话，Google就是美国的），如果我们电脑的对外公网 IP 地址能变成美国的 IP 地址，那不就可以访问 Google了。你很聪明，VPN 就是这样产生的。我们在访问 Google 时，先连上 VPN 服务器将我们的 IP 地址变成美国的 IP 地址，然后就可以顺利的访问了。</p>
-<p>这里的 VPN 就是做正向代理的。正向代理服务器位于客户端和服务器之间，为了向服务器获取数据，客户端要向代理服务器发送一个请求，并指定目标服务器，代理服务器将目标服务器返回的数据转交给客户端。这里客户端是要进行一些正向代理的设置的。</p>
-<h4 id="12-反向代理">1.2. 反向代理</h4>
-<p>​		反向代理和正向代理的区别就是：<strong>正向代理代理客户端，反向代理代理服务器。</strong></p>
-<p>​		反向代理，其实客户端对代理是无感知的，因为客户端不需要任何配置就可以访问，我们只需要将请求发送到反向代理服务器，由反向代理服务器去选择目标服务器获取数据后，在返回给客户端，此时反向代理服务器和目标服务器对外就是一个服务器，暴露的是代理服务器地址，隐藏了真实服务器IP地址。</p>
-<p>下面通过两张图来对比正向代理和方向代理：</p>
-<figure data-type="image" tabindex="2"><img src="https://gitee.com/WuChiYong/markdown_picture/raw/master/img/20210121091427.png" alt="img" loading="lazy"></figure>
-<figure data-type="image" tabindex="3"><img src="https://gitee.com/WuChiYong/markdown_picture/raw/master/img/20210121091516.png" alt="image-20210121091516426" loading="lazy"></figure>
-<p>理解这两种代理的关键在于代理服务器所代理的对象是什么，正向代理代理的是客户端，我们需要在客户端进行一些代理的设置。而反向代理代理的是服务器，作为客户端的我们是无法感知到服务器的真实存在的。</p>
-<h3 id="2-配置反向代理">2. 配置反向代理</h3>
-<p>​		范例：使用 nginx 反向代理 www.123.com 直接跳转到127.0.0.1:8080</p>
-<p>①、启动一个 tomcat，浏览器地址栏输入 127.0.0.1:8080，出现如下界面</p>
-<figure data-type="image" tabindex="4"><img src="https://gitee.com/WuChiYong/markdown_picture/raw/master/img/20210121092115.png" alt="img" loading="lazy"></figure>
-<p>​		②、通过修改本地 host 文件，将 www.123.com 映射到 127.0.0.1</p>
-<pre><code>127.0.0.1 www.123.com
-</code></pre>
-<p>​		将上面代码添加到 Windows 的host 文件中，该文件位置在：</p>
-<p><img src="https://gitee.com/WuChiYong/markdown_picture/raw/master/img/20210121092211.png" alt="img" loading="lazy">		配置完成之后，我们便可以通过 www.123.com:8080 访问到第一步出现的 Tomcat初始界面。</p>
-<p>​		那么如何只需要输入 www.123.com 便可以跳转到 Tomcat初始界面呢？便用到 nginx的反向代理。</p>
-<p>​		③、在 nginx.conf 配置文件中增加如下配置：</p>
-<pre><code>server {
+    <div
+      class="section-layout  pisces">
+      <div class="section-layout-wrapper">
+        <div id="sidebarMeta" class="sidebar">
+    
+<div class="sidebar-wrapper box-shadow-wrapper bg-color">
+  <div class="sidebar-item">
+    <img class="site-author-image right-motion" src="/images/avatar.png"/>
+    <p class="site-author-name"></p>
+    
+  </div>
+  <div class="sidebar-item side-item-stat right-motion">
+    <div class="sidebar-item-box">
+      <a href="/archives/">
+        
+        <span class="site-item-stat-count">6</span>
+        <span class="site-item-stat-name">文章</span>
+      </a>
+    </div>
+    <div class="sidebar-item-box">
+      <a href="">
+        <span class="site-item-stat-count">7</span>
+        <span class="site-item-stat-name">分类</span>
+      </a>
+    </div>
+    <div class="sidebar-item-box">
+      <a href="/tags/">
+        <span class="site-item-stat-count">7</span>
+        <span class="site-item-stat-name">标签</span>
+      </a>
+    </div>
+  </div>
+  
+    
+      <div class="sidebar-item" style="border-top: 1px dotted #ccc; margin-top: 10px;">
+      </div>
+    
+  
+  
+
+  
+
+
+</div>
+</div>
+<script>
+  let sidebarMeta = document.querySelector('#sidebarMeta');
+  let scheme = '';
+  let sidebarWrapper = document.querySelector('.sidebar-wrapper');
+  if (sidebarMeta && (scheme === 'pisces' || scheme === 'gemini')) {
+    document.addEventListener('scroll', function(e) {
+      if (document.scrollingElement.scrollTop > parseInt(sidebarMeta.style.marginTop) + 10) {
+        sidebarWrapper.classList.add('home-sidebar-fixed')
+      } else {
+        sidebarWrapper.classList.remove('home-sidebar-fixed')
+      }
+    });
+  }
+  </script>
+        <div class="section-box tag-line box-shadow-wrapper">
+          <section class="section tags-section posts-expand bg-color">
+            <div class="padding-wrapper">
+  <div class="tag-timeline-box">
+    <div class="tag-timeline-wrapper">
+      <div class="tag-timeline-title">
+        <h2>
+          Nginx
+          <small>标签</small>
+        </h2>
+      </div>
+      
+      
+      
+      <a href="https://chiyongwu.github.io/post/nginx-fan-xiang-dai-li/">
+        <div class="motion-warpper">
+          <div class="tag-post-node">
+            <h1>
+              01-21
+              <small>Nginx反向代理</small>
+            </h1>
+          </div>
+        </div>
+      </a>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </div>
+  </div>
+</div>
+          </section>
+        </div>
+      </div>
+    </div>
+    <div class="footer-box">
+  <footer class="footer">
+    <div class="copyright">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | © 2019-2020 Theme By <a href="https://github.com/hsxyhao/gridea-theme-next" target="_blank">HsxyHao</a>
+    </div>
+    <div class="poweredby">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+    </div>
+  </footer>
+  
+  
+  <div class="pisces back-to-top" id="back_to_top">
+    <i class="fa fa-arrow-up"></i>
+    
+    <span class="scrollpercent">
+      <span id="back_to_top_text">0</span>%
+    </span>
+    
+  </div>
+  
+    <div class="bg-img">
+      <img src="" />
+    </div>
+  
+  
+  
+    
+
+  
+</div>
+<script>
+
+  let sideBarOpen = 'sidebar-open';
+  let body = document.body;
+  let back2Top = document.querySelector('#back_to_top'),
+  back2TopText = document.querySelector('#back_to_top_text'),
+  drawerBox = document.querySelector('#drawer_box'),
+  rightSideBar = document.querySelector('.sidebar'),
+  viewport = document.querySelector('body');
+
+  function scrollAnimation(currentY, targetY) {
+   
+    let needScrollTop = targetY - currentY
+    let _currentY = currentY
+    setTimeout(() => {
+      const dist = Math.ceil(needScrollTop / 10)
+      _currentY += dist
+      window.scrollTo(_currentY, currentY)
+      if (needScrollTop > 10 || needScrollTop < -10) {
+        scrollAnimation(_currentY, targetY)
+      } else {
+        window.scrollTo(_currentY, targetY)
+      }
+    }, 1)
+  }
+
+  back2Top.addEventListener("click", function(e) {
+    scrollAnimation(document.scrollingElement.scrollTop, 0);
+    e.stopPropagation();
+    return false;
+  });
+  
+  window.addEventListener('scroll', function(e) {
+    let percent = document.scrollingElement.scrollTop / (document.scrollingElement.scrollHeight - document.scrollingElement.clientHeight) * 100;
+    if (percent > 1 && !back2Top.classList.contains('back-top-active')) {
+      back2Top.classList.add('back-top-active');
+    }
+    if (percent == 0) {
+      back2Top.classList.remove('back-top-active');
+    }
+    if (back2TopText) {
+      back2TopText.textContent = Math.floor(percent);
+    }
+  });
+
+  
+  let hasCacu = false;
+  window.onresize = function() {
+    if (window.width > 991) {
+      calcuHeight();
+    } else {
+      hasCacu = false;
+    }
+  }
+
+  function calcuHeight() {
+    // 动态调整站点概览高度
+    if (!hasCacu && back2Top.classList.contains('pisces') || back2Top.classList.contains('gemini')) {
+      let sideBar = document.querySelector('.sidebar');
+      let navUl = document.querySelector('#site_nav');
+      sideBar.style = 'margin-top:' + (navUl.offsetHeight + navUl.offsetTop + 15) + 'px;';
+      hasCacu = true;
+    }
+  }
+  calcuHeight();
+  
+  let open = false, MOTION_TIME = 300, RIGHT_MOVE_DIS = '320px';
+
+  if (drawerBox) {
+    let rightMotions = document.querySelectorAll('.right-motion');
+    let right = drawerBox.classList.contains('right');
+
+    let transitionDir = right ? "transition.slideRightIn" : "transition.slideLeftIn";
+
+    let openProp, closeProp;
+    if (right) {
+      openProp = {
+        paddingRight: RIGHT_MOVE_DIS 
+      };
+      closeProp = {
+        paddingRight: '0px'
+      };
+    } else {
+      openProp = {
+        paddingLeft: RIGHT_MOVE_DIS 
+      };
+      closeProp = {
+        paddingLeft: '0px'
+      };
+    }
+
+    drawerBox.onclick = function() {
+      open = !open;
+      window.Velocity(rightSideBar, 'stop');
+      window.Velocity(viewport, 'stop');
+      window.Velocity(rightMotions, 'stop');
+      if (open) {
+        window.Velocity(rightSideBar, {
+          width: RIGHT_MOVE_DIS
+        }, {
+          duration: MOTION_TIME,
+          begin: function() {
+            window.Velocity(rightMotions, transitionDir,{ });
+          }
+        })
+        window.Velocity(viewport, openProp,{
+          duration: MOTION_TIME
+        });
+      } else {
+        window.Velocity(rightSideBar, {
+          width: '0px'
+        }, {
+          duration: MOTION_TIME,
+          begin: function() {
+            window.Velocity(rightMotions, {
+              opacity: 0
+            });
+          }
+        })
+        window.Velocity(viewport, closeProp ,{
+          duration: MOTION_TIME
+        });
+      }
+      for (let i = 0; i < drawerBox.children.length; i++) {
+        drawerBox.children[i].classList.toggle('muse-line');
+      }
+      drawerBox.classList.toggle(sideBarOpen);
+    }
+  }
+
+  // 链接跳转
+  let newWindow = ''
+  if (newWindow === 'true') {
+    let links = document.querySelectorAll('.post-body a')
+    links.forEach(item => {
+      if (!item.classList.contains('btn')) {
+        item.setAttribute("target","_blank");
+      }
+    })
+  }
+  // 代码高亮
+  hljs.initHighlightingOnLoad();
+
+</script>
+  </div>
+</body>
+<input hidden id="copy" />
+<script>
+  //拿来主义(真香)^_^，Clipboard 实现摘自掘金 https://juejin.im/post/5aefeb6e6fb9a07aa43c20af
+  window.Clipboard = (function (window, document, navigator) {
+    var textArea,
+      copy;
+
+    // 判断是不是ios端
+    function isOS() {
+      return navigator.userAgent.match(/ipad|iphone/i);
+    }
+    //创建文本元素
+    function createTextArea(text) {
+      textArea = document.createElement('textArea');
+      textArea.value = text;
+      textArea.style.width = 0;
+      textArea.style.height = 0;
+      textArea.clientHeight = 0;
+      textArea.clientWidth = 0;
+      document.body.appendChild(textArea);
+    }
+    //选择内容
+    function selectText() {
+      var range,
+        selection;
+
+      if (isOS()) {
+        range = document.createRange();
+        range.selectNodeContents(textArea);
+        selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+        textArea.setSelectionRange(0, 999999);
+      } else {
+        textArea.select();
+      }
+    }
+
+    //复制到剪贴板
+    function copyToClipboard() {
+      try {
+        document.execCommand("Copy")
+      } catch (err) {
+        alert("复制错误！请手动复制！")
+      }
+      document.body.removeChild(textArea);
+    }
+
+    copy = function (text) {
+      createTextArea(text);
+      selectText();
+      copyToClipboard();
+    };
+
+    return {
+      copy: copy
+    };
+  })(window, document, navigator);
+
+  function copyCode(e) {
+    if (e.srcElement.tagName === 'SPAN' && e.srcElement.classList.contains('copy-code')) {
+      let code = e.currentTarget.querySelector('code');
+      var text = code.innerText;
+      if (e.srcElement.textContent === '复制成功') {
+        console.log('复制操作频率过高');
+        return;
+      }
+      e.srcElement.textContent = '复制成功';
+      (function (elem) {
+        setTimeout(() => {
+          if (elem.textContent === '复制成功') {
+            elem.textContent = '复制代码'
+          }
+        }, 1000);
+      })(e.srcElement)
+      Clipboard.copy(text);
+    }
+  }
+
+  let pres = document.querySelectorAll('pre');
+  pres.forEach(pre => {
+    let code = pre.querySelector('code');
+    let copyElem = document.createElement('span');
+    copyElem.classList.add('copy-code');
+    copyElem.textContent = '复制代码';
+    pre.appendChild(copyElem);
+    pre.onclick = copyCode
+  })
+</script>
+<script src="/media/js/motion.js"></script>
+
+<script src="https://cdn.jsdelivr.net/gh/cferdinandi/smooth-scroll/dist/smooth-scroll.polyfills.min.js"></script>
+<script>
+  var scroll = new SmoothScroll('a[href*="#"]', {
+    speed: 500
+  });
+</script>
+
+<!-- <div class="search-mask" id="search_mask">
+  <div class="search-box">
+    <div class="search-title">
+      <i class="fa fa-search"></i>
+      <div class="input-box">
+        <input type="text" placeholder="搜索">
+      </div>
+      <i class="fa fa-times-circle"></i>
+    </div>
+    <div class="result">
+      
+      <div class="item">
+        <a class="result-title" href="https://chiyongwu.github.io/post/nginx-fan-xiang-dai-li/"" data-c="
+          &lt;h3 id=&#34;1-代理&#34;&gt;1. 代理&lt;/h3&gt;
+&lt;p&gt;​		Nginx 主要能够代理如下几种协议，其中用到的最多的就是做Http代理服务器。&lt;/p&gt;
+&lt;figure data-type=&#34;image&#34; tabindex=&#34;1&#34;&gt;&lt;img src=&#34;https://gitee.com/WuChiYong/markdown_picture/raw/master/img/20210121090820.png&#34; alt=&#34;img&#34; loading=&#34;lazy&#34;&gt;&lt;/figure&gt;
+&lt;h4 id=&#34;11-正向代理&#34;&gt;1.1. 正向代理&lt;/h4&gt;
+&lt;p&gt;​		大家都知道，现在国内是访问不了 Google的，那么怎么才能访问 Google呢？我们又想，美国人不是能访问 Google吗（这不废话，Google就是美国的），如果我们电脑的对外公网 IP 地址能变成美国的 IP 地址，那不就可以访问 Google了。你很聪明，VPN 就是这样产生的。我们在访问 Google 时，先连上 VPN 服务器将我们的 IP 地址变成美国的 IP 地址，然后就可以顺利的访问了。&lt;/p&gt;
+&lt;p&gt;这里的 VPN 就是做正向代理的。正向代理服务器位于客户端和服务器之间，为了向服务器获取数据，客户端要向代理服务器发送一个请求，并指定目标服务器，代理服务器将目标服务器返回的数据转交给客户端。这里客户端是要进行一些正向代理的设置的。&lt;/p&gt;
+&lt;h4 id=&#34;12-反向代理&#34;&gt;1.2. 反向代理&lt;/h4&gt;
+&lt;p&gt;​		反向代理和正向代理的区别就是：&lt;strong&gt;正向代理代理客户端，反向代理代理服务器。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;​		反向代理，其实客户端对代理是无感知的，因为客户端不需要任何配置就可以访问，我们只需要将请求发送到反向代理服务器，由反向代理服务器去选择目标服务器获取数据后，在返回给客户端，此时反向代理服务器和目标服务器对外就是一个服务器，暴露的是代理服务器地址，隐藏了真实服务器IP地址。&lt;/p&gt;
+&lt;p&gt;下面通过两张图来对比正向代理和方向代理：&lt;/p&gt;
+&lt;figure data-type=&#34;image&#34; tabindex=&#34;2&#34;&gt;&lt;img src=&#34;https://gitee.com/WuChiYong/markdown_picture/raw/master/img/20210121091427.png&#34; alt=&#34;img&#34; loading=&#34;lazy&#34;&gt;&lt;/figure&gt;
+&lt;figure data-type=&#34;image&#34; tabindex=&#34;3&#34;&gt;&lt;img src=&#34;https://gitee.com/WuChiYong/markdown_picture/raw/master/img/20210121091516.png&#34; alt=&#34;image-20210121091516426&#34; loading=&#34;lazy&#34;&gt;&lt;/figure&gt;
+&lt;p&gt;理解这两种代理的关键在于代理服务器所代理的对象是什么，正向代理代理的是客户端，我们需要在客户端进行一些代理的设置。而反向代理代理的是服务器，作为客户端的我们是无法感知到服务器的真实存在的。&lt;/p&gt;
+&lt;h3 id=&#34;2-配置反向代理&#34;&gt;2. 配置反向代理&lt;/h3&gt;
+&lt;p&gt;​		范例：使用 nginx 反向代理 www.123.com 直接跳转到127.0.0.1:8080&lt;/p&gt;
+&lt;p&gt;①、启动一个 tomcat，浏览器地址栏输入 127.0.0.1:8080，出现如下界面&lt;/p&gt;
+&lt;figure data-type=&#34;image&#34; tabindex=&#34;4&#34;&gt;&lt;img src=&#34;https://gitee.com/WuChiYong/markdown_picture/raw/master/img/20210121092115.png&#34; alt=&#34;img&#34; loading=&#34;lazy&#34;&gt;&lt;/figure&gt;
+&lt;p&gt;​		②、通过修改本地 host 文件，将 www.123.com 映射到 127.0.0.1&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;127.0.0.1 www.123.com
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;​		将上面代码添加到 Windows 的host 文件中，该文件位置在：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://gitee.com/WuChiYong/markdown_picture/raw/master/img/20210121092211.png&#34; alt=&#34;img&#34; loading=&#34;lazy&#34;&gt;		配置完成之后，我们便可以通过 www.123.com:8080 访问到第一步出现的 Tomcat初始界面。&lt;/p&gt;
+&lt;p&gt;​		那么如何只需要输入 www.123.com 便可以跳转到 Tomcat初始界面呢？便用到 nginx的反向代理。&lt;/p&gt;
+&lt;p&gt;​		③、在 nginx.conf 配置文件中增加如下配置：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;server {
         listen       80;
         server_name  www.123.com;
 
@@ -99,119 +574,411 @@
             index  index.html index.htm index.jsp;
         }
     }
-</code></pre>
-<p>​		如上配置，我们监听80端口，访问域名为www.123.com，不加端口号时默认为80端口，故访问该域名时会跳转到127.0.0.1:8080路径上。</p>
-<p>​		我们在浏览器端输入 www.123.com 结果如下：</p>
-<figure data-type="image" tabindex="5"><img src="https://gitee.com/WuChiYong/markdown_picture/raw/master/img/20210121092340.png" alt="img" loading="lazy"></figure>
-<p>​		④、总结：其实这里更贴切的说是通过nginx代理端口，原先访问的是8080端口，通过nginx代理之后，通过80端口就可以访问了。</p>
-<h3 id="3-nginx反向代理相关指令介绍">3. Nginx反向代理相关指令介绍</h3>
-<h4 id="1-listen">①、listen</h4>
-<p>该指令用于配置网络监听。主要有如下三种配置语法结构：</p>
-<p>一、配置监听的IP地址</p>
-<pre><code>listen address[:port] [default_server] [setfib=number] [backlog=number] [rcvbuf=size] [sndbuf=size] [deferred]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;​		如上配置，我们监听80端口，访问域名为www.123.com，不加端口号时默认为80端口，故访问该域名时会跳转到127.0.0.1:8080路径上。&lt;/p&gt;
+&lt;p&gt;​		我们在浏览器端输入 www.123.com 结果如下：&lt;/p&gt;
+&lt;figure data-type=&#34;image&#34; tabindex=&#34;5&#34;&gt;&lt;img src=&#34;https://gitee.com/WuChiYong/markdown_picture/raw/master/img/20210121092340.png&#34; alt=&#34;img&#34; loading=&#34;lazy&#34;&gt;&lt;/figure&gt;
+&lt;p&gt;​		④、总结：其实这里更贴切的说是通过nginx代理端口，原先访问的是8080端口，通过nginx代理之后，通过80端口就可以访问了。&lt;/p&gt;
+&lt;h3 id=&#34;3-nginx反向代理相关指令介绍&#34;&gt;3. Nginx反向代理相关指令介绍&lt;/h3&gt;
+&lt;h4 id=&#34;1-listen&#34;&gt;①、listen&lt;/h4&gt;
+&lt;p&gt;该指令用于配置网络监听。主要有如下三种配置语法结构：&lt;/p&gt;
+&lt;p&gt;一、配置监听的IP地址&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;listen address[:port] [default_server] [setfib=number] [backlog=number] [rcvbuf=size] [sndbuf=size] [deferred]
     [accept_filter=filter] [bind] [ssl];
-</code></pre>
-<p>二、配置监听端口</p>
-<pre><code>listen port[default_server] [setfib=number] [backlog=number] [rcvbuf=size] [sndbuf=size] [accept_filter=filter] 
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;二、配置监听端口&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;listen port[default_server] [setfib=number] [backlog=number] [rcvbuf=size] [sndbuf=size] [accept_filter=filter] 
     [deferred] [bind] [ipv6only=on|off] [ssl];
-</code></pre>
-<p>三、配置 UNIX Domain Socket</p>
-<pre><code>listen unix:path [default_server]  [backlog=number] [rcvbuf=size] [sndbuf=size] [accept_filter=filter] 
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;三、配置 UNIX Domain Socket&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;listen unix:path [default_server]  [backlog=number] [rcvbuf=size] [sndbuf=size] [accept_filter=filter] 
     [deferred] [bind] [ssl];
-</code></pre>
-<p>上面的配置看似比较复杂，其实使用起来是比较简单的：</p>
-<pre><code>1 listen *:80 | *:8080 #监听所有80端口和8080端口
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;上面的配置看似比较复杂，其实使用起来是比较简单的：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;1 listen *:80 | *:8080 #监听所有80端口和8080端口
 2 listen  IP_address:port   #监听指定的地址和端口号
 3 listen  IP_address     #监听指定ip地址所有端口
 4 listen port     #监听该端口的所有IP连接
-</code></pre>
-<p>下面分别解释每个选项的具体含义：</p>
-<p>1、address:IP地址，如果是 IPV6地址，需要使用中括号[] 括起来，比如[fe80::1]等。</p>
-<p>2、port:端口号，如果只定义了IP地址，没有定义端口号，那么就使用80端口。</p>
-<p>3、path:socket文件路径，如 var/run/nginx.sock等。</p>
-<p>4、default_server:标识符，将此虚拟主机设置为 address:port 的默认主机。（在 nginx-0.8.21 之前使用的是 default 指令）</p>
-<p>5、 setfib=number:Nginx-0.8.44 中使用这个变量监听 socket 关联路由表，目前只对 FreeBSD 起作用，不常用。</p>
-<p>6、backlog=number:设置监听函数listen()最多允许多少网络连接同时处于挂起状态，在 FreeBSD 中默认为 -1,其他平台默认为511.</p>
-<p>7、rcvbuf=size:设置监听socket接收缓存区大小。</p>
-<p>8、sndbuf=size:设置监听socket发送缓存区大小。</p>
-<p>9、deferred:标识符，将accept()设置为Deferred模式。</p>
-<p>10、accept_filter=filter:设置监听端口对所有请求进行过滤，被过滤的内容不能被接收和处理，本指令只在 FreeBSD 和 NetBSD 5.0+ 平台下有效。filter 可以设置为 dataready 或 httpready 。</p>
-<p>11、bind:标识符，使用独立的bind() 处理此address:port，一般情况下，对于端口相同而IP地址不同的多个连接，Nginx 服务器将只使用一个监听指令，并使用 bind() 处理端口相同的所有连接。</p>
-<p>12、ssl:标识符，设置会话连接使用 SSL模式进行，此标识符和Nginx服务器提供的 HTTPS 服务有关。</p>
-<h4 id="2-server_name">②、server_name</h4>
-<p>该指令用于虚拟主机的配置。通常分为以下两种：</p>
-<p><strong>1、基于名称的虚拟主机配置</strong></p>
-<p>语法格式如下：</p>
-<pre><code>server_name   name ...;
-</code></pre>
-<p>一、对于name 来说，可以只有一个名称，也可以有多个名称，中间用空格隔开。而每个名字由两段或者三段组成，每段之间用“.”隔开。</p>
-<pre><code>server_name 123.com www.123.com
-</code></pre>
-<p>二、可以使用通配符“*”，但通配符只能用在由三段字符组成的首段或者尾端，或者由两端字符组成的尾端。</p>
-<pre><code>server_name *.123.com www.123.*
-</code></pre>
-<p>三、还可以使用正则表达式，用“~”作为正则表达式字符串的开始标记。</p>
-<pre><code>server_name ~^www\d+\.123\.com$;
-</code></pre>
-<p>该表达式“<sub>”表示匹配正则表达式，以www开头（“^”表示开头），紧跟着一个0</sub>9之间的数字，在紧跟“.123.co”，最后跟着“m”($表示结尾)</p>
-<p>以上匹配的顺序优先级如下：</p>
-<pre><code>1 ①、准确匹配 server_name
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;下面分别解释每个选项的具体含义：&lt;/p&gt;
+&lt;p&gt;1、address:IP地址，如果是 IPV6地址，需要使用中括号[] 括起来，比如[fe80::1]等。&lt;/p&gt;
+&lt;p&gt;2、port:端口号，如果只定义了IP地址，没有定义端口号，那么就使用80端口。&lt;/p&gt;
+&lt;p&gt;3、path:socket文件路径，如 var/run/nginx.sock等。&lt;/p&gt;
+&lt;p&gt;4、default_server:标识符，将此虚拟主机设置为 address:port 的默认主机。（在 nginx-0.8.21 之前使用的是 default 指令）&lt;/p&gt;
+&lt;p&gt;5、 setfib=number:Nginx-0.8.44 中使用这个变量监听 socket 关联路由表，目前只对 FreeBSD 起作用，不常用。&lt;/p&gt;
+&lt;p&gt;6、backlog=number:设置监听函数listen()最多允许多少网络连接同时处于挂起状态，在 FreeBSD 中默认为 -1,其他平台默认为511.&lt;/p&gt;
+&lt;p&gt;7、rcvbuf=size:设置监听socket接收缓存区大小。&lt;/p&gt;
+&lt;p&gt;8、sndbuf=size:设置监听socket发送缓存区大小。&lt;/p&gt;
+&lt;p&gt;9、deferred:标识符，将accept()设置为Deferred模式。&lt;/p&gt;
+&lt;p&gt;10、accept_filter=filter:设置监听端口对所有请求进行过滤，被过滤的内容不能被接收和处理，本指令只在 FreeBSD 和 NetBSD 5.0+ 平台下有效。filter 可以设置为 dataready 或 httpready 。&lt;/p&gt;
+&lt;p&gt;11、bind:标识符，使用独立的bind() 处理此address:port，一般情况下，对于端口相同而IP地址不同的多个连接，Nginx 服务器将只使用一个监听指令，并使用 bind() 处理端口相同的所有连接。&lt;/p&gt;
+&lt;p&gt;12、ssl:标识符，设置会话连接使用 SSL模式进行，此标识符和Nginx服务器提供的 HTTPS 服务有关。&lt;/p&gt;
+&lt;h4 id=&#34;2-server_name&#34;&gt;②、server_name&lt;/h4&gt;
+&lt;p&gt;该指令用于虚拟主机的配置。通常分为以下两种：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;1、基于名称的虚拟主机配置&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;语法格式如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;server_name   name ...;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;一、对于name 来说，可以只有一个名称，也可以有多个名称，中间用空格隔开。而每个名字由两段或者三段组成，每段之间用“.”隔开。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;server_name 123.com www.123.com
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;二、可以使用通配符“*”，但通配符只能用在由三段字符组成的首段或者尾端，或者由两端字符组成的尾端。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;server_name *.123.com www.123.*
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;三、还可以使用正则表达式，用“~”作为正则表达式字符串的开始标记。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;server_name ~^www\d+\.123\.com$;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;该表达式“&lt;sub&gt;”表示匹配正则表达式，以www开头（“^”表示开头），紧跟着一个0&lt;/sub&gt;9之间的数字，在紧跟“.123.co”，最后跟着“m”($表示结尾)&lt;/p&gt;
+&lt;p&gt;以上匹配的顺序优先级如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;1 ①、准确匹配 server_name
 2 ②、通配符在开始时匹配 server_name 成功
 3 ③、通配符在结尾时匹配 server_name 成功
 4 ④、正则表达式匹配 server_name 成功
-</code></pre>
-<p><strong>2、基于 IP 地址的虚拟主机配置</strong></p>
-<p>语法结构和基于域名匹配一样，而且不需要考虑通配符和正则表达式的问题。</p>
-<pre><code>server_name 192.168.1.1
-</code></pre>
-<h4 id="3-location">③、location</h4>
-<p>该指令用于匹配 URL。</p>
-<p>语法如下：</p>
-<pre><code>1 location [ = | ~ | ~* | ^~] uri {
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;2、基于 IP 地址的虚拟主机配置&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;语法结构和基于域名匹配一样，而且不需要考虑通配符和正则表达式的问题。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;server_name 192.168.1.1
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;3-location&#34;&gt;③、location&lt;/h4&gt;
+&lt;p&gt;该指令用于匹配 URL。&lt;/p&gt;
+&lt;p&gt;语法如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;1 location [ = | ~ | ~* | ^~] uri {
 2 
 3 }
-</code></pre>
-<p>1、= ：用于不含正则表达式的 uri 前，要求请求字符串与 uri 严格匹配，如果匹配成功，就停止继续向下搜索并立即处理该请求。</p>
-<p>2、~：用于表示 uri 包含正则表达式，并且区分大小写。</p>
-<p>3、~*：用于表示 uri 包含正则表达式，并且不区分大小写。</p>
-<p>4、^~：用于不含正则表达式的 uri 前，要求 Nginx 服务器找到标识 uri 和请求字符串匹配度最高的 location 后，立即使用此 location 处理请求，而不再使用 location 块中的正则 uri 和请求字符串做匹配。</p>
-<p>注意：如果 uri 包含正则表达式，则必须要有 ~ 或者 ~* 标识。</p>
-<h4 id="4-proxy_pass">④、proxy_pass</h4>
-<p>该指令用于设置被代理服务器的地址。可以是主机名称、IP地址加端口号的形式。</p>
-<p>语法结构如下：</p>
-<pre><code>proxy_pass URL;
-</code></pre>
-<p>URL 为被代理服务器的地址，可以包含传输协议、主机名称或IP地址加端口号，URI等。</p>
-<pre><code>proxy_pass  http://www.123.com/uri;
-</code></pre>
-<h4 id="5-index">⑤、index</h4>
-<p>该指令用于设置网站的默认首页。</p>
-<p>语法为：</p>
-<pre><code>index  filename ...;
-</code></pre>
-<p>后面的文件名称可以有多个，中间用空格隔开。</p>
-<pre><code>index  index.html index.jsp;
-</code></pre>
-<p>通常该指令有两个作用：第一个是用户在请求访问网站时，请求地址可以不写首页名称；第二个是可以对一个请求，根据请求内容而设置不同的首页。</p>
-
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;1、= ：用于不含正则表达式的 uri 前，要求请求字符串与 uri 严格匹配，如果匹配成功，就停止继续向下搜索并立即处理该请求。&lt;/p&gt;
+&lt;p&gt;2、~：用于表示 uri 包含正则表达式，并且区分大小写。&lt;/p&gt;
+&lt;p&gt;3、~*：用于表示 uri 包含正则表达式，并且不区分大小写。&lt;/p&gt;
+&lt;p&gt;4、^~：用于不含正则表达式的 uri 前，要求 Nginx 服务器找到标识 uri 和请求字符串匹配度最高的 location 后，立即使用此 location 处理请求，而不再使用 location 块中的正则 uri 和请求字符串做匹配。&lt;/p&gt;
+&lt;p&gt;注意：如果 uri 包含正则表达式，则必须要有 ~ 或者 ~* 标识。&lt;/p&gt;
+&lt;h4 id=&#34;4-proxy_pass&#34;&gt;④、proxy_pass&lt;/h4&gt;
+&lt;p&gt;该指令用于设置被代理服务器的地址。可以是主机名称、IP地址加端口号的形式。&lt;/p&gt;
+&lt;p&gt;语法结构如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;proxy_pass URL;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;URL 为被代理服务器的地址，可以包含传输协议、主机名称或IP地址加端口号，URI等。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;proxy_pass  http://www.123.com/uri;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;5-index&#34;&gt;⑤、index&lt;/h4&gt;
+&lt;p&gt;该指令用于设置网站的默认首页。&lt;/p&gt;
+&lt;p&gt;语法为：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;index  filename ...;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;后面的文件名称可以有多个，中间用空格隔开。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;index  index.html index.jsp;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;通常该指令有两个作用：第一个是用户在请求访问网站时，请求地址可以不写首页名称；第二个是可以对一个请求，根据请求内容而设置不同的首页。&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;!-- more --&gt;
+">Nginx反向代理</a>
       </div>
-      <a href="https://chiyongwu.github.io/post/nginx-fan-xiang-dai-li/" class="btn">
-        阅读更多
-      </a>
-    </div>
-    
-  </div>
-  
-      </div>
-
       
-      <footer class="py-12 text-center px-4 md:px-0" v-pre>
-  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
-</footer>
+      <div class="item">
+        <a class="result-title" href="https://chiyongwu.github.io/post/yarn-shi-yong-jiao-cheng/"" data-c="
+          &lt;h3 id=&#34;一-yarn的简介&#34;&gt;一、yarn的简介：&lt;/h3&gt;
+&lt;p&gt;Yarn是facebook发布的一款取代npm的包管理工具。&lt;/p&gt;
+&lt;h3 id=&#34;二-yarn的特点&#34;&gt;二、yarn的特点：&lt;/h3&gt;
+&lt;p&gt;1.速度超快。&lt;br&gt;
+Yarn 缓存了每个下载过的包，所以再次使用时无需重复下载。 同时利用并行下载以最大化资源利用率，因此安装速度更快。&lt;br&gt;
+2.超级安全。&lt;br&gt;
+在执行代码之前，Yarn 会通过算法校验每个安装包的完整性。&lt;br&gt;
+3.超级可靠。&lt;br&gt;
+使用详细、简洁的锁文件格式和明确的安装算法，Yarn 能够保证在不同系统上无差异的工作。&lt;/p&gt;
+&lt;h3 id=&#34;三-yarn的安装&#34;&gt;三、yarn的安装:&lt;/h3&gt;
+&lt;h5 id=&#34;下载nodejs使用npm安装&#34;&gt;下载node.js，使用npm安装&lt;/h5&gt;
+&lt;p&gt;npm install -g yarn&lt;/p&gt;
+&lt;h5 id=&#34;查看版本&#34;&gt;查看版本：&lt;/h5&gt;
+&lt;p&gt;yarn --version&lt;/p&gt;
+&lt;h5 id=&#34;yarn-淘宝源安装&#34;&gt;Yarn 淘宝源安装&lt;/h5&gt;
+&lt;p&gt;yarn config set registry &lt;a href=&#34;https://registry.npm.taobao.org/&#34;&gt;https://registry.npm.taobao.org&lt;/a&gt; -g&lt;br&gt;
+yarn config set sass_binary_site http://cdn.npm.taobao.org/dist/node-sass -g&lt;/p&gt;
+&lt;h3 id=&#34;四-yarn的常用命令&#34;&gt;四、yarn的常用命令：&lt;/h3&gt;
+&lt;p&gt;安装yarn&lt;br&gt;
+npm install -g yarn&lt;br&gt;
+安装成功后，查看版本号：&lt;br&gt;
+yarn --version&lt;br&gt;
+创建文件夹 yarn&lt;br&gt;
+md yarn&lt;br&gt;
+进入yarn文件夹&lt;br&gt;
+cd yarn&lt;br&gt;
+初始化项目&lt;br&gt;
+yarn init // 同npm init，执行输入信息后，会生成package.json文件&lt;br&gt;
+yarn的配置项：&lt;br&gt;
+yarn config list // 显示所有配置项&lt;br&gt;
+yarn config get //显示某配置项&lt;br&gt;
+yarn config delete //删除某配置项&lt;br&gt;
+yarn config set [-g|--global] //设置配置项&lt;br&gt;
+安装包：&lt;br&gt;
+yarn install &lt;a href=&#34;https://xn--package-4g6m3574a.xn--json-8h0gt02f9uhek3g/&#34;&gt;//安装package.json里所有包&lt;/a&gt;，并将包及它的所有依赖项保存进yarn.lock&lt;br&gt;
+yarn install --flat //安装一个包的单一版本&lt;br&gt;
+yarn install --force //强制重新下载所有包&lt;br&gt;
+yarn install --production //只安装dependencies里的包&lt;br&gt;
+yarn install --no-lockfile &lt;a href=&#34;https://xn--yarn-fb5fm02ao2zmbx542a609b.lock/&#34;&gt;//不读取或生成yarn.lock&lt;/a&gt;&lt;br&gt;
+yarn install --pure-lockfile &lt;a href=&#34;https://xn--yarn-fb5f137h141a.lock/&#34;&gt;//不生成yarn.lock&lt;/a&gt;&lt;br&gt;
+添加包（会更新package.json和yarn.lock）：&lt;/p&gt;
+&lt;p&gt;yarn add [package] // 在当前的项目中添加一个依赖包，会自动更新到package.json和yarn.lock文件中&lt;br&gt;
+yarn add [package]@[version] // 安装指定版本，这里指的是主要版本，如果需要精确到小版本，使用-E参数&lt;br&gt;
+yarn add [package]@[tag] // 安装某个tag（比如beta,next或者latest）&lt;br&gt;
+//不指定依赖类型默认安装到dependencies里，你也可以指定依赖类型：&lt;/p&gt;
+&lt;p&gt;yarn add --dev/-D // 加到 devDependencies&lt;br&gt;
+yarn add --peer/-P // 加到 peerDependencies&lt;br&gt;
+yarn add --optional/-O // 加到 optionalDependencies&lt;br&gt;
+//默认安装包的主要版本里的最新版本，下面两个命令可以指定版本：&lt;/p&gt;
+&lt;p&gt;yarn add --exact/-E // 安装包的精确版本。例如yarn add foo@1.2.3会接受1.9.1版，但是yarn add foo@1.2.3 --exact只会接受1.2.3版&lt;br&gt;
+yarn add --tilde/-T // 安装包的次要版本里的最新版。例如yarn add foo@1.2.3 --tilde会接受1.2.9，但不接受1.3.0&lt;br&gt;
+发布包&lt;/p&gt;
+&lt;p&gt;yarn publish&lt;br&gt;
+移除一个包&lt;br&gt;
+yarn remove ：移除一个包，会自动更新package.json和yarn.lock&lt;br&gt;
+更新一个依赖&lt;br&gt;
+yarn upgrade 用于更新包到基于规范范围的最新版本&lt;br&gt;
+运行脚本&lt;br&gt;
+yarn run 用来执行在 package.json 中 scripts 属性下定义的脚本&lt;br&gt;
+显示某个包的信息&lt;br&gt;
+yarn info 可以用来查看某个模块的最新版本信息&lt;br&gt;
+缓存&lt;br&gt;
+yarn cache&lt;br&gt;
+yarn cache list # 列出已缓存的每个包&lt;br&gt;
+yarn cache dir # 返回 全局缓存位置&lt;br&gt;
+yarn cache clean # 清除缓存&lt;/p&gt;
+&lt;h3 id=&#34;五-npm-与-yarn命令比较&#34;&gt;五、npm 与 yarn命令比较:&lt;/h3&gt;
+&lt;p&gt;比如说你的项目模块依赖是图中描述的，@1.2.1代表这个模块的版本。在你安装A的时候需要安装依赖C和D，很多依赖不会指定版本号，默认会安装最新的版本，这样就会出现问题：比如今天安装模块的时候C和D是某一个版本，而当以后C、D更新的时候，再次安装模块就会安装C和D的最新版本，如果新的版本无法兼容你的项目，你的程序可能就会出BUG，甚至无法运行。这就是npm的弊端，而yarn为了解决这个问题推出了yarn.lock的机制，这是作者项目中的yarn.lock文件。&lt;/p&gt;
+&lt;p&gt;大家会看到，这个文件已经把依赖模块的版本号全部锁定，当你执行yarn install的时候，yarn会读取这个文件获得依赖的版本号，然后依照这个版本号去安装对应的依赖模块，这样依赖就会被锁定，以后再也不用担心版本号的问题了。其他人或者其他环境下使用的时候，把这个yarn.lock拷贝到相应的环境项目下再安装即可。&lt;br&gt;
+注意：这个文件不要手动修改它，当你使用一些操作如yarn add时，yarn会自动更新yarn.lock。&lt;/p&gt;
+">yarn使用教程</a>
+      </div>
+      
+      <div class="item">
+        <a class="result-title" href="https://chiyongwu.github.io/post/git-zhong-duan-dai-li-she-zhi/"" data-c="
+          &lt;h3 id=&#34;git设置和取消代理&#34;&gt;git设置和取消代理&lt;/h3&gt;
+&lt;h4 id=&#34;方法1永久设置&#34;&gt;方法1：永久设置&lt;/h4&gt;
+&lt;pre&gt;&lt;code&gt;# 设置ss
+git config --global http.proxy &#39;socks5://127.0.0.1:端口号&#39;
 
+git config --global https.proxy &#39;socks5://127.0.0.1:端口号&#39;
+
+# 设置代理
+git config --global https.proxy http://127.0.0.1:端口号
+
+git config --global https.proxy https://127.0.0.1:端口号
+
+# 取消代理
+git config --global --unset http.proxy
+
+git config --global --unset https.proxy
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;方法2临时设置&#34;&gt;方法2：临时设置&lt;/h4&gt;
+&lt;pre&gt;&lt;code&gt;# 设置ss
+export http_proxy=&amp;quot;socks5://127.0.0.1:端口号&amp;quot;
+export https_proxy=&amp;quot;socks5://127.0.0.1:端口号&amp;quot;
+
+# 设置代理
+export http_proxy=&#39;http://127.0.0.1:端口号&#39;
+export https_proxy=&#39;http://127.0.0.1:端口号&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;方法3直接修改gitconfig文件&#34;&gt;方法3：直接修改.gitconfig文件&lt;/h4&gt;
+&lt;pre&gt;&lt;code&gt;# 打开该文件，追加以下内容：
+
+[http &amp;quot;https://github.com&amp;quot;]
+    proxy = socks5://127.0.0.1:端口号
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;方法4第三方平台代理下载&#34;&gt;方法4：第三方平台代理下载&lt;/h4&gt;
+&lt;pre&gt;&lt;code&gt;http://gitd.cc/
+
+https://gitclone.com/
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;方法5利用gitee克隆导入github项目&#34;&gt;方法5：利用gitee克隆/导入github项目&lt;/h4&gt;
+&lt;pre&gt;&lt;code&gt;https://zhuanlan.zhihu.com/p/112697807
+&lt;/code&gt;&lt;/pre&gt;
+">git终端代理设置</a>
+      </div>
+      
+      <div class="item">
+        <a class="result-title" href="https://chiyongwu.github.io/post/nvm-an-zhuang-pei-zhi-jiao-cheng/"" data-c="
+          &lt;p&gt;转载：https://www.longkui.site/development/nvm%e7%9a%84%e5%ae%89%e8%a3%85%e9%85%8d%e7%bd%ae%e4%b8%8e%e4%bd%bf%e7%94%a8/&lt;/p&gt;
+">nvm安装配置教程</a>
+      </div>
+      
+      <div class="item">
+        <a class="result-title" href="https://chiyongwu.github.io/post/docker-jiao-cheng/"" data-c="
+          &lt;h3 id=&#34;一-centos-7安装docker-ce&#34;&gt;一、centos 7安装docker ce&lt;/h3&gt;
+&lt;p&gt;1、安装依赖包&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;yum install -y yum-utils device-mapper-persistent-data lvm2
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;2、设置国内yum源&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;3、安装docker&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;yum install -y docker-ce
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;4、启动/关闭docker服务&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;systemctl start docker
+systemctl stop docker
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;二-常用命令&#34;&gt;二、常用命令&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;搜索镜像：docker search [imageName]
+拉取镜像: docker pull [imageName]:[image Tag]
+查看本地镜像: docker images
+运行容器: docker run [imageId]
+查看运行中的docker：docker ps
+查看所有历史容器：docker ps -a
+查看docker容器日志：docker logs [-f] [containerId]
+进入容器：docker exec -it [containerId] /bin/bash
+docker拷贝文件：docker cp [localPath] [containerId]:[containerPath]
+启动/停止/重启已存在的容器：docker start/stop/restart [containerId]
+移除docker容器：docker rm [containerId]（容器必须在停止状态才能移除）
+删除镜像：docker rmi [imageId]
+
+-d：后台运行镜像
+-t：启动一个终端
+-i：标准输入
+-p：容器內的端口映射到本机端口
+-v：文件映射
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;三-项目部署&#34;&gt;三、项目部署&lt;/h3&gt;
+&lt;p&gt;原则：不要把配置文件和数据放在容器中，请在宿主机上创建配置文件目录和数据文件目录，再通过文件映射方式提供容器使用。&lt;/p&gt;
+&lt;p&gt;dockerhub网站可以搜镜像的使用方法，比如mysql：https://hub.docker.com/_/mysql&lt;/p&gt;
+&lt;p&gt;注意：&lt;/p&gt;
+&lt;p&gt;从宿主机外面访问宿主机上的容器，IP地址只需要填宿主机，端口填映射端口即可访问容器。若是容器间的通信，则不能填宿主机的IP和映射端口。同一个宿主机中的docker间通信，可以通过docker内部IP来访问。容器间的通信有如下3种方法：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;docker inspect [containerId]&lt;/li&gt;
+&lt;li&gt;每次重启容器都会变更IP，因此应进行docker网络创建。通过在docker run命令中让容器加入已有的docker网络，并起容器网络别名的方式，实现容器网络创建&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;四-docker网络创建&#34;&gt;四、docker网络创建&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;docker network create beihe-network //创建docker网络
+docker network ls //查看网络
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;举例：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;docker run -d -p 3306:3306 --network beihe-network --network-alias mysql-network --privileged=true -v /home/docker/mysql/conf/my.cnf:/etc/mysql/my.cnf -v /home/docker/mysql /data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=123456 mysql:5.7.21
+	
+
+--network-alias：网络别名，当IP使用，直接写在配置文件中的ip位置
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;五-dockerfile创建镜像&#34;&gt;五、dockerfile创建镜像&lt;/h3&gt;
+&lt;p&gt;若要做镜像，请基于别人做好的镜像再做。比如java项目，去dockerhub下载java镜像，步骤如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;FROM hub.c.163.com/library/java  //拉取java容器镜像
+RUN mkdir -p /home/app  //为容器创建目录
+COPY pinter.jar /home/app  //将java项目拷贝到容器目录
+WORKDIR /home/app  //设置工作目录
+EXPOSE 8080  //设置端口号
+CMD java -jar pinter.jar  //执行命令
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;生成镜像：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;docker build -t pinter:tagName .  //.是路径上下文
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;更多命令参考：https://www.runoob.com/docker/docker-dockerfile.html&lt;/p&gt;
+&lt;p&gt;RUN命令和CMD命令的区别：&lt;/p&gt;
+&lt;p&gt;RUN命令只在build时执行，CMD是每次容器运行时执行。&lt;/p&gt;
+&lt;h3 id=&#34;六-docker-compose&#34;&gt;六、docker-compose&lt;/h3&gt;
+&lt;p&gt;直接去http://get.daocloud.io/#install-compose下载docker compose，验证是否安装成功：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;docker-compose -v
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;docker-compose文件是yaml配置文件，模板：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;version: &#39;2&#39;
+services:
+  web:
+    image: dockercloud/hello-world
+    ports:
+      - 8080
+    networks:
+      - front-tier
+      - back-tier
+ 
+  redis:
+    image: redis
+    links:
+      - web
+    networks:
+      - back-tier
+ 
+  lb:
+    image: dockercloud/haproxy
+    ports:
+      - 80:80
+    links:
+      - web
+    networks:
+      - front-tier
+      - back-tier
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+ 
+networks:
+  front-tier:
+    driver: bridge
+  back-tier:
+    driver: bridge
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;常用命令：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;后台启动容器：docker-compose up -d compose文件路径
+查看容器：docker-compose ps
+停止容器：docker-compose stop
+查看日志：docker-compose logs
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;更多命令参考：https://www.cnblogs.com/minseo/p/11548177.html&lt;/p&gt;
+">docker教程</a>
+      </div>
+      
+      <div class="item">
+        <a class="result-title" href="https://chiyongwu.github.io/post/about/"" data-c="
+          &lt;blockquote&gt;
+&lt;p&gt;欢迎来到我的小站呀，很高兴遇见你！🤝&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;关于本站&#34;&gt;🏠 关于本站&lt;/h2&gt;
+&lt;h2 id=&#34;博主是谁&#34;&gt;👨‍💻 博主是谁&lt;/h2&gt;
+&lt;h2 id=&#34;兴趣爱好&#34;&gt;⛹ 兴趣爱好&lt;/h2&gt;
+&lt;h2 id=&#34;联系我呀&#34;&gt;📬 联系我呀&lt;/h2&gt;
+">关于</a>
+      </div>
+      
+      <div class="item">
+        <a class="result-title" href="https://chiyongwu.github.io/post/hello-gridea/"" data-c="
+          &lt;p&gt;👏  欢迎使用 &lt;strong&gt;Gridea&lt;/strong&gt; ！&lt;br&gt;
+✍️  &lt;strong&gt;Gridea&lt;/strong&gt; 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/getgridea/gridea&#34;&gt;Github&lt;/a&gt;&lt;br&gt;
+&lt;a href=&#34;https://gridea.dev/&#34;&gt;Gridea 主页&lt;/a&gt;&lt;br&gt;
+&lt;a href=&#34;http://fehey.com/&#34;&gt;示例网站&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;特性&#34;&gt;特性👇&lt;/h2&gt;
+&lt;p&gt;📝  你可以使用最酷的 &lt;strong&gt;Markdown&lt;/strong&gt; 语法，进行快速创作&lt;/p&gt;
+&lt;p&gt;🌉  你可以给文章配上精美的封面图和在文章任意位置插入图片&lt;/p&gt;
+&lt;p&gt;🏷️  你可以对文章进行标签分组&lt;/p&gt;
+&lt;p&gt;📋  你可以自定义菜单，甚至可以创建外部链接菜单&lt;/p&gt;
+&lt;p&gt;💻  你可以在 &lt;strong&gt;Windows&lt;/strong&gt;，&lt;strong&gt;MacOS&lt;/strong&gt; 或 &lt;strong&gt;Linux&lt;/strong&gt; 设备上使用此客户端&lt;/p&gt;
+&lt;p&gt;🌎  你可以使用 &lt;strong&gt;𝖦𝗂𝗍𝗁𝗎𝖻 𝖯𝖺𝗀𝖾𝗌&lt;/strong&gt; 或 &lt;strong&gt;Coding Pages&lt;/strong&gt; 向世界展示，未来将支持更多平台&lt;/p&gt;
+&lt;p&gt;💬  你可以进行简单的配置，接入 &lt;a href=&#34;https://github.com/gitalk/gitalk&#34;&gt;Gitalk&lt;/a&gt; 或 &lt;a href=&#34;https://github.com/SukkaW/DisqusJS&#34;&gt;DisqusJS&lt;/a&gt; 评论系统&lt;/p&gt;
+&lt;p&gt;🇬🇧  你可以使用&lt;strong&gt;中文简体&lt;/strong&gt;或&lt;strong&gt;英语&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;🌁  你可以任意使用应用内默认主题或任意第三方主题，强大的主题自定义能力&lt;/p&gt;
+&lt;p&gt;🖥  你可以自定义源文件夹，利用 OneDrive、百度网盘、iCloud、Dropbox 等进行多设备同步&lt;/p&gt;
+&lt;p&gt;🌱 当然 &lt;strong&gt;Gridea&lt;/strong&gt; 还很年轻，有很多不足，但请相信，它会不停向前 🏃&lt;/p&gt;
+&lt;p&gt;未来，它一定会成为你离不开的伙伴&lt;/p&gt;
+&lt;p&gt;尽情发挥你的才华吧！&lt;/p&gt;
+&lt;p&gt;😘 Enjoy~&lt;/p&gt;
+">Hello Gridea</a>
+      </div>
+      
     </div>
   </div>
-  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-  <script src="https://chiyongwu.github.io/media/scripts/main.js"></script>
-</body>
+</div>
+<script>
+  // var escape = "[{&#34;content&#34;:&#34;&lt;h3 id=\&#34;1-代理\&#34;&gt;1. 代理&lt;/h3&gt;\n&lt;p&gt;​\t\tNginx 主要能够代理如下几种协议，其中用到的最多的就是做Http代理服务器。&lt;/p&gt;\n&lt;figure data-type=\&#34;image\&#34; tabindex=\&#34;1\&#34;&gt;&lt;img src=\&#34;https://gitee.com/WuChiYong/markdown_picture/raw/master/img/20210121090820.png\&#34; alt=\&#34;img\&#34; loading=\&#34;lazy\&#34;&gt;&lt;/figure&gt;\n&lt;h4 id=\&#34;11-正向代理\&#34;&gt;1.1. 正向代理&lt;/h4&gt;\n&lt;p&gt;​\t\t大家都知道，现在国内是访问不了 Google的，那么怎么才能访问 Google呢？我们又想，美国人不是能访问 Google吗（这不废话，Google就是美国的），如果我们电脑的对外公网 IP 地址能变成美国的 IP 地址，那不就可以访问 Google了。你很聪明，VPN 就是这样产生的。我们在访问 Google 时，先连上 VPN 服务器将我们的 IP 地址变成美国的 IP 地址，然后就可以顺利的访问了。&lt;/p&gt;\n&lt;p&gt;这里的 VPN 就是做正向代理的。正向代理服务器位于客户端和服务器之间，为了向服务器获取数据，客户端要向代理服务器发送一个请求，并指定目标服务器，代理服务器将目标服务器返回的数据转交给客户端。这里客户端是要进行一些正向代理的设置的。&lt;/p&gt;\n&lt;h4 id=\&#34;12-反向代理\&#34;&gt;1.2. 反向代理&lt;/h4&gt;\n&lt;p&gt;​\t\t反向代理和正向代理的区别就是：&lt;strong&gt;正向代理代理客户端，反向代理代理服务器。&lt;/strong&gt;&lt;/p&gt;\n&lt;p&gt;​\t\t反向代理，其实客户端对代理是无感知的，因为客户端不需要任何配置就可以访问，我们只需要将请求发送到反向代理服务器，由反向代理服务器去选择目标服务器获取数据后，在返回给客户端，此时反向代理服务器和目标服务器对外就是一个服务器，暴露的是代理服务器地址，隐藏了真实服务器IP地址。&lt;/p&gt;\n&lt;p&gt;下面通过两张图来对比正向代理和方向代理：&lt;/p&gt;\n&lt;figure data-type=\&#34;image\&#34; tabindex=\&#34;2\&#34;&gt;&lt;img src=\&#34;https://gitee.com/WuChiYong/markdown_picture/raw/master/img/20210121091427.png\&#34; alt=\&#34;img\&#34; loading=\&#34;lazy\&#34;&gt;&lt;/figure&gt;\n&lt;figure data-type=\&#34;image\&#34; tabindex=\&#34;3\&#34;&gt;&lt;img src=\&#34;https://gitee.com/WuChiYong/markdown_picture/raw/master/img/20210121091516.png\&#34; alt=\&#34;image-20210121091516426\&#34; loading=\&#34;lazy\&#34;&gt;&lt;/figure&gt;\n&lt;p&gt;理解这两种代理的关键在于代理服务器所代理的对象是什么，正向代理代理的是客户端，我们需要在客户端进行一些代理的设置。而反向代理代理的是服务器，作为客户端的我们是无法感知到服务器的真实存在的。&lt;/p&gt;\n&lt;h3 id=\&#34;2-配置反向代理\&#34;&gt;2. 配置反向代理&lt;/h3&gt;\n&lt;p&gt;​\t\t范例：使用 nginx 反向代理 www.123.com 直接跳转到127.0.0.1:8080&lt;/p&gt;\n&lt;p&gt;①、启动一个 tomcat，浏览器地址栏输入 127.0.0.1:8080，出现如下界面&lt;/p&gt;\n&lt;figure data-type=\&#34;image\&#34; tabindex=\&#34;4\&#34;&gt;&lt;img src=\&#34;https://gitee.com/WuChiYong/markdown_picture/raw/master/img/20210121092115.png\&#34; alt=\&#34;img\&#34; loading=\&#34;lazy\&#34;&gt;&lt;/figure&gt;\n&lt;p&gt;​\t\t②、通过修改本地 host 文件，将 www.123.com 映射到 127.0.0.1&lt;/p&gt;\n&lt;pre&gt;&lt;code&gt;127.0.0.1 www.123.com\n&lt;/code&gt;&lt;/pre&gt;\n&lt;p&gt;​\t\t将上面代码添加到 Windows 的host 文件中，该文件位置在：&lt;/p&gt;\n&lt;p&gt;&lt;img src=\&#34;https://gitee.com/WuChiYong/markdown_picture/raw/master/img/20210121092211.png\&#34; alt=\&#34;img\&#34; loading=\&#34;lazy\&#34;&gt;\t\t配置完成之后，我们便可以通过 www.123.com:8080 访问到第一步出现的 Tomcat初始界面。&lt;/p&gt;\n&lt;p&gt;​\t\t那么如何只需要输入 www.123.com 便可以跳转到 Tomcat初始界面呢？便用到 nginx的反向代理。&lt;/p&gt;\n&lt;p&gt;​\t\t③、在 nginx.conf 配置文件中增加如下配置：&lt;/p&gt;\n&lt;pre&gt;&lt;code&gt;server {\n        listen       80;\n        server_name  www.123.com;\n\n        location / {\n            proxy_pass http://127.0.0.1:8080;\n            index  index.html index.htm index.jsp;\n        }\n    }\n&lt;/code&gt;&lt;/pre&gt;\n&lt;p&gt;​\t\t如上配置，我们监听80端口，访问域名为www.123.com，不加端口号时默认为80端口，故访问该域名时会跳转到127.0.0.1:8080路径上。&lt;/p&gt;\n&lt;p&gt;​\t\t我们在浏览器端输入 www.123.com 结果如下：&lt;/p&gt;\n&lt;figure data-type=\&#34;image\&#34; tabindex=\&#34;5\&#34;&gt;&lt;img src=\&#34;https://gitee.com/WuChiYong/markdown_picture/raw/master/img/20210121092340.png\&#34; alt=\&#34;img\&#34; loading=\&#34;lazy\&#34;&gt;&lt;/figure&gt;\n&lt;p&gt;​\t\t④、总结：其实这里更贴切的说是通过nginx代理端口，原先访问的是8080端口，通过nginx代理之后，通过80端口就可以访问了。&lt;/p&gt;\n&lt;h3 id=\&#34;3-nginx反向代理相关指令介绍\&#34;&gt;3. Nginx反向代理相关指令介绍&lt;/h3&gt;\n&lt;h4 id=\&#34;1-listen\&#34;&gt;①、listen&lt;/h4&gt;\n&lt;p&gt;该指令用于配置网络监听。主要有如下三种配置语法结构：&lt;/p&gt;\n&lt;p&gt;一、配置监听的IP地址&lt;/p&gt;\n&lt;pre&gt;&lt;code&gt;listen address[:port] [default_server] [setfib=number] [backlog=number] [rcvbuf=size] [sndbuf=size] [deferred]\n    [accept_filter=filter] [bind] [ssl];\n&lt;/code&gt;&lt;/pre&gt;\n&lt;p&gt;二、配置监听端口&lt;/p&gt;\n&lt;pre&gt;&lt;code&gt;listen port[default_server] [setfib=number] [backlog=number] [rcvbuf=size] [sndbuf=size] [accept_filter=filter] \n    [deferred] [bind] [ipv6only=on|off] [ssl];\n&lt;/code&gt;&lt;/pre&gt;\n&lt;p&gt;三、配置 UNIX Domain Socket&lt;/p&gt;\n&lt;pre&gt;&lt;code&gt;listen unix:path [default_server]  [backlog=number] [rcvbuf=size] [sndbuf=size] [accept_filter=filter] \n    [deferred] [bind] [ssl];\n&lt;/code&gt;&lt;/pre&gt;\n&lt;p&gt;上面的配置看似比较复杂，其实使用起来是比较简单的：&lt;/p&gt;\n&lt;pre&gt;&lt;code&gt;1 listen *:80 | *:8080 #监听所有80端口和8080端口\n2 listen  IP_address:port   #监听指定的地址和端口号\n3 listen  IP_address     #监听指定ip地址所有端口\n4 listen port     #监听该端口的所有IP连接\n&lt;/code&gt;&lt;/pre&gt;\n&lt;p&gt;下面分别解释每个选项的具体含义：&lt;/p&gt;\n&lt;p&gt;1、address:IP地址，如果是 IPV6地址，需要使用中括号[] 括起来，比如[fe80::1]等。&lt;/p&gt;\n&lt;p&gt;2、port:端口号，如果只定义了IP地址，没有定义端口号，那么就使用80端口。&lt;/p&gt;\n&lt;p&gt;3、path:socket文件路径，如 var/run/nginx.sock等。&lt;/p&gt;\n&lt;p&gt;4、default_server:标识符，将此虚拟主机设置为 address:port 的默认主机。（在 nginx-0.8.21 之前使用的是 default 指令）&lt;/p&gt;\n&lt;p&gt;5、 setfib=number:Nginx-0.8.44 中使用这个变量监听 socket 关联路由表，目前只对 FreeBSD 起作用，不常用。&lt;/p&gt;\n&lt;p&gt;6、backlog=number:设置监听函数listen()最多允许多少网络连接同时处于挂起状态，在 FreeBSD 中默认为 -1,其他平台默认为511.&lt;/p&gt;\n&lt;p&gt;7、rcvbuf=size:设置监听socket接收缓存区大小。&lt;/p&gt;\n&lt;p&gt;8、sndbuf=size:设置监听socket发送缓存区大小。&lt;/p&gt;\n&lt;p&gt;9、deferred:标识符，将accept()设置为Deferred模式。&lt;/p&gt;\n&lt;p&gt;10、accept_filter=filter:设置监听端口对所有请求进行过滤，被过滤的内容不能被接收和处理，本指令只在 FreeBSD 和 NetBSD 5.0+ 平台下有效。filter 可以设置为 dataready 或 httpready 。&lt;/p&gt;\n&lt;p&gt;11、bind:标识符，使用独立的bind() 处理此address:port，一般情况下，对于端口相同而IP地址不同的多个连接，Nginx 服务器将只使用一个监听指令，并使用 bind() 处理端口相同的所有连接。&lt;/p&gt;\n&lt;p&gt;12、ssl:标识符，设置会话连接使用 SSL模式进行，此标识符和Nginx服务器提供的 HTTPS 服务有关。&lt;/p&gt;\n&lt;h4 id=\&#34;2-server_name\&#34;&gt;②、server_name&lt;/h4&gt;\n&lt;p&gt;该指令用于虚拟主机的配置。通常分为以下两种：&lt;/p&gt;\n&lt;p&gt;&lt;strong&gt;1、基于名称的虚拟主机配置&lt;/strong&gt;&lt;/p&gt;\n&lt;p&gt;语法格式如下：&lt;/p&gt;\n&lt;pre&gt;&lt;code&gt;server_name   name ...;\n&lt;/code&gt;&lt;/pre&gt;\n&lt;p&gt;一、对于name 来说，可以只有一个名称，也可以有多个名称，中间用空格隔开。而每个名字由两段或者三段组成，每段之间用“.”隔开。&lt;/p&gt;\n&lt;pre&gt;&lt;code&gt;server_name 123.com www.123.com\n&lt;/code&gt;&lt;/pre&gt;\n&lt;p&gt;二、可以使用通配符“*”，但通配符只能用在由三段字符组成的首段或者尾端，或者由两端字符组成的尾端。&lt;/p&gt;\n&lt;pre&gt;&lt;code&gt;server_name *.123.com www.123.*\n&lt;/code&gt;&lt;/pre&gt;\n&lt;p&gt;三、还可以使用正则表达式，用“~”作为正则表达式字符串的开始标记。&lt;/p&gt;\n&lt;pre&gt;&lt;code&gt;server_name ~^www\\d+\\.123\\.com$;\n&lt;/code&gt;&lt;/pre&gt;\n&lt;p&gt;该表达式“&lt;sub&gt;”表示匹配正则表达式，以www开头（“^”表示开头），紧跟着一个0&lt;/sub&gt;9之间的数字，在紧跟“.123.co”，最后跟着“m”($表示结尾)&lt;/p&gt;\n&lt;p&gt;以上匹配的顺序优先级如下：&lt;/p&gt;\n&lt;pre&gt;&lt;code&gt;1 ①、准确匹配 server_name\n2 ②、通配符在开始时匹配 server_name 成功\n3 ③、通配符在结尾时匹配 server_name 成功\n4 ④、正则表达式匹配 server_name 成功\n&lt;/code&gt;&lt;/pre&gt;\n&lt;p&gt;&lt;strong&gt;2、基于 IP 地址的虚拟主机配置&lt;/strong&gt;&lt;/p&gt;\n&lt;p&gt;语法结构和基于域名匹配一样，而且不需要考虑通配符和正则表达式的问题。&lt;/p&gt;\n&lt;pre&gt;&lt;code&gt;server_name 192.168.1.1\n&lt;/code&gt;&lt;/pre&gt;\n&lt;h4 id=\&#34;3-location\&#34;&gt;③、location&lt;/h4&gt;\n&lt;p&gt;该指令用于匹配 URL。&lt;/p&gt;\n&lt;p&gt;语法如下：&lt;/p&gt;\n&lt;pre&gt;&lt;code&gt;1 location [ = | ~ | ~* | ^~] uri {\n2 \n3 }\n&lt;/code&gt;&lt;/pre&gt;\n&lt;p&gt;1、= ：用于不含正则表达式的 uri 前，要求请求字符串与 uri 严格匹配，如果匹配成功，就停止继续向下搜索并立即处理该请求。&lt;/p&gt;\n&lt;p&gt;2、~：用于表示 uri 包含正则表达式，并且区分大小写。&lt;/p&gt;\n&lt;p&gt;3、~*：用于表示 uri 包含正则表达式，并且不区分大小写。&lt;/p&gt;\n&lt;p&gt;4、^~：用于不含正则表达式的 uri 前，要求 Nginx 服务器找到标识 uri 和请求字符串匹配度最高的 location 后，立即使用此 location 处理请求，而不再使用 location 块中的正则 uri 和请求字符串做匹配。&lt;/p&gt;\n&lt;p&gt;注意：如果 uri 包含正则表达式，则必须要有 ~ 或者 ~* 标识。&lt;/p&gt;\n&lt;h4 id=\&#34;4-proxy_pass\&#34;&gt;④、proxy_pass&lt;/h4&gt;\n&lt;p&gt;该指令用于设置被代理服务器的地址。可以是主机名称、IP地址加端口号的形式。&lt;/p&gt;\n&lt;p&gt;语法结构如下：&lt;/p&gt;\n&lt;pre&gt;&lt;code&gt;proxy_pass URL;\n&lt;/code&gt;&lt;/pre&gt;\n&lt;p&gt;URL 为被代理服务器的地址，可以包含传输协议、主机名称或IP地址加端口号，URI等。&lt;/p&gt;\n&lt;pre&gt;&lt;code&gt;proxy_pass  http://www.123.com/uri;\n&lt;/code&gt;&lt;/pre&gt;\n&lt;h4 id=\&#34;5-index\&#34;&gt;⑤、index&lt;/h4&gt;\n&lt;p&gt;该指令用于设置网站的默认首页。&lt;/p&gt;\n&lt;p&gt;语法为：&lt;/p&gt;\n&lt;pre&gt;&lt;code&gt;index  filename ...;\n&lt;/code&gt;&lt;/pre&gt;\n&lt;p&gt;后面的文件名称可以有多个，中间用空格隔开。&lt;/p&gt;\n&lt;pre&gt;&lt;code&gt;index  index.html index.jsp;\n&lt;/code&gt;&lt;/pre&gt;\n&lt;p&gt;通常该指令有两个作用：第一个是用户在请求访问网站时，请求地址可以不写首页名称；第二个是可以对一个请求，根据请求内容而设置不同的首页。&lt;/p&gt;\n&lt;!-- more --&gt;\n&lt;!-- more --&gt;\n&#34;,&#34;fileName&#34;:&#34;nginx-fan-xiang-dai-li&#34;,&#34;abstract&#34;:&#34;&lt;h3 id=\&#34;1-代理\&#34;&gt;1. 代理&lt;/h3&gt;\n&lt;p&gt;​\t\tNginx 主要能够代理如下几种协议，其中用到的最多的就是做Http代理服务器。&lt;/p&gt;\n&lt;figure data-type=\&#34;image\&#34; tabindex=\&#34;1\&#34;&gt;&lt;img src=\&#34;https://gitee.com/WuChiYong/markdown_picture/raw/master/img/20210121090820.png\&#34; alt=\&#34;img\&#34; loading=\&#34;lazy\&#34;&gt;&lt;/figure&gt;\n&lt;h4 id=\&#34;11-正向代理\&#34;&gt;1.1. 正向代理&lt;/h4&gt;\n&lt;p&gt;​\t\t大家都知道，现在国内是访问不了 Google的，那么怎么才能访问 Google呢？我们又想，美国人不是能访问 Google吗（这不废话，Google就是美国的），如果我们电脑的对外公网 IP 地址能变成美国的 IP 地址，那不就可以访问 Google了。你很聪明，VPN 就是这样产生的。我们在访问 Google 时，先连上 VPN 服务器将我们的 IP 地址变成美国的 IP 地址，然后就可以顺利的访问了。&lt;/p&gt;\n&lt;p&gt;这里的 VPN 就是做正向代理的。正向代理服务器位于客户端和服务器之间，为了向服务器获取数据，客户端要向代理服务器发送一个请求，并指定目标服务器，代理服务器将目标服务器返回的数据转交给客户端。这里客户端是要进行一些正向代理的设置的。&lt;/p&gt;\n&lt;h4 id=\&#34;12-反向代理\&#34;&gt;1.2. 反向代理&lt;/h4&gt;\n&lt;p&gt;​\t\t反向代理和正向代理的区别就是：&lt;strong&gt;正向代理代理客户端，反向代理代理服务器。&lt;/strong&gt;&lt;/p&gt;\n&lt;p&gt;​\t\t反向代理，其实客户端对代理是无感知的，因为客户端不需要任何配置就可以访问，我们只需要将请求发送到反向代理服务器，由反向代理服务器去选择目标服务器获取数据后，在返回给客户端，此时反向代理服务器和目标服务器对外就是一个服务器，暴露的是代理服务器地址，隐藏了真实服务器IP地址。&lt;/p&gt;\n&lt;p&gt;下面通过两张图来对比正向代理和方向代理：&lt;/p&gt;\n&lt;figure data-type=\&#34;image\&#34; tabindex=\&#34;2\&#34;&gt;&lt;img src=\&#34;https://gitee.com/WuChiYong/markdown_picture/raw/master/img/20210121091427.png\&#34; alt=\&#34;img\&#34; loading=\&#34;lazy\&#34;&gt;&lt;/figure&gt;\n&lt;figure data-type=\&#34;image\&#34; tabindex=\&#34;3\&#34;&gt;&lt;img src=\&#34;https://gitee.com/WuChiYong/markdown_picture/raw/master/img/20210121091516.png\&#34; alt=\&#34;image-20210121091516426\&#34; loading=\&#34;lazy\&#34;&gt;&lt;/figure&gt;\n&lt;p&gt;理解这两种代理的关键在于代理服务器所代理的对象是什么，正向代理代理的是客户端，我们需要在客户端进行一些代理的设置。而反向代理代理的是服务器，作为客户端的我们是无法感知到服务器的真实存在的。&lt;/p&gt;\n&lt;h3 id=\&#34;2-配置反向代理\&#34;&gt;2. 配置反向代理&lt;/h3&gt;\n&lt;p&gt;​\t\t范例：使用 nginx 反向代理 www.123.com 直接跳转到127.0.0.1:8080&lt;/p&gt;\n&lt;p&gt;①、启动一个 tomcat，浏览器地址栏输入 127.0.0.1:8080，出现如下界面&lt;/p&gt;\n&lt;figure data-type=\&#34;image\&#34; tabindex=\&#34;4\&#34;&gt;&lt;img src=\&#34;https://gitee.com/WuChiYong/markdown_picture/raw/master/img/20210121092115.png\&#34; alt=\&#34;img\&#34; loading=\&#34;lazy\&#34;&gt;&lt;/figure&gt;\n&lt;p&gt;​\t\t②、通过修改本地 host 文件，将 www.123.com 映射到 127.0.0.1&lt;/p&gt;\n&lt;pre&gt;&lt;code&gt;127.0.0.1 www.123.com\n&lt;/code&gt;&lt;/pre&gt;\n&lt;p&gt;​\t\t将上面代码添加到 Windows 的host 文件中，该文件位置在：&lt;/p&gt;\n&lt;p&gt;&lt;img src=\&#34;https://gitee.com/WuChiYong/markdown_picture/raw/master/img/20210121092211.png\&#34; alt=\&#34;img\&#34; loading=\&#34;lazy\&#34;&gt;\t\t配置完成之后，我们便可以通过 www.123.com:8080 访问到第一步出现的 Tomcat初始界面。&lt;/p&gt;\n&lt;p&gt;​\t\t那么如何只需要输入 www.123.com 便可以跳转到 Tomcat初始界面呢？便用到 nginx的反向代理。&lt;/p&gt;\n&lt;p&gt;​\t\t③、在 nginx.conf 配置文件中增加如下配置：&lt;/p&gt;\n&lt;pre&gt;&lt;code&gt;server {\n        listen       80;\n        server_name  www.123.com;\n\n        location / {\n            proxy_pass http://127.0.0.1:8080;\n            index  index.html index.htm index.jsp;\n        }\n    }\n&lt;/code&gt;&lt;/pre&gt;\n&lt;p&gt;​\t\t如上配置，我们监听80端口，访问域名为www.123.com，不加端口号时默认为80端口，故访问该域名时会跳转到127.0.0.1:8080路径上。&lt;/p&gt;\n&lt;p&gt;​\t\t我们在浏览器端输入 www.123.com 结果如下：&lt;/p&gt;\n&lt;figure data-type=\&#34;image\&#34; tabindex=\&#34;5\&#34;&gt;&lt;img src=\&#34;https://gitee.com/WuChiYong/markdown_picture/raw/master/img/20210121092340.png\&#34; alt=\&#34;img\&#34; loading=\&#34;lazy\&#34;&gt;&lt;/figure&gt;\n&lt;p&gt;​\t\t④、总结：其实这里更贴切的说是通过nginx代理端口，原先访问的是8080端口，通过nginx代理之后，通过80端口就可以访问了。&lt;/p&gt;\n&lt;h3 id=\&#34;3-nginx反向代理相关指令介绍\&#34;&gt;3. Nginx反向代理相关指令介绍&lt;/h3&gt;\n&lt;h4 id=\&#34;1-listen\&#34;&gt;①、listen&lt;/h4&gt;\n&lt;p&gt;该指令用于配置网络监听。主要有如下三种配置语法结构：&lt;/p&gt;\n&lt;p&gt;一、配置监听的IP地址&lt;/p&gt;\n&lt;pre&gt;&lt;code&gt;listen address[:port] [default_server] [setfib=number] [backlog=number] [rcvbuf=size] [sndbuf=size] [deferred]\n    [accept_filter=filter] [bind] [ssl];\n&lt;/code&gt;&lt;/pre&gt;\n&lt;p&gt;二、配置监听端口&lt;/p&gt;\n&lt;pre&gt;&lt;code&gt;listen port[default_server] [setfib=number] [backlog=number] [rcvbuf=size] [sndbuf=size] [accept_filter=filter] \n    [deferred] [bind] [ipv6only=on|off] [ssl];\n&lt;/code&gt;&lt;/pre&gt;\n&lt;p&gt;三、配置 UNIX Domain Socket&lt;/p&gt;\n&lt;pre&gt;&lt;code&gt;listen unix:path [default_server]  [backlog=number] [rcvbuf=size] [sndbuf=size] [accept_filter=filter] \n    [deferred] [bind] [ssl];\n&lt;/code&gt;&lt;/pre&gt;\n&lt;p&gt;上面的配置看似比较复杂，其实使用起来是比较简单的：&lt;/p&gt;\n&lt;pre&gt;&lt;code&gt;1 listen *:80 | *:8080 #监听所有80端口和8080端口\n2 listen  IP_address:port   #监听指定的地址和端口号\n3 listen  IP_address     #监听指定ip地址所有端口\n4 listen port     #监听该端口的所有IP连接\n&lt;/code&gt;&lt;/pre&gt;\n&lt;p&gt;下面分别解释每个选项的具体含义：&lt;/p&gt;\n&lt;p&gt;1、address:IP地址，如果是 IPV6地址，需要使用中括号[] 括起来，比如[fe80::1]等。&lt;/p&gt;\n&lt;p&gt;2、port:端口号，如果只定义了IP地址，没有定义端口号，那么就使用80端口。&lt;/p&gt;\n&lt;p&gt;3、path:socket文件路径，如 var/run/nginx.sock等。&lt;/p&gt;\n&lt;p&gt;4、default_server:标识符，将此虚拟主机设置为 address:port 的默认主机。（在 nginx-0.8.21 之前使用的是 default 指令）&lt;/p&gt;\n&lt;p&gt;5、 setfib=number:Nginx-0.8.44 中使用这个变量监听 socket 关联路由表，目前只对 FreeBSD 起作用，不常用。&lt;/p&gt;\n&lt;p&gt;6、backlog=number:设置监听函数listen()最多允许多少网络连接同时处于挂起状态，在 FreeBSD 中默认为 -1,其他平台默认为511.&lt;/p&gt;\n&lt;p&gt;7、rcvbuf=size:设置监听socket接收缓存区大小。&lt;/p&gt;\n&lt;p&gt;8、sndbuf=size:设置监听socket发送缓存区大小。&lt;/p&gt;\n&lt;p&gt;9、deferred:标识符，将accept()设置为Deferred模式。&lt;/p&gt;\n&lt;p&gt;10、accept_filter=filter:设置监听端口对所有请求进行过滤，被过滤的内容不能被接收和处理，本指令只在 FreeBSD 和 NetBSD 5.0+ 平台下有效。filter 可以设置为 dataready 或 httpready 。&lt;/p&gt;\n&lt;p&gt;11、bind:标识符，使用独立的bind() 处理此address:port，一般情况下，对于端口相同而IP地址不同的多个连接，Nginx 服务器将只使用一个监听指令，并使用 bind() 处理端口相同的所有连接。&lt;/p&gt;\n&lt;p&gt;12、ssl:标识符，设置会话连接使用 SSL模式进行，此标识符和Nginx服务器提供的 HTTPS 服务有关。&lt;/p&gt;\n&lt;h4 id=\&#34;2-server_name\&#34;&gt;②、server_name&lt;/h4&gt;\n&lt;p&gt;该指令用于虚拟主机的配置。通常分为以下两种：&lt;/p&gt;\n&lt;p&gt;&lt;strong&gt;1、基于名称的虚拟主机配置&lt;/strong&gt;&lt;/p&gt;\n&lt;p&gt;语法格式如下：&lt;/p&gt;\n&lt;pre&gt;&lt;code&gt;server_name   name ...;\n&lt;/code&gt;&lt;/pre&gt;\n&lt;p&gt;一、对于name 来说，可以只有一个名称，也可以有多个名称，中间用空格隔开。而每个名字由两段或者三段组成，每段之间用“.”隔开。&lt;/p&gt;\n&lt;pre&gt;&lt;code&gt;server_name 123.com www.123.com\n&lt;/code&gt;&lt;/pre&gt;\n&lt;p&gt;二、可以使用通配符“*”，但通配符只能用在由三段字符组成的首段或者尾端，或者由两端字符组成的尾端。&lt;/p&gt;\n&lt;pre&gt;&lt;code&gt;server_name *.123.com www.123.*\n&lt;/code&gt;&lt;/pre&gt;\n&lt;p&gt;三、还可以使用正则表达式，用“~”作为正则表达式字符串的开始标记。&lt;/p&gt;\n&lt;pre&gt;&lt;code&gt;server_name ~^www\\d+\\.123\\.com$;\n&lt;/code&gt;&lt;/pre&gt;\n&lt;p&gt;该表达式“&lt;sub&gt;”表示匹配正则表达式，以www开头（“^”表示开头），紧跟着一个0&lt;/sub&gt;9之间的数字，在紧跟“.123.co”，最后跟着“m”($表示结尾)&lt;/p&gt;\n&lt;p&gt;以上匹配的顺序优先级如下：&lt;/p&gt;\n&lt;pre&gt;&lt;code&gt;1 ①、准确匹配 server_name\n2 ②、通配符在开始时匹配 server_name 成功\n3 ③、通配符在结尾时匹配 server_name 成功\n4 ④、正则表达式匹配 server_name 成功\n&lt;/code&gt;&lt;/pre&gt;\n&lt;p&gt;&lt;strong&gt;2、基于 IP 地址的虚拟主机配置&lt;/strong&gt;&lt;/p&gt;\n&lt;p&gt;语法结构和基于域名匹配一样，而且不需要考虑通配符和正则表达式的问题。&lt;/p&gt;\n&lt;pre&gt;&lt;code&gt;server_name 192.168.1.1\n&lt;/code&gt;&lt;/pre&gt;\n&lt;h4 id=\&#34;3-location\&#34;&gt;③、location&lt;/h4&gt;\n&lt;p&gt;该指令用于匹配 URL。&lt;/p&gt;\n&lt;p&gt;语法如下：&lt;/p&gt;\n&lt;pre&gt;&lt;code&gt;1 location [ = | ~ | ~* | ^~] uri {\n2 \n3 }\n&lt;/code&gt;&lt;/pre&gt;\n&lt;p&gt;1、= ：用于不含正则表达式的 uri 前，要求请求字符串与 uri 严格匹配，如果匹配成功，就停止继续向下搜索并立即处理该请求。&lt;/p&gt;\n&lt;p&gt;2、~：用于表示 uri 包含正则表达式，并且区分大小写。&lt;/p&gt;\n&lt;p&gt;3、~*：用于表示 uri 包含正则表达式，并且不区分大小写。&lt;/p&gt;\n&lt;p&gt;4、^~：用于不含正则表达式的 uri 前，要求 Nginx 服务器找到标识 uri 和请求字符串匹配度最高的 location 后，立即使用此 location 处理请求，而不再使用 location 块中的正则 uri 和请求字符串做匹配。&lt;/p&gt;\n&lt;p&gt;注意：如果 uri 包含正则表达式，则必须要有 ~ 或者 ~* 标识。&lt;/p&gt;\n&lt;h4 id=\&#34;4-proxy_pass\&#34;&gt;④、proxy_pass&lt;/h4&gt;\n&lt;p&gt;该指令用于设置被代理服务器的地址。可以是主机名称、IP地址加端口号的形式。&lt;/p&gt;\n&lt;p&gt;语法结构如下：&lt;/p&gt;\n&lt;pre&gt;&lt;code&gt;proxy_pass URL;\n&lt;/code&gt;&lt;/pre&gt;\n&lt;p&gt;URL 为被代理服务器的地址，可以包含传输协议、主机名称或IP地址加端口号，URI等。&lt;/p&gt;\n&lt;pre&gt;&lt;code&gt;proxy_pass  http://www.123.com/uri;\n&lt;/code&gt;&lt;/pre&gt;\n&lt;h4 id=\&#34;5-index\&#34;&gt;⑤、index&lt;/h4&gt;\n&lt;p&gt;该指令用于设置网站的默认首页。&lt;/p&gt;\n&lt;p&gt;语法为：&lt;/p&gt;\n&lt;pre&gt;&lt;code&gt;index  filename ...;\n&lt;/code&gt;&lt;/pre&gt;\n&lt;p&gt;后面的文件名称可以有多个，中间用空格隔开。&lt;/p&gt;\n&lt;pre&gt;&lt;code&gt;index  index.html index.jsp;\n&lt;/code&gt;&lt;/pre&gt;\n&lt;p&gt;通常该指令有两个作用：第一个是用户在请求访问网站时，请求地址可以不写首页名称；第二个是可以对一个请求，根据请求内容而设置不同的首页。&lt;/p&gt;\n&#34;,&#34;title&#34;:&#34;Nginx反向代理&#34;,&#34;tags&#34;:[{&#34;name&#34;:&#34;Nginx&#34;,&#34;slug&#34;:&#34;ZuuWx2SC_&#34;,&#34;used&#34;:true,&#34;link&#34;:&#34;https://chiyongwu.github.io/tag/ZuuWx2SC_/&#34;},{&#34;name&#34;:&#34;反向代理&#34;,&#34;slug&#34;:&#34;xxcjBiXtGB&#34;,&#34;used&#34;:true,&#34;link&#34;:&#34;https://chiyongwu.github.io/tag/xxcjBiXtGB/&#34;}],&#34;date&#34;:&#34;2021-01-21 09:26:08&#34;,&#34;dateFormat&#34;:&#34;2021-01-21&#34;,&#34;feature&#34;:&#34;&#34;,&#34;link&#34;:&#34;https://chiyongwu.github.io/post/nginx-fan-xiang-dai-li/&#34;,&#34;hideInList&#34;:false,&#34;isTop&#34;:false,&#34;stats&#34;:{&#34;text&#34;:&#34;9 min read&#34;,&#34;time&#34;:491000,&#34;words&#34;:2158,&#34;minutes&#34;:9},&#34;description&#34;:&#34;1. 代理\n​\t\tNginx 主要能够代理如下几种协议，其中用到的最多的就是做Http代理服务器。\n\n1.1. 正向代理\n​\t\t大家都知道，现在国内是访问不了 Google的，那么怎么才能访问 Google呢？我们又想，美国人不是能访问 G...&#34;,&#34;toc&#34;:&#34;&lt;ul class=\&#34;markdownIt-TOC\&#34;&gt;\n&lt;li&gt;\n&lt;ul&gt;\n&lt;li&gt;\n&lt;ul&gt;\n&lt;li&gt;&lt;a href=\&#34;#1-%E4%BB%A3%E7%90%86\&#34;&gt;1. 代理&lt;/a&gt;\n&lt;ul&gt;\n&lt;li&gt;&lt;a href=\&#34;#11-%E6%AD%A3%E5%90%91%E4%BB%A3%E7%90%86\&#34;&gt;1.1. 正向代理&lt;/a&gt;&lt;/li&gt;\n&lt;li&gt;&lt;a href=\&#34;#12-%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86\&#34;&gt;1.2. 反向代理&lt;/a&gt;&lt;/li&gt;\n&lt;/ul&gt;\n&lt;/li&gt;\n&lt;li&gt;&lt;a href=\&#34;#2-%E9%85%8D%E7%BD%AE%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86\&#34;&gt;2. 配置反向代理&lt;/a&gt;&lt;/li&gt;\n&lt;li&gt;&lt;a href=\&#34;#3-nginx%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E7%9B%B8%E5%85%B3%E6%8C%87%E4%BB%A4%E4%BB%8B%E7%BB%8D\&#34;&gt;3. Nginx反向代理相关指令介绍&lt;/a&gt;\n&lt;ul&gt;\n&lt;li&gt;&lt;a href=\&#34;#1-listen\&#34;&gt;①、listen&lt;/a&gt;&lt;/li&gt;\n&lt;li&gt;&lt;a href=\&#34;#2-server_name\&#34;&gt;②、server_name&lt;/a&gt;&lt;/li&gt;\n&lt;li&gt;&lt;a href=\&#34;#3-location\&#34;&gt;③、location&lt;/a&gt;&lt;/li&gt;\n&lt;li&gt;&lt;a href=\&#34;#4-proxy_pass\&#34;&gt;④、proxy_pass&lt;/a&gt;&lt;/li&gt;\n&lt;li&gt;&lt;a href=\&#34;#5-index\&#34;&gt;⑤、index&lt;/a&gt;&lt;/li&gt;\n&lt;/ul&gt;\n&lt;/li&gt;\n&lt;/ul&gt;\n&lt;/li&gt;\n&lt;/ul&gt;\n&lt;/li&gt;\n&lt;/ul&gt;\n&#34;},{&#34;content&#34;:&#34;&lt;h3 id=\&#34;一-yarn的简介\&#34;&gt;一、yarn的简介：&lt;/h3&gt;\n&lt;p&gt;Yarn是facebook发布的一款取代npm的包管理工具。&lt;/p&gt;\n&lt;h3 id=\&#34;二-yarn的特点\&#34;&gt;二、yarn的特点：&lt;/h3&gt;\n&lt;p&gt;1.速度超快。&lt;br&gt;\nYarn 缓存了每个下载过的包，所以再次使用时无需重复下载。 同时利用并行下载以最大化资源利用率，因此安装速度更快。&lt;br&gt;\n2.超级安全。&lt;br&gt;\n在执行代码之前，Yarn 会通过算法校验每个安装包的完整性。&lt;br&gt;\n3.超级可靠。&lt;br&gt;\n使用详细、简洁的锁文件格式和明确的安装算法，Yarn 能够保证在不同系统上无差异的工作。&lt;/p&gt;\n&lt;h3 id=\&#34;三-yarn的安装\&#34;&gt;三、yarn的安装:&lt;/h3&gt;\n&lt;h5 id=\&#34;下载nodejs使用npm安装\&#34;&gt;下载node.js，使用npm安装&lt;/h5&gt;\n&lt;p&gt;npm install -g yarn&lt;/p&gt;\n&lt;h5 id=\&#34;查看版本\&#34;&gt;查看版本：&lt;/h5&gt;\n&lt;p&gt;yarn --version&lt;/p&gt;\n&lt;h5 id=\&#34;yarn-淘宝源安装\&#34;&gt;Yarn 淘宝源安装&lt;/h5&gt;\n&lt;p&gt;yarn config set registry &lt;a href=\&#34;https://registry.npm.taobao.org/\&#34;&gt;https://registry.npm.taobao.org&lt;/a&gt; -g&lt;br&gt;\nyarn config set sass_binary_site http://cdn.npm.taobao.org/dist/node-sass -g&lt;/p&gt;\n&lt;h3 id=\&#34;四-yarn的常用命令\&#34;&gt;四、yarn的常用命令：&lt;/h3&gt;\n&lt;p&gt;安装yarn&lt;br&gt;\nnpm install -g yarn&lt;br&gt;\n安装成功后，查看版本号：&lt;br&gt;\nyarn --version&lt;br&gt;\n创建文件夹 yarn&lt;br&gt;\nmd yarn&lt;br&gt;\n进入yarn文件夹&lt;br&gt;\ncd yarn&lt;br&gt;\n初始化项目&lt;br&gt;\nyarn init // 同npm init，执行输入信息后，会生成package.json文件&lt;br&gt;\nyarn的配置项：&lt;br&gt;\nyarn config list // 显示所有配置项&lt;br&gt;\nyarn config get //显示某配置项&lt;br&gt;\nyarn config delete //删除某配置项&lt;br&gt;\nyarn config set [-g|--global] //设置配置项&lt;br&gt;\n安装包：&lt;br&gt;\nyarn install &lt;a href=\&#34;https://xn--package-4g6m3574a.xn--json-8h0gt02f9uhek3g/\&#34;&gt;//安装package.json里所有包&lt;/a&gt;，并将包及它的所有依赖项保存进yarn.lock&lt;br&gt;\nyarn install --flat //安装一个包的单一版本&lt;br&gt;\nyarn install --force //强制重新下载所有包&lt;br&gt;\nyarn install --production //只安装dependencies里的包&lt;br&gt;\nyarn install --no-lockfile &lt;a href=\&#34;https://xn--yarn-fb5fm02ao2zmbx542a609b.lock/\&#34;&gt;//不读取或生成yarn.lock&lt;/a&gt;&lt;br&gt;\nyarn install --pure-lockfile &lt;a href=\&#34;https://xn--yarn-fb5f137h141a.lock/\&#34;&gt;//不生成yarn.lock&lt;/a&gt;&lt;br&gt;\n添加包（会更新package.json和yarn.lock）：&lt;/p&gt;\n&lt;p&gt;yarn add [package] // 在当前的项目中添加一个依赖包，会自动更新到package.json和yarn.lock文件中&lt;br&gt;\nyarn add [package]@[version] // 安装指定版本，这里指的是主要版本，如果需要精确到小版本，使用-E参数&lt;br&gt;\nyarn add [package]@[tag] // 安装某个tag（比如beta,next或者latest）&lt;br&gt;\n//不指定依赖类型默认安装到dependencies里，你也可以指定依赖类型：&lt;/p&gt;\n&lt;p&gt;yarn add --dev/-D // 加到 devDependencies&lt;br&gt;\nyarn add --peer/-P // 加到 peerDependencies&lt;br&gt;\nyarn add --optional/-O // 加到 optionalDependencies&lt;br&gt;\n//默认安装包的主要版本里的最新版本，下面两个命令可以指定版本：&lt;/p&gt;\n&lt;p&gt;yarn add --exact/-E // 安装包的精确版本。例如yarn add foo@1.2.3会接受1.9.1版，但是yarn add foo@1.2.3 --exact只会接受1.2.3版&lt;br&gt;\nyarn add --tilde/-T // 安装包的次要版本里的最新版。例如yarn add foo@1.2.3 --tilde会接受1.2.9，但不接受1.3.0&lt;br&gt;\n发布包&lt;/p&gt;\n&lt;p&gt;yarn publish&lt;br&gt;\n移除一个包&lt;br&gt;\nyarn remove ：移除一个包，会自动更新package.json和yarn.lock&lt;br&gt;\n更新一个依赖&lt;br&gt;\nyarn upgrade 用于更新包到基于规范范围的最新版本&lt;br&gt;\n运行脚本&lt;br&gt;\nyarn run 用来执行在 package.json 中 scripts 属性下定义的脚本&lt;br&gt;\n显示某个包的信息&lt;br&gt;\nyarn info 可以用来查看某个模块的最新版本信息&lt;br&gt;\n缓存&lt;br&gt;\nyarn cache&lt;br&gt;\nyarn cache list # 列出已缓存的每个包&lt;br&gt;\nyarn cache dir # 返回 全局缓存位置&lt;br&gt;\nyarn cache clean # 清除缓存&lt;/p&gt;\n&lt;h3 id=\&#34;五-npm-与-yarn命令比较\&#34;&gt;五、npm 与 yarn命令比较:&lt;/h3&gt;\n&lt;p&gt;比如说你的项目模块依赖是图中描述的，@1.2.1代表这个模块的版本。在你安装A的时候需要安装依赖C和D，很多依赖不会指定版本号，默认会安装最新的版本，这样就会出现问题：比如今天安装模块的时候C和D是某一个版本，而当以后C、D更新的时候，再次安装模块就会安装C和D的最新版本，如果新的版本无法兼容你的项目，你的程序可能就会出BUG，甚至无法运行。这就是npm的弊端，而yarn为了解决这个问题推出了yarn.lock的机制，这是作者项目中的yarn.lock文件。&lt;/p&gt;\n&lt;p&gt;大家会看到，这个文件已经把依赖模块的版本号全部锁定，当你执行yarn install的时候，yarn会读取这个文件获得依赖的版本号，然后依照这个版本号去安装对应的依赖模块，这样依赖就会被锁定，以后再也不用担心版本号的问题了。其他人或者其他环境下使用的时候，把这个yarn.lock拷贝到相应的环境项目下再安装即可。&lt;br&gt;\n注意：这个文件不要手动修改它，当你使用一些操作如yarn add时，yarn会自动更新yarn.lock。&lt;/p&gt;\n&#34;,&#34;fileName&#34;:&#34;yarn-shi-yong-jiao-cheng&#34;,&#34;abstract&#34;:&#34;&#34;,&#34;title&#34;:&#34;yarn使用教程&#34;,&#34;tags&#34;:[{&#34;name&#34;:&#34;前端&#34;,&#34;slug&#34;:&#34;hlj6GosQh&#34;,&#34;used&#34;:true,&#34;link&#34;:&#34;https://chiyongwu.github.io/tag/hlj6GosQh/&#34;},{&#34;name&#34;:&#34;依赖管理工具&#34;,&#34;slug&#34;:&#34;p1_gec0sC&#34;,&#34;used&#34;:true,&#34;link&#34;:&#34;https://chiyongwu.github.io/tag/p1_gec0sC/&#34;}],&#34;date&#34;:&#34;2021-01-17 14:09:19&#34;,&#34;dateFormat&#34;:&#34;2021-01-17&#34;,&#34;feature&#34;:&#34;&#34;,&#34;link&#34;:&#34;https://chiyongwu.github.io/post/yarn-shi-yong-jiao-cheng/&#34;,&#34;hideInList&#34;:false,&#34;isTop&#34;:false,&#34;stats&#34;:{&#34;text&#34;:&#34;5 min read&#34;,&#34;time&#34;:266000,&#34;words&#34;:1128,&#34;minutes&#34;:5},&#34;description&#34;:&#34;一、yarn的简介：\nYarn是facebook发布的一款取代npm的包管理工具。\n二、yarn的特点：\n1.速度超快。\nYarn 缓存了每个下载过的包，所以再次使用时无需重复下载。 同时利用并行下载以最大化资源利用率，因此安装速度更快。\n...&#34;,&#34;toc&#34;:&#34;&lt;ul class=\&#34;markdownIt-TOC\&#34;&gt;\n&lt;li&gt;\n&lt;ul&gt;\n&lt;li&gt;\n&lt;ul&gt;\n&lt;li&gt;&lt;a href=\&#34;#%E4%B8%80-yarn%E7%9A%84%E7%AE%80%E4%BB%8B\&#34;&gt;一、yarn的简介：&lt;/a&gt;&lt;/li&gt;\n&lt;li&gt;&lt;a href=\&#34;#%E4%BA%8C-yarn%E7%9A%84%E7%89%B9%E7%82%B9\&#34;&gt;二、yarn的特点：&lt;/a&gt;&lt;/li&gt;\n&lt;li&gt;&lt;a href=\&#34;#%E4%B8%89-yarn%E7%9A%84%E5%AE%89%E8%A3%85\&#34;&gt;三、yarn的安装:&lt;/a&gt;&lt;br&gt;\n*\n&lt;ul&gt;\n&lt;li&gt;&lt;a href=\&#34;#%E4%B8%8B%E8%BD%BDnodejs%E4%BD%BF%E7%94%A8npm%E5%AE%89%E8%A3%85\&#34;&gt;下载node.js，使用npm安装&lt;/a&gt;&lt;/li&gt;\n&lt;li&gt;&lt;a href=\&#34;#%E6%9F%A5%E7%9C%8B%E7%89%88%E6%9C%AC\&#34;&gt;查看版本：&lt;/a&gt;&lt;/li&gt;\n&lt;li&gt;&lt;a href=\&#34;#yarn-%E6%B7%98%E5%AE%9D%E6%BA%90%E5%AE%89%E8%A3%85\&#34;&gt;Yarn 淘宝源安装&lt;/a&gt;&lt;/li&gt;\n&lt;/ul&gt;\n&lt;/li&gt;\n&lt;li&gt;&lt;a href=\&#34;#%E5%9B%9B-yarn%E7%9A%84%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4\&#34;&gt;四、yarn的常用命令：&lt;/a&gt;&lt;/li&gt;\n&lt;li&gt;&lt;a href=\&#34;#%E4%BA%94-npm-%E4%B8%8E-yarn%E5%91%BD%E4%BB%A4%E6%AF%94%E8%BE%83\&#34;&gt;五、npm 与 yarn命令比较:&lt;/a&gt;&lt;/li&gt;\n&lt;/ul&gt;\n&lt;/li&gt;\n&lt;/ul&gt;\n&lt;/li&gt;\n&lt;/ul&gt;\n&#34;},{&#34;content&#34;:&#34;&lt;h3 id=\&#34;git设置和取消代理\&#34;&gt;git设置和取消代理&lt;/h3&gt;\n&lt;h4 id=\&#34;方法1永久设置\&#34;&gt;方法1：永久设置&lt;/h4&gt;\n&lt;pre&gt;&lt;code&gt;# 设置ss\ngit config --global http.proxy &#39;socks5://127.0.0.1:端口号&#39;\n\ngit config --global https.proxy &#39;socks5://127.0.0.1:端口号&#39;\n\n# 设置代理\ngit config --global https.proxy http://127.0.0.1:端口号\n\ngit config --global https.proxy https://127.0.0.1:端口号\n\n# 取消代理\ngit config --global --unset http.proxy\n\ngit config --global --unset https.proxy\n&lt;/code&gt;&lt;/pre&gt;\n&lt;h4 id=\&#34;方法2临时设置\&#34;&gt;方法2：临时设置&lt;/h4&gt;\n&lt;pre&gt;&lt;code&gt;# 设置ss\nexport http_proxy=&amp;quot;socks5://127.0.0.1:端口号&amp;quot;\nexport https_proxy=&amp;quot;socks5://127.0.0.1:端口号&amp;quot;\n\n# 设置代理\nexport http_proxy=&#39;http://127.0.0.1:端口号&#39;\nexport https_proxy=&#39;http://127.0.0.1:端口号&#39;\n&lt;/code&gt;&lt;/pre&gt;\n&lt;h4 id=\&#34;方法3直接修改gitconfig文件\&#34;&gt;方法3：直接修改.gitconfig文件&lt;/h4&gt;\n&lt;pre&gt;&lt;code&gt;# 打开该文件，追加以下内容：\n\n[http &amp;quot;https://github.com&amp;quot;]\n    proxy = socks5://127.0.0.1:端口号\n&lt;/code&gt;&lt;/pre&gt;\n&lt;h4 id=\&#34;方法4第三方平台代理下载\&#34;&gt;方法4：第三方平台代理下载&lt;/h4&gt;\n&lt;pre&gt;&lt;code&gt;http://gitd.cc/\n\nhttps://gitclone.com/\n&lt;/code&gt;&lt;/pre&gt;\n&lt;h4 id=\&#34;方法5利用gitee克隆导入github项目\&#34;&gt;方法5：利用gitee克隆/导入github项目&lt;/h4&gt;\n&lt;pre&gt;&lt;code&gt;https://zhuanlan.zhihu.com/p/112697807\n&lt;/code&gt;&lt;/pre&gt;\n&#34;,&#34;fileName&#34;:&#34;git-zhong-duan-dai-li-she-zhi&#34;,&#34;abstract&#34;:&#34;&#34;,&#34;title&#34;:&#34;git终端代理设置&#34;,&#34;tags&#34;:[{&#34;name&#34;:&#34;git&#34;,&#34;slug&#34;:&#34;PhZ-BplBh&#34;,&#34;used&#34;:true,&#34;link&#34;:&#34;https://chiyongwu.github.io/tag/PhZ-BplBh/&#34;}],&#34;date&#34;:&#34;2021-01-14 05:16:31&#34;,&#34;dateFormat&#34;:&#34;2021-01-14&#34;,&#34;feature&#34;:&#34;&#34;,&#34;link&#34;:&#34;https://chiyongwu.github.io/post/git-zhong-duan-dai-li-she-zhi/&#34;,&#34;hideInList&#34;:false,&#34;isTop&#34;:false,&#34;stats&#34;:{&#34;text&#34;:&#34;2 min read&#34;,&#34;time&#34;:65000,&#34;words&#34;:221,&#34;minutes&#34;:2},&#34;description&#34;:&#34;git设置和取消代理\n方法1：永久设置\n# 设置ss\ngit config --global http.proxy &#39;socks5://127.0.0.1:端口号&#39;\n\ngit config --global https.proxy &#39;soc...&#34;,&#34;toc&#34;:&#34;&lt;ul class=\&#34;markdownIt-TOC\&#34;&gt;\n&lt;li&gt;\n&lt;ul&gt;\n&lt;li&gt;\n&lt;ul&gt;\n&lt;li&gt;&lt;a href=\&#34;#git%E8%AE%BE%E7%BD%AE%E5%92%8C%E5%8F%96%E6%B6%88%E4%BB%A3%E7%90%86\&#34;&gt;git设置和取消代理&lt;/a&gt;\n&lt;ul&gt;\n&lt;li&gt;&lt;a href=\&#34;#%E6%96%B9%E6%B3%951%E6%B0%B8%E4%B9%85%E8%AE%BE%E7%BD%AE\&#34;&gt;方法1：永久设置&lt;/a&gt;&lt;/li&gt;\n&lt;li&gt;&lt;a href=\&#34;#%E6%96%B9%E6%B3%952%E4%B8%B4%E6%97%B6%E8%AE%BE%E7%BD%AE\&#34;&gt;方法2：临时设置&lt;/a&gt;&lt;/li&gt;\n&lt;li&gt;&lt;a href=\&#34;#%E6%96%B9%E6%B3%953%E7%9B%B4%E6%8E%A5%E4%BF%AE%E6%94%B9gitconfig%E6%96%87%E4%BB%B6\&#34;&gt;方法3：直接修改.gitconfig文件&lt;/a&gt;&lt;/li&gt;\n&lt;li&gt;&lt;a href=\&#34;#%E6%96%B9%E6%B3%954%E7%AC%AC%E4%B8%89%E6%96%B9%E5%B9%B3%E5%8F%B0%E4%BB%A3%E7%90%86%E4%B8%8B%E8%BD%BD\&#34;&gt;方法4：第三方平台代理下载&lt;/a&gt;&lt;/li&gt;\n&lt;li&gt;&lt;a href=\&#34;#%E6%96%B9%E6%B3%955%E5%88%A9%E7%94%A8gitee%E5%85%8B%E9%9A%86%E5%AF%BC%E5%85%A5github%E9%A1%B9%E7%9B%AE\&#34;&gt;方法5：利用gitee克隆/导入github项目&lt;/a&gt;&lt;/li&gt;\n&lt;/ul&gt;\n&lt;/li&gt;\n&lt;/ul&gt;\n&lt;/li&gt;\n&lt;/ul&gt;\n&lt;/li&gt;\n&lt;/ul&gt;\n&#34;},{&#34;content&#34;:&#34;&lt;p&gt;转载：https://www.longkui.site/development/nvm%e7%9a%84%e5%ae%89%e8%a3%85%e9%85%8d%e7%bd%ae%e4%b8%8e%e4%bd%bf%e7%94%a8/&lt;/p&gt;\n&#34;,&#34;fileName&#34;:&#34;nvm-an-zhuang-pei-zhi-jiao-cheng&#34;,&#34;abstract&#34;:&#34;&#34;,&#34;title&#34;:&#34;nvm安装配置教程&#34;,&#34;tags&#34;:[{&#34;name&#34;:&#34;前端&#34;,&#34;slug&#34;:&#34;hlj6GosQh&#34;,&#34;used&#34;:true,&#34;link&#34;:&#34;https://chiyongwu.github.io/tag/hlj6GosQh/&#34;},{&#34;name&#34;:&#34;依赖管理工具&#34;,&#34;slug&#34;:&#34;p1_gec0sC&#34;,&#34;used&#34;:true,&#34;link&#34;:&#34;https://chiyongwu.github.io/tag/p1_gec0sC/&#34;}],&#34;date&#34;:&#34;2021-01-04 00:36:21&#34;,&#34;dateFormat&#34;:&#34;2021-01-04&#34;,&#34;feature&#34;:&#34;&#34;,&#34;link&#34;:&#34;https://chiyongwu.github.io/post/nvm-an-zhuang-pei-zhi-jiao-cheng/&#34;,&#34;hideInList&#34;:false,&#34;isTop&#34;:false,&#34;stats&#34;:{&#34;text&#34;:&#34;1 min read&#34;,&#34;time&#34;:11000,&#34;words&#34;:32,&#34;minutes&#34;:1},&#34;description&#34;:&#34;转载：https://www.longkui.site/development/nvm%e7%9a%84%e5%ae%89%e8%a3%85%e9%85%8d%e7%bd%ae%e4%b8%8e%e4%bd%bf%e7%94%a8/\n...&#34;,&#34;toc&#34;:&#34;&#34;},{&#34;content&#34;:&#34;&lt;h3 id=\&#34;一-centos-7安装docker-ce\&#34;&gt;一、centos 7安装docker ce&lt;/h3&gt;\n&lt;p&gt;1、安装依赖包&lt;/p&gt;\n&lt;pre&gt;&lt;code&gt;yum install -y yum-utils device-mapper-persistent-data lvm2\n&lt;/code&gt;&lt;/pre&gt;\n&lt;p&gt;2、设置国内yum源&lt;/p&gt;\n&lt;pre&gt;&lt;code&gt;yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo\n&lt;/code&gt;&lt;/pre&gt;\n&lt;p&gt;3、安装docker&lt;/p&gt;\n&lt;pre&gt;&lt;code&gt;yum install -y docker-ce\n&lt;/code&gt;&lt;/pre&gt;\n&lt;p&gt;4、启动/关闭docker服务&lt;/p&gt;\n&lt;pre&gt;&lt;code&gt;systemctl start docker\nsystemctl stop docker\n&lt;/code&gt;&lt;/pre&gt;\n&lt;h3 id=\&#34;二-常用命令\&#34;&gt;二、常用命令&lt;/h3&gt;\n&lt;pre&gt;&lt;code&gt;搜索镜像：docker search [imageName]\n拉取镜像: docker pull [imageName]:[image Tag]\n查看本地镜像: docker images\n运行容器: docker run [imageId]\n查看运行中的docker：docker ps\n查看所有历史容器：docker ps -a\n查看docker容器日志：docker logs [-f] [containerId]\n进入容器：docker exec -it [containerId] /bin/bash\ndocker拷贝文件：docker cp [localPath] [containerId]:[containerPath]\n启动/停止/重启已存在的容器：docker start/stop/restart [containerId]\n移除docker容器：docker rm [containerId]（容器必须在停止状态才能移除）\n删除镜像：docker rmi [imageId]\n\n-d：后台运行镜像\n-t：启动一个终端\n-i：标准输入\n-p：容器內的端口映射到本机端口\n-v：文件映射\n&lt;/code&gt;&lt;/pre&gt;\n&lt;h3 id=\&#34;三-项目部署\&#34;&gt;三、项目部署&lt;/h3&gt;\n&lt;p&gt;原则：不要把配置文件和数据放在容器中，请在宿主机上创建配置文件目录和数据文件目录，再通过文件映射方式提供容器使用。&lt;/p&gt;\n&lt;p&gt;dockerhub网站可以搜镜像的使用方法，比如mysql：https://hub.docker.com/_/mysql&lt;/p&gt;\n&lt;p&gt;注意：&lt;/p&gt;\n&lt;p&gt;从宿主机外面访问宿主机上的容器，IP地址只需要填宿主机，端口填映射端口即可访问容器。若是容器间的通信，则不能填宿主机的IP和映射端口。同一个宿主机中的docker间通信，可以通过docker内部IP来访问。容器间的通信有如下3种方法：&lt;/p&gt;\n&lt;ul&gt;\n&lt;li&gt;docker inspect [containerId]&lt;/li&gt;\n&lt;li&gt;每次重启容器都会变更IP，因此应进行docker网络创建。通过在docker run命令中让容器加入已有的docker网络，并起容器网络别名的方式，实现容器网络创建&lt;/li&gt;\n&lt;/ul&gt;\n&lt;h3 id=\&#34;四-docker网络创建\&#34;&gt;四、docker网络创建&lt;/h3&gt;\n&lt;pre&gt;&lt;code&gt;docker network create beihe-network //创建docker网络\ndocker network ls //查看网络\n&lt;/code&gt;&lt;/pre&gt;\n&lt;p&gt;举例：&lt;/p&gt;\n&lt;pre&gt;&lt;code&gt;docker run -d -p 3306:3306 --network beihe-network --network-alias mysql-network --privileged=true -v /home/docker/mysql/conf/my.cnf:/etc/mysql/my.cnf -v /home/docker/mysql /data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=123456 mysql:5.7.21\n\t\n\n--network-alias：网络别名，当IP使用，直接写在配置文件中的ip位置\n&lt;/code&gt;&lt;/pre&gt;\n&lt;h3 id=\&#34;五-dockerfile创建镜像\&#34;&gt;五、dockerfile创建镜像&lt;/h3&gt;\n&lt;p&gt;若要做镜像，请基于别人做好的镜像再做。比如java项目，去dockerhub下载java镜像，步骤如下：&lt;/p&gt;\n&lt;pre&gt;&lt;code&gt;FROM hub.c.163.com/library/java  //拉取java容器镜像\nRUN mkdir -p /home/app  //为容器创建目录\nCOPY pinter.jar /home/app  //将java项目拷贝到容器目录\nWORKDIR /home/app  //设置工作目录\nEXPOSE 8080  //设置端口号\nCMD java -jar pinter.jar  //执行命令\n&lt;/code&gt;&lt;/pre&gt;\n&lt;p&gt;生成镜像：&lt;/p&gt;\n&lt;pre&gt;&lt;code&gt;docker build -t pinter:tagName .  //.是路径上下文\n&lt;/code&gt;&lt;/pre&gt;\n&lt;p&gt;更多命令参考：https://www.runoob.com/docker/docker-dockerfile.html&lt;/p&gt;\n&lt;p&gt;RUN命令和CMD命令的区别：&lt;/p&gt;\n&lt;p&gt;RUN命令只在build时执行，CMD是每次容器运行时执行。&lt;/p&gt;\n&lt;h3 id=\&#34;六-docker-compose\&#34;&gt;六、docker-compose&lt;/h3&gt;\n&lt;p&gt;直接去http://get.daocloud.io/#install-compose下载docker compose，验证是否安装成功：&lt;/p&gt;\n&lt;pre&gt;&lt;code&gt;docker-compose -v\n&lt;/code&gt;&lt;/pre&gt;\n&lt;p&gt;docker-compose文件是yaml配置文件，模板：&lt;/p&gt;\n&lt;pre&gt;&lt;code&gt;version: &#39;2&#39;\nservices:\n  web:\n    image: dockercloud/hello-world\n    ports:\n      - 8080\n    networks:\n      - front-tier\n      - back-tier\n \n  redis:\n    image: redis\n    links:\n      - web\n    networks:\n      - back-tier\n \n  lb:\n    image: dockercloud/haproxy\n    ports:\n      - 80:80\n    links:\n      - web\n    networks:\n      - front-tier\n      - back-tier\n    volumes:\n      - /var/run/docker.sock:/var/run/docker.sock\n \nnetworks:\n  front-tier:\n    driver: bridge\n  back-tier:\n    driver: bridge\n&lt;/code&gt;&lt;/pre&gt;\n&lt;p&gt;常用命令：&lt;/p&gt;\n&lt;pre&gt;&lt;code&gt;后台启动容器：docker-compose up -d compose文件路径\n查看容器：docker-compose ps\n停止容器：docker-compose stop\n查看日志：docker-compose logs\n&lt;/code&gt;&lt;/pre&gt;\n&lt;p&gt;更多命令参考：https://www.cnblogs.com/minseo/p/11548177.html&lt;/p&gt;\n&#34;,&#34;fileName&#34;:&#34;docker-jiao-cheng&#34;,&#34;abstract&#34;:&#34;&#34;,&#34;title&#34;:&#34;docker教程&#34;,&#34;tags&#34;:[{&#34;name&#34;:&#34;docker&#34;,&#34;slug&#34;:&#34;WwosyOe_g&#34;,&#34;used&#34;:true,&#34;link&#34;:&#34;https://chiyongwu.github.io/tag/WwosyOe_g/&#34;}],&#34;date&#34;:&#34;2021-01-04 00:28:58&#34;,&#34;dateFormat&#34;:&#34;2021-01-04&#34;,&#34;feature&#34;:&#34;&#34;,&#34;link&#34;:&#34;https://chiyongwu.github.io/post/docker-jiao-cheng/&#34;,&#34;hideInList&#34;:false,&#34;isTop&#34;:false,&#34;stats&#34;:{&#34;text&#34;:&#34;4 min read&#34;,&#34;time&#34;:229000,&#34;words&#34;:873,&#34;minutes&#34;:4},&#34;description&#34;:&#34;一、centos 7安装docker ce\n1、安装依赖包\nyum install -y yum-utils device-mapper-persistent-data lvm2\n\n2、设置国内yum源\nyum-config-manager...&#34;,&#34;toc&#34;:&#34;&lt;ul class=\&#34;markdownIt-TOC\&#34;&gt;\n&lt;li&gt;\n&lt;ul&gt;\n&lt;li&gt;\n&lt;ul&gt;\n&lt;li&gt;&lt;a href=\&#34;#%E4%B8%80-centos-7%E5%AE%89%E8%A3%85docker-ce\&#34;&gt;一、centos 7安装docker ce&lt;/a&gt;&lt;/li&gt;\n&lt;li&gt;&lt;a href=\&#34;#%E4%BA%8C-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4\&#34;&gt;二、常用命令&lt;/a&gt;&lt;/li&gt;\n&lt;li&gt;&lt;a href=\&#34;#%E4%B8%89-%E9%A1%B9%E7%9B%AE%E9%83%A8%E7%BD%B2\&#34;&gt;三、项目部署&lt;/a&gt;&lt;/li&gt;\n&lt;li&gt;&lt;a href=\&#34;#%E5%9B%9B-docker%E7%BD%91%E7%BB%9C%E5%88%9B%E5%BB%BA\&#34;&gt;四、docker网络创建&lt;/a&gt;&lt;/li&gt;\n&lt;li&gt;&lt;a href=\&#34;#%E4%BA%94-dockerfile%E5%88%9B%E5%BB%BA%E9%95%9C%E5%83%8F\&#34;&gt;五、dockerfile创建镜像&lt;/a&gt;&lt;/li&gt;\n&lt;li&gt;&lt;a href=\&#34;#%E5%85%AD-docker-compose\&#34;&gt;六、docker-compose&lt;/a&gt;&lt;/li&gt;\n&lt;/ul&gt;\n&lt;/li&gt;\n&lt;/ul&gt;\n&lt;/li&gt;\n&lt;/ul&gt;\n&#34;},{&#34;content&#34;:&#34;&lt;blockquote&gt;\n&lt;p&gt;欢迎来到我的小站呀，很高兴遇见你！🤝&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;h2 id=\&#34;关于本站\&#34;&gt;🏠 关于本站&lt;/h2&gt;\n&lt;h2 id=\&#34;博主是谁\&#34;&gt;👨‍💻 博主是谁&lt;/h2&gt;\n&lt;h2 id=\&#34;兴趣爱好\&#34;&gt;⛹ 兴趣爱好&lt;/h2&gt;\n&lt;h2 id=\&#34;联系我呀\&#34;&gt;📬 联系我呀&lt;/h2&gt;\n&#34;,&#34;fileName&#34;:&#34;about&#34;,&#34;abstract&#34;:&#34;&#34;,&#34;title&#34;:&#34;关于&#34;,&#34;tags&#34;:[],&#34;date&#34;:&#34;2019-01-25 19:09:48&#34;,&#34;dateFormat&#34;:&#34;2019-01-25&#34;,&#34;feature&#34;:&#34;&#34;,&#34;link&#34;:&#34;https://chiyongwu.github.io/post/about/&#34;,&#34;hideInList&#34;:true,&#34;isTop&#34;:false,&#34;stats&#34;:{&#34;text&#34;:&#34;1 min read&#34;,&#34;time&#34;:6000,&#34;words&#34;:31,&#34;minutes&#34;:1},&#34;description&#34;:&#34;\n欢迎来到我的小站呀，很高兴遇见你！🤝\n\n🏠 关于本站\n👨‍💻 博主是谁\n⛹ 兴趣爱好\n📬 联系我呀\n...&#34;,&#34;toc&#34;:&#34;&lt;ul class=\&#34;markdownIt-TOC\&#34;&gt;\n&lt;li&gt;\n&lt;ul&gt;\n&lt;li&gt;&lt;a href=\&#34;#%E5%85%B3%E4%BA%8E%E6%9C%AC%E7%AB%99\&#34;&gt;🏠 关于本站&lt;/a&gt;&lt;/li&gt;\n&lt;li&gt;&lt;a href=\&#34;#%E5%8D%9A%E4%B8%BB%E6%98%AF%E8%B0%81\&#34;&gt;👨‍💻 博主是谁&lt;/a&gt;&lt;/li&gt;\n&lt;li&gt;&lt;a href=\&#34;#%E5%85%B4%E8%B6%A3%E7%88%B1%E5%A5%BD\&#34;&gt;⛹ 兴趣爱好&lt;/a&gt;&lt;/li&gt;\n&lt;li&gt;&lt;a href=\&#34;#%E8%81%94%E7%B3%BB%E6%88%91%E5%91%80\&#34;&gt;📬 联系我呀&lt;/a&gt;&lt;/li&gt;\n&lt;/ul&gt;\n&lt;/li&gt;\n&lt;/ul&gt;\n&#34;},{&#34;content&#34;:&#34;&lt;p&gt;👏  欢迎使用 &lt;strong&gt;Gridea&lt;/strong&gt; ！&lt;br&gt;\n✍️  &lt;strong&gt;Gridea&lt;/strong&gt; 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...&lt;/p&gt;\n&lt;!-- more --&gt;\n&lt;p&gt;&lt;a href=\&#34;https://github.com/getgridea/gridea\&#34;&gt;Github&lt;/a&gt;&lt;br&gt;\n&lt;a href=\&#34;https://gridea.dev/\&#34;&gt;Gridea 主页&lt;/a&gt;&lt;br&gt;\n&lt;a href=\&#34;http://fehey.com/\&#34;&gt;示例网站&lt;/a&gt;&lt;/p&gt;\n&lt;h2 id=\&#34;特性\&#34;&gt;特性👇&lt;/h2&gt;\n&lt;p&gt;📝  你可以使用最酷的 &lt;strong&gt;Markdown&lt;/strong&gt; 语法，进行快速创作&lt;/p&gt;\n&lt;p&gt;🌉  你可以给文章配上精美的封面图和在文章任意位置插入图片&lt;/p&gt;\n&lt;p&gt;🏷️  你可以对文章进行标签分组&lt;/p&gt;\n&lt;p&gt;📋  你可以自定义菜单，甚至可以创建外部链接菜单&lt;/p&gt;\n&lt;p&gt;💻  你可以在 &lt;strong&gt;Windows&lt;/strong&gt;，&lt;strong&gt;MacOS&lt;/strong&gt; 或 &lt;strong&gt;Linux&lt;/strong&gt; 设备上使用此客户端&lt;/p&gt;\n&lt;p&gt;🌎  你可以使用 &lt;strong&gt;𝖦𝗂𝗍𝗁𝗎𝖻 𝖯𝖺𝗀𝖾𝗌&lt;/strong&gt; 或 &lt;strong&gt;Coding Pages&lt;/strong&gt; 向世界展示，未来将支持更多平台&lt;/p&gt;\n&lt;p&gt;💬  你可以进行简单的配置，接入 &lt;a href=\&#34;https://github.com/gitalk/gitalk\&#34;&gt;Gitalk&lt;/a&gt; 或 &lt;a href=\&#34;https://github.com/SukkaW/DisqusJS\&#34;&gt;DisqusJS&lt;/a&gt; 评论系统&lt;/p&gt;\n&lt;p&gt;🇬🇧  你可以使用&lt;strong&gt;中文简体&lt;/strong&gt;或&lt;strong&gt;英语&lt;/strong&gt;&lt;/p&gt;\n&lt;p&gt;🌁  你可以任意使用应用内默认主题或任意第三方主题，强大的主题自定义能力&lt;/p&gt;\n&lt;p&gt;🖥  你可以自定义源文件夹，利用 OneDrive、百度网盘、iCloud、Dropbox 等进行多设备同步&lt;/p&gt;\n&lt;p&gt;🌱 当然 &lt;strong&gt;Gridea&lt;/strong&gt; 还很年轻，有很多不足，但请相信，它会不停向前 🏃&lt;/p&gt;\n&lt;p&gt;未来，它一定会成为你离不开的伙伴&lt;/p&gt;\n&lt;p&gt;尽情发挥你的才华吧！&lt;/p&gt;\n&lt;p&gt;😘 Enjoy~&lt;/p&gt;\n&#34;,&#34;fileName&#34;:&#34;hello-gridea&#34;,&#34;abstract&#34;:&#34;&lt;p&gt;👏  欢迎使用 &lt;strong&gt;Gridea&lt;/strong&gt; ！&lt;br&gt;\n✍️  &lt;strong&gt;Gridea&lt;/strong&gt; 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...&lt;/p&gt;\n&#34;,&#34;title&#34;:&#34;Hello Gridea&#34;,&#34;tags&#34;:[{&#34;name&#34;:&#34;Gridea&#34;,&#34;slug&#34;:&#34;cgjfeaO05&#34;,&#34;used&#34;:true,&#34;link&#34;:&#34;https://chiyongwu.github.io/tag/cgjfeaO05/&#34;}],&#34;date&#34;:&#34;2018-12-12 00:00:00&#34;,&#34;dateFormat&#34;:&#34;2018-12-12&#34;,&#34;feature&#34;:&#34;https://chiyongwu.github.io/post-images/hello-gridea.png&#34;,&#34;link&#34;:&#34;https://chiyongwu.github.io/post/hello-gridea/&#34;,&#34;hideInList&#34;:false,&#34;isTop&#34;:false,&#34;stats&#34;:{&#34;text&#34;:&#34;2 min read&#34;,&#34;time&#34;:62000,&#34;words&#34;:298,&#34;minutes&#34;:2},&#34;description&#34;:&#34;👏  欢迎使用 Gridea ！\n✍️  Gridea 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...\n\nGithub\nGridea 主页\n示例网站\n特性👇\n📝  你可以使用最酷的 Markdo...&#34;,&#34;toc&#34;:&#34;&lt;ul class=\&#34;markdownIt-TOC\&#34;&gt;\n&lt;li&gt;\n&lt;ul&gt;\n&lt;li&gt;&lt;a href=\&#34;#%E7%89%B9%E6%80%A7\&#34;&gt;特性👇&lt;/a&gt;&lt;/li&gt;\n&lt;/ul&gt;\n&lt;/li&gt;\n&lt;/ul&gt;\n&#34;}]";
+  // var json = escape.substr(1, escape.length - 2);
+  // var datas = json.split(',');
+  // for (let i=0; i < datas.length; i++) {
+  //   let item = datas[i];
+  //   let attrs = item.split('34;:&#34')
+  //   debugger
+  //   console.log(datas[i])
+  // }
+  let escapeMap = new Map();
+  escapeMap.set('&#34;', '"');
+  escapeMap.set('&gt;', '>');
+  escapeMap.set('&#39;', "'");
+  escapeMap.set('&lt;', '<');
+  escapeMap.set('&quot;', '"');
+  escapeMap.set('&amp;', '&');
+</script> -->
+
+
+
 </html>
