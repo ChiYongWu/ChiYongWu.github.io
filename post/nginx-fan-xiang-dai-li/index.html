@@ -2,16 +2,23 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>SwordPal&#39;s blog</title>
+<title>Nginx反向代理 | SwordPal&#39;s blog</title>
 <link rel="shortcut icon" href="https://chiyongwu.github.io/favicon.ico?v=1611192443828">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://chiyongwu.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="SwordPal&#39;s blog - Atom Feed" href="https://chiyongwu.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="Nginx反向代理 | SwordPal&#39;s blog - Atom Feed" href="https://chiyongwu.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
-    <meta name="description" content="等候未来的你" />
+    <meta name="description" content="1. 代理
+​		Nginx 主要能够代理如下几种协议，其中用到的最多的就是做Http代理服务器。
+
+1.1. 正向代理
+​		大家都知道，现在国内是访问不了 Google的，那么怎么才能访问 Google呢？我们又想，美国人不是能访问 G..." />
+    <meta name="keywords" content="Nginx,反向代理" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
   </head>
   <body>
     <div class="main">
@@ -68,33 +75,32 @@
   </div>
 </div>
 
-    
-        <div class="post-container">
-  
-    <article class="post">
-      <a href="https://chiyongwu.github.io/post/nginx-fan-xiang-dai-li/">
-        <h2 class="post-title">Nginx反向代理</h2>
-      </a>
-      <div class="post-info">
-        <span>
-          2021-01-21
-        </span>
-        <span>
-          9 min read
-        </span>
-        
-          <a href="https://chiyongwu.github.io/tag/ZuuWx2SC_/" class="post-tag">
-            # Nginx
-          </a>
-        
-          <a href="https://chiyongwu.github.io/tag/xxcjBiXtGB/" class="post-tag">
-            # 反向代理
-          </a>
-        
-      </div>
-      
-      <div class="post-abstract">
-        <h3 id="1-代理">1. 代理</h3>
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              Nginx反向代理
+            </h2>
+            <div class="post-info">
+              <span>
+                2021-01-21
+              </span>
+              <span>
+                9 min read
+              </span>
+              
+                <a href="https://chiyongwu.github.io/tag/ZuuWx2SC_/" class="post-tag">
+                  # Nginx
+                </a>
+              
+                <a href="https://chiyongwu.github.io/tag/xxcjBiXtGB/" class="post-tag">
+                  # 反向代理
+                </a>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <h3 id="1-代理">1. 代理</h3>
 <p>​		Nginx 主要能够代理如下几种协议，其中用到的最多的就是做Http代理服务器。</p>
 <figure data-type="image" tabindex="1"><img src="https://gitee.com/WuChiYong/markdown_picture/raw/master/img/20210121090820.png" alt="img" loading="lazy"></figure>
 <h4 id="11-正向代理">1.1. 正向代理</h4>
@@ -221,147 +227,56 @@
 <pre><code>index  index.html index.jsp;
 </code></pre>
 <p>通常该指令有两个作用：第一个是用户在请求访问网站时，请求地址可以不写首页名称；第二个是可以对一个请求，根据请求内容而设置不同的首页。</p>
+<!-- more -->
+<!-- more -->
 
-      </div>
-    </article>
-  
-    <article class="post">
-      <a href="https://chiyongwu.github.io/post/yarn-shi-yong-jiao-cheng/">
-        <h2 class="post-title">yarn使用教程</h2>
-      </a>
-      <div class="post-info">
-        <span>
-          2021-01-17
-        </span>
-        <span>
-          5 min read
-        </span>
-        
-          <a href="https://chiyongwu.github.io/tag/hlj6GosQh/" class="post-tag">
-            # 前端
-          </a>
-        
-          <a href="https://chiyongwu.github.io/tag/p1_gec0sC/" class="post-tag">
-            # 依赖管理工具
-          </a>
-        
-      </div>
-      
-      <div class="post-abstract">
-        
-      </div>
-    </article>
-  
-    <article class="post">
-      <a href="https://chiyongwu.github.io/post/git-zhong-duan-dai-li-she-zhi/">
-        <h2 class="post-title">git终端代理设置</h2>
-      </a>
-      <div class="post-info">
-        <span>
-          2021-01-14
-        </span>
-        <span>
-          2 min read
-        </span>
-        
-          <a href="https://chiyongwu.github.io/tag/PhZ-BplBh/" class="post-tag">
-            # git
-          </a>
-        
-      </div>
-      
-      <div class="post-abstract">
-        
-      </div>
-    </article>
-  
-    <article class="post">
-      <a href="https://chiyongwu.github.io/post/nvm-an-zhuang-pei-zhi-jiao-cheng/">
-        <h2 class="post-title">nvm安装配置教程</h2>
-      </a>
-      <div class="post-info">
-        <span>
-          2021-01-04
-        </span>
-        <span>
-          1 min read
-        </span>
-        
-          <a href="https://chiyongwu.github.io/tag/hlj6GosQh/" class="post-tag">
-            # 前端
-          </a>
-        
-          <a href="https://chiyongwu.github.io/tag/p1_gec0sC/" class="post-tag">
-            # 依赖管理工具
-          </a>
-        
-      </div>
-      
-      <div class="post-abstract">
-        
-      </div>
-    </article>
-  
-    <article class="post">
-      <a href="https://chiyongwu.github.io/post/docker-jiao-cheng/">
-        <h2 class="post-title">docker教程</h2>
-      </a>
-      <div class="post-info">
-        <span>
-          2021-01-04
-        </span>
-        <span>
-          4 min read
-        </span>
-        
-          <a href="https://chiyongwu.github.io/tag/WwosyOe_g/" class="post-tag">
-            # docker
-          </a>
-        
-      </div>
-      
-      <div class="post-abstract">
-        
-      </div>
-    </article>
-  
-    <article class="post">
-      <a href="https://chiyongwu.github.io/post/hello-gridea/">
-        <h2 class="post-title">Hello Gridea</h2>
-      </a>
-      <div class="post-info">
-        <span>
-          2018-12-12
-        </span>
-        <span>
-          2 min read
-        </span>
-        
-          <a href="https://chiyongwu.github.io/tag/cgjfeaO05/" class="post-tag">
-            # Gridea
-          </a>
-        
-      </div>
-      
-        <a href="https://chiyongwu.github.io/post/hello-gridea/" class="post-feature-image" style="background-image: url('https://chiyongwu.github.io/post-images/hello-gridea.png')">
-        </a>
-      
-      <div class="post-abstract">
-        <p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
-✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#1-%E4%BB%A3%E7%90%86">1. 代理</a>
+<ul>
+<li><a href="#11-%E6%AD%A3%E5%90%91%E4%BB%A3%E7%90%86">1.1. 正向代理</a></li>
+<li><a href="#12-%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86">1.2. 反向代理</a></li>
+</ul>
+</li>
+<li><a href="#2-%E9%85%8D%E7%BD%AE%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86">2. 配置反向代理</a></li>
+<li><a href="#3-nginx%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E7%9B%B8%E5%85%B3%E6%8C%87%E4%BB%A4%E4%BB%8B%E7%BB%8D">3. Nginx反向代理相关指令介绍</a>
+<ul>
+<li><a href="#1-listen">①、listen</a></li>
+<li><a href="#2-server_name">②、server_name</a></li>
+<li><a href="#3-location">③、location</a></li>
+<li><a href="#4-proxy_pass">④、proxy_pass</a></li>
+<li><a href="#5-index">⑤、index</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 
-      </div>
-    </article>
-  
-</div>
+              </div>
+            </div>
+          </article>
+        </div>
 
-    
-        <div class="pagination-container">
-  
-  
-</div>
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://chiyongwu.github.io/post/yarn-shi-yong-jiao-cheng/">
+              <h3 class="post-title">
+                yarn使用教程
+              </h3>
+            </a>
+          </div>
+        
 
-    
+        
+
         <div class="site-footer">
   Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
   <a class="rss" href="https://chiyongwu.github.io/atom.xml" target="_blank">
@@ -371,5 +286,46 @@
 
       </div>
     </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
   </body>
 </html>
