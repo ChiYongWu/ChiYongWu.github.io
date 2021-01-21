@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://chiyongwu.github.io</id>
     <title>SwordPal&apos;s blog</title>
-    <updated>2021-01-21T02:40:27.051Z</updated>
+    <updated>2021-01-21T03:31:32.189Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://chiyongwu.github.io"/>
     <link rel="self" href="https://chiyongwu.github.io/atom.xml"/>
@@ -10,6 +10,56 @@
     <logo>https://chiyongwu.github.io/images/avatar.png</logo>
     <icon>https://chiyongwu.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, SwordPal&apos;s blog</rights>
+    <entry>
+        <title type="html"><![CDATA[Win下Nginx安装部署实战]]></title>
+        <id>https://chiyongwu.github.io/post/win-xia-nginx-an-zhuang-bu-shu-shi-zhan/</id>
+        <link href="https://chiyongwu.github.io/post/win-xia-nginx-an-zhuang-bu-shu-shi-zhan/">
+        </link>
+        <updated>2021-01-21T03:30:27.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="安装">安装</h3>
+<p>http://nginx.org/</p>
+<h3 id="启动">启动</h3>
+<p>启动方式很多，可以双击nginx解压目录下的nginx.exe启动nginx，出现一闪而过的窗口，是正常的，表示nginx服务器已经启动；</p>
+<p>也可以在cmd命令窗口输入命令 nginx，使用命令到达nginx的加压缩后的目录，然后输入nginx命令，如下所示。</p>
+<figure data-type="image" tabindex="1"><img src="https://gitee.com/WuChiYong/markdown_picture/raw/master/img/20210121111022" alt="图片" loading="lazy"></figure>
+<p>在浏览器地址框输入地址，</p>
+<p>http://localhost:80</p>
+<p>或者http://127.0.0.1:80</p>
+<p>或者http://localhost</p>
+<p>或者http://127.0.0.1</p>
+<p>然后浏览器出现如下信息，说明nginx启动成功。</p>
+<figure data-type="image" tabindex="2"><img src="https://gitee.com/WuChiYong/markdown_picture/raw/master/img/20210121111321" alt="图片" loading="lazy"></figure>
+<h3 id="配置">配置</h3>
+<ol>
+<li>
+<p>修改端口号</p>
+<p>conf目录下的nginx.conf，默认配置的nginx监听的端口为80，如果80端口被占用可以修改为未被占用的端口即可。</p>
+</li>
+</ol>
+<figure data-type="image" tabindex="3"><img src="https://gitee.com/WuChiYong/markdown_picture/raw/master/img/20210121111953" alt="图片" loading="lazy"></figure>
+<p><strong>注意：</strong></p>
+<ol>
+<li>
+<p>检查80端口是否被占用的命令是：netstat -ano | findstr “80”</p>
+<p>当我们修改了nginx的配置文件nginx.conf 时，不需要关闭nginx后重新启动nginx，只需要执行命令 nginx -s reload 即可让改动生效。</p>
+</li>
+<li>
+<p>配置静态资源</p>
+<p>在解压缩的nginx目录下新建static目录，在该目录下拷贝粘贴一张图片资源1.jpg。</p>
+</li>
+</ol>
+<figure data-type="image" tabindex="4"><img src="https://gitee.com/WuChiYong/markdown_picture/raw/master/img/20210121112653.png" alt="image-20210121112653634" loading="lazy"></figure>
+<p>​		然后执行命令 nginx -s reload 即可实现修改生效，然后在浏览器地址栏输入访问地址：http://localhost/1.jpg</p>
+<h3 id="停止">停止</h3>
+<p>​		如果使用cmd命令窗口启动nginx，关闭cmd窗口是不能结束nginx进程的，可使用如下三种方法关闭nginx。</p>
+<ol>
+<li>nginx -s stop(快速停止nginx)  或nginx -s quit(完整有序的停止nginx)</li>
+<li>taskkill /f /t /im nginx.exe</li>
+<li>任务管理器中结束nginx任务</li>
+</ol>
+<p>总结：以上是windows环境下常用的下载、安装、启动、配置、停止等操作步骤。</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Nginx反向代理]]></title>
         <id>https://chiyongwu.github.io/post/nginx-fan-xiang-dai-li/</id>
