@@ -1,103 +1,71 @@
-<html>
-  <head>
-  <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>反向代理 | SwordPal&#39;s blog</title>
-<link rel="shortcut icon" href="https://chiyongwu.github.io/favicon.ico?v=1611192443828">
-<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>SwordPal&#39;s blog</title>
+<link rel="shortcut icon" href="https://chiyongwu.github.io/favicon.ico">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.2.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css">
+<link rel="stylesheet" href="https://chiyongwu.github.io/media/css/tailwind.css">
 <link rel="stylesheet" href="https://chiyongwu.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="反向代理 | SwordPal&#39;s blog - Atom Feed" href="https://chiyongwu.github.io/atom.xml">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+<link rel="alternate" type="application/atom+xml" title="SwordPal&#39;s blog - Atom Feed" href="https://chiyongwu.github.io/atom.xml">
 
-
+    
 
   <meta name="description" content="等候未来的你" />
-  </head>
-  <body>
-    <div class="main">
-      <div class="main-content">
-        <div class="site-header">
-  <a href="https://chiyongwu.github.io">
-  <img class="avatar" src="https://chiyongwu.github.io/images/avatar.png?v=1611192443828" alt="">
-  </a>
-  <h1 class="site-title">
-    SwordPal&#39;s blog
-  </h1>
-  <p class="site-description">
-    等候未来的你
-  </p>
-  <div class="menu-container">
-    
-      
-        <a href="/" class="menu">
-          首页
-        </a>
-      
-    
-      
-        <a href="/archives" class="menu">
-          归档
-        </a>
-      
-    
-      
-        <a href="/tags" class="menu">
-          标签
-        </a>
-      
-    
-      
-        <a href="/post/about" class="menu">
-          关于
-        </a>
-      
-    
+</head>
+<body>
+  <div class="antialiased flex flex-col min-h-screen" id="app">
+
+    <div class="nav py-3 md:py-8 fixed w-full z-10 bg-gray-50 dark:bg-gray-700 transition-all duration-300" :class="{ 'scroll': scrolled }">
+  <div class="flex justify-end px-4">
+    <div class="w-8 h-8 flex justify-center items-center rounded-full md:hidden" @click="showMenu = !showMenu">
+      <i class="ri-close-line" v-show="showMenu"></i>
+      <i class="ri-menu-3-line" v-show="!showMenu"></i>
+    </div>
   </div>
-  <div class="social-container">
+  <nav class="max-w-4xl w-full mx-auto text-center flex flex-col md:flex-row justify-center md:block" :class="`${ showMenu ? 'block' : 'hidden' }`">
     
-      
+      <a href="/" target="" class="py-2 md:py-1 px-4 mx-4 inline-flex transition font-semibold rounded dark:hover:bg-gray-600 hover:bg-gray-200">
+        首页
+      </a>
     
-      
+      <a href="/archives" target="" class="py-2 md:py-1 px-4 mx-4 inline-flex transition font-semibold rounded dark:hover:bg-gray-600 hover:bg-gray-200">
+        归档
+      </a>
     
-      
+      <a href="/tags" target="" class="py-2 md:py-1 px-4 mx-4 inline-flex transition font-semibold rounded dark:hover:bg-gray-600 hover:bg-gray-200">
+        标签
+      </a>
     
-      
+      <a href="/post/about" target="" class="py-2 md:py-1 px-4 mx-4 inline-flex transition font-semibold rounded dark:hover:bg-gray-600 hover:bg-gray-200">
+        关于
+      </a>
     
-      
-    
-  </div>
+    <a href="https://chiyongwu.github.io/atom.xml" target="_blank" class="py-2 md:py-1 px-4 mx-4 inline-flex transition font-semibold rounded dark:hover:bg-gray-600 hover:bg-gray-200">
+      RSS
+    </a>
+  </nav>
 </div>
 
-        <div class="current-tag-container">
-            <h2 class="title">
-                标签：# 反向代理
-            </h2> 
-        </div>
-        <div class="post-container">
-  
-    <article class="post">
-      <a href="https://chiyongwu.github.io/post/nginx-fan-xiang-dai-li/">
-        <h2 class="post-title">Nginx反向代理</h2>
-      </a>
-      <div class="post-info">
-        <span>
-          2021-01-21
-        </span>
-        <span>
-          9 min read
-        </span>
+    <div class="max-w-4xl w-full mx-auto pt-32">
+      <h1 class="text-2xl font-bold pb-8 flex justify-center items-center">
+        <i class="ri-hashtag"></i>
+        反向代理
+      </h1>
+      <div class="shadow-box bg-white dark:bg-gray-600 border-gray-300 rounded-none md:rounded-lg -mx-1 md:mx-0 md:px-0">
         
-          <a href="https://chiyongwu.github.io/tag/ZuuWx2SC_/" class="post-tag">
-            # Nginx
-          </a>
-        
-          <a href="https://chiyongwu.github.io/tag/xxcjBiXtGB/" class="post-tag">
-            # 反向代理
-          </a>
-        
-      </div>
-      
-      <div class="post-abstract">
+  <div class="p-8 border-b border-gray-200 dark:border-gray-700 flex relative overflow-hidden flex-col md:flex-row animated fadeIn">
+    
+    <div class="flex-1 order-2 md:order-1">
+      <h2 class="text-2xl font-semibold mb-4">
+        <a href="https://chiyongwu.github.io/post/nginx-fan-xiang-dai-li/" class="text-gray-700 dark:text-gray-200 border-b-2 border-dotted border-gray-200 dark:border-gray-400 dark:hover:border-gray-200 hover:border-gray-600 transition-all duration-100">
+          Nginx反向代理
+        </a>
+      </h2>
+      <div class="mb-4 text-xs text-gray-500">2021-01-21</div>
+      <div class="mb-4 text-gray-500 dark:text-gray-300">
         <h3 id="1-代理">1. 代理</h3>
 <p>​		Nginx 主要能够代理如下几种协议，其中用到的最多的就是做Http代理服务器。</p>
 <figure data-type="image" tabindex="1"><img src="https://gitee.com/WuChiYong/markdown_picture/raw/master/img/20210121090820.png" alt="img" loading="lazy"></figure>
@@ -227,23 +195,23 @@
 <p>通常该指令有两个作用：第一个是用户在请求访问网站时，请求地址可以不写首页名称；第二个是可以对一个请求，根据请求内容而设置不同的首页。</p>
 
       </div>
-    </article>
-  
-</div>
-
-        <div class="pagination-container">
-  
-  
-</div>
-
-        <div class="site-footer">
-  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
-  <a class="rss" href="https://chiyongwu.github.io/atom.xml" target="_blank">
-    <i class="ri-rss-line"></i> RSS
-  </a>
-</div>
-
-      </div>
+      <a href="https://chiyongwu.github.io/post/nginx-fan-xiang-dai-li/" class="btn">
+        阅读更多
+      </a>
     </div>
-  </body>
+    
+  </div>
+  
+      </div>
+
+      
+      <footer class="py-12 text-center px-4 md:px-0" v-pre>
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+</footer>
+
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://chiyongwu.github.io/media/scripts/main.js"></script>
+</body>
 </html>
