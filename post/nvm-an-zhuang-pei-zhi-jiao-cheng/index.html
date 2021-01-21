@@ -23,8 +23,8 @@
     <script src="https://cdn.jsdelivr.net/gh/itjoker233/Gridea-theme-Chic/assets/media/script/script.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/itjoker233/Gridea-theme-Chic/assets/media/script/icon.min.js"></script>
     
-            <script src="https://cdn.jsdelivr.net/gh/ITJoker233/ITJoker233.github.io@1.0.12/CDN/js/Card/prism.min.js"></script>
-            <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ITJoker233/ITJoker233.github.io@1.0.12/CDN/css/Card/prism.min.css" />
+            <script src="https://cdn.jsdelivr.net/gh/ITJoker233/ITJoker233.github.io@latest/CDN/js/Card/prism.min.js"></script>
+            <link rel="stylesheet" href="" />
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.css">
             <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.js"></script>
             
@@ -64,7 +64,7 @@
                     SwordPal&#39;s blog
                 </a>
             </div>
-
+            <div id="tp-weather-widget"></div>
             <div class="menu navbar-right">
                 
                     <a class="menu-item" href="/">
@@ -162,6 +162,43 @@
 
     }
 </script>
+
+
+
+    <script>
+        (function(a, h, g, f, e, d, c, b) {
+            b = function() {
+                d = h.createElement(g);
+                c = h.getElementsByTagName(g)[0];
+                d.src = e;
+                d.charset = "utf-8";
+                d.async = 1;
+                c.parentNode.insertBefore(d, c)
+            };
+            a["SeniverseWeatherWidgetObject"] = f;
+            a[f] || (a[f] = function() {
+                (a[f].q = a[f].q || []).push(arguments)
+            });
+            a[f].l = +new Date();
+            if (a.attachEvent) {
+                a.attachEvent("onload", b)
+            } else {
+                a.addEventListener("load", b, false)
+            }
+        }(window, document, "script", "SeniverseWeatherWidget", "//cdn.sencdn.com/widget2/static/js/bundle.js?t=" + parseInt((new Date().getTime() / 100000000).toString(), 10)));
+        window.SeniverseWeatherWidget('show', {
+            flavor: "slim",
+            location: "WWEFQFPJZ7T8",
+            geolocation: true,
+            language: "auto",
+            unit: "c",
+            theme: "auto",
+            token: "61bcc333-3305-4728-9465-6785274bb0a3",
+            hover: "enabled",
+            container: "tp-weather-widget"
+        })
+    </script>
+    
             <div class="main">
                 <div class="container">
                     <article class="post-wrap">
@@ -296,15 +333,6 @@
         <footer id="footer" class="footer">
             <div class="copyright">
                 
-                    <div class="Like">
-                        <div class="tip" data-tooltip="Do you like it?">
-                            <a href="https://github.com/ITJoker233/Gridea-theme-Chic" target="_blank" title=""><svg class="icon"
-                        aria-hidden="true">
-                        <use xlink:href="#like"></use>
-                    </svg><b class="like_text" id="star"></b></a>
-                        </div>
-                    </div>
-                    
                         Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
                             
                                 <b id="hitokoto"></b><br>
@@ -320,8 +348,8 @@
                                                 document.write("" + date.getFullYear());
                                             </script>
                                             | Powered by
-                                            <a href="https://coding.net" target="_blank">
-                                                Coding.net
+                                            <a href="" target="_blank">
+                                                
                                             </a>
             </div>
             <div id="update" style="display:none;">
@@ -333,9 +361,9 @@
                 </div>
                 
                     <script>
-                        var pat = '';
+                        var port = '';
                         
-                        document.write('<div id="home_path" style="display:none;">' + document.location.protocol + '//' + window.document.location.hostname + pat + '</div>')
+                        document.write('<div id="home_path" style="display:none;">' + document.location.protocol + '//' + window.document.location.hostname + port + '</div>')
                     </script>
         </footer>
         
@@ -345,21 +373,20 @@
                     
 
                     function LoadPlayer() {
-                        var music_array = [];
+                        var musicList = [];
                         
-                        music_array.push({
+                        musicList.push({
                             name: '',
                             url: '',
                             artist: '',
                             cover: '',
                         });
                         
-                        console.log(" MusicList: " + music_array);
+                        console.log(" MusicList: " + musicList);
                         
                         const ap = new APlayer({
                             container: document.getElementById('player'),
-                            fixed: true,
-                            audio: music_array
+                            audio: musicList
                         });
                         
                     }
@@ -382,50 +409,6 @@
                     console.log(" Blog Update Time: " + newDate.toLocaleDateString());
                     console.log("\n %c \u26a1Theme:Chic Author's Blog:https://blog.itjoker.cn  Write By ITJoker  \n\n", "color: #ffffff; background: rgba(49, 49, 49, 0.85); padding:5px 0;border-radius:5px;");
                 </script>
-                
-                    <div id="tp-weather-widget" style="background: #666;display: flex;"></div>
-                    <script>
-                        (function(T, h, i, n, k, P, a, g, e) {
-                            g = function() {
-                                P = h.createElement(i);
-                                a = h.getElementsByTagName(i)[0];
-                                P.src = k;
-                                P.charset = "utf-8";
-                                P.async = 1;
-                                a.parentNode.insertBefore(P, a)
-                            };
-                            T["ThinkPageWeatherWidgetObject"] = n;
-                            T[n] || (T[n] = function() {
-                                (T[n].q = T[n].q || []).push(arguments)
-                            });
-                            T[n].l = +new Date();
-                            if (T.attachEvent) {
-                                T.attachEvent("onload", g)
-                            } else {
-                                T.addEventListener("load", g, false)
-                            }
-                        }(window, document, "script", "tpwidget", "//widget.seniverse.com/widget/chameleon.js"))
-                    </script>
-                    <script>
-                        var wearther_margin = "10px 10px";
-                        
-                        wearther_margin = "70px 5px";
-                        
-                        tpwidget("init", {
-                            "flavor": "bubble",
-                            "location": "WX4FBXXFKE4F",
-                            "geolocation": "enabled",
-                            "position": "bottom-left",
-                            "margin": wearther_margin,
-                            "language": "zh-chs",
-                            "unit": "c",
-                            "theme": "chameleon",
-                            "uid": "UFC977E1C7",
-                            "hash": "213ad798bc472dc365da3a9d4a9ff115"
-                        });
-                        tpwidget("show");
-                    </script>
-                    
         </div>
 </body>
 <script>
