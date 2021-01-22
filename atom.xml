@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://chiyongwu.github.io</id>
     <title>SwordPal&apos;s blog</title>
-    <updated>2021-01-22T09:19:10.545Z</updated>
+    <updated>2021-01-22T11:34:52.876Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://chiyongwu.github.io"/>
     <link rel="self" href="https://chiyongwu.github.io/atom.xml"/>
@@ -308,7 +308,7 @@ server {
 ]]></content>
     </entry>
     <entry>
-        <title type="html"><![CDATA[Nginx反向代理]]></title>
+        <title type="html"><![CDATA[【Nginx】反向代理]]></title>
         <id>https://chiyongwu.github.io/post/nginx-fan-xiang-dai-li/</id>
         <link href="https://chiyongwu.github.io/post/nginx-fan-xiang-dai-li/">
         </link>
@@ -569,8 +569,7 @@ server {
 </code></pre>
 <p>通常该指令有两个作用：第一个是用户在请求访问网站时，请求地址可以不写首页名称；第二个是可以对一个请求，根据请求内容而设置不同的首页。</p>
 <!-- more -->
-<!-- more -->
-]]></content>
+<!-- more -->]]></content>
     </entry>
     <entry>
         <title type="html"><![CDATA[yarn使用教程]]></title>
