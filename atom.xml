@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://chiyongwu.github.io</id>
     <title>SwordPal&apos;s blog</title>
-    <updated>2021-01-24T03:56:32.371Z</updated>
+    <updated>2021-01-24T04:25:57.350Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://chiyongwu.github.io"/>
     <link rel="self" href="https://chiyongwu.github.io/atom.xml"/>
@@ -89,6 +89,7 @@ babel src -d dist2
 <pre><code>mkdir dist
 npm run build
 </code></pre>
+<p>参考资料：https://www.cnblogs.com/houjiao/p/12108060.html</p>
 ]]></content>
     </entry>
     <entry>
