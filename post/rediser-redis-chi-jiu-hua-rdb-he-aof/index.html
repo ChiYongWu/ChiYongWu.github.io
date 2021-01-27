@@ -1,0 +1,499 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Redis(二)：Redis持久化RDB和AOF - SwordPal&#39;s blog</title>
+<link rel="shortcut icon" href="https://chiyongwu.github.io/favicon.ico">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.2.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css">
+<link rel="stylesheet" href="https://chiyongwu.github.io/media/css/tailwind.css">
+<link rel="stylesheet" href="https://chiyongwu.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="Redis(二)：Redis持久化RDB和AOF - SwordPal&#39;s blog - Atom Feed" href="https://chiyongwu.github.io/atom.xml">
+
+    
+
+  <meta name="description" content="一、Redis两种持久化方式
+对Redis而言，其数据是保存在内存中的，一旦机器宕机，内存中的数据会丢失，因此需要将数据异步持久化到硬盘中保存。这样，即使机器宕机，数据能从硬盘中恢复。
+常见的数据持久化方式：
+1.快照：类似拍照记录时光，快..." />
+  <meta property="og:title" content="Redis(二)：Redis持久化RDB和AOF - SwordPal&#39;s blog">
+  <meta property="og:description" content="一、Redis两种持久化方式
+对Redis而言，其数据是保存在内存中的，一旦机器宕机，内存中的数据会丢失，因此需要将数据异步持久化到硬盘中保存。这样，即使机器宕机，数据能从硬盘中恢复。
+常见的数据持久化方式：
+1.快照：类似拍照记录时光，快..." />
+  <meta property="og:type" content="articles">
+  <meta property="og:url" content="https://chiyongwu.github.io/post/rediser-redis-chi-jiu-hua-rdb-he-aof/" />
+  <meta property="og:image" content="https://chiyongwu.github.io/images/avatar.png">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:width" content="1200">
+  <meta name="twitter:title" content="Redis(二)：Redis持久化RDB和AOF - SwordPal&#39;s blog">
+  <meta name="twitter:description" content="一、Redis两种持久化方式
+对Redis而言，其数据是保存在内存中的，一旦机器宕机，内存中的数据会丢失，因此需要将数据异步持久化到硬盘中保存。这样，即使机器宕机，数据能从硬盘中恢复。
+常见的数据持久化方式：
+1.快照：类似拍照记录时光，快...">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://chiyongwu.github.io/post/rediser-redis-chi-jiu-hua-rdb-he-aof/">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css">
+ 
+  
+
+  
+</head>
+
+<body>
+  <div class="antialiased flex flex-col min-h-screen" id="app">
+    <a href="https://chiyongwu.github.io" class="fixed top-0 left-0 mt-4 bg-black text-white dark:text-gray-700 dark:bg-yellow-50 dark:hover:bg-black dark:hover:text-white inline-flex p-2 pl-8 hover:text-gray-700 hover:bg-yellow-50 font-bold z-10 transition-fast animated fadeInLeft">
+      SwordPal&#39;s blog
+    </a>
+    <div class="max-w-4xl w-full mx-auto">
+      <div class="shadow-box bg-white dark:bg-gray-600 rounded-lg pt-32 md:pt-64 px-4 md:px-8 pb-8 animated fadeIn mb-8">
+        <h1 class="text-5xl font-semibold leading-normal pb-8 mb-8 border-b-8 border-gray-700">
+          Redis(二)：Redis持久化RDB和AOF
+        </h1>
+        
+        <div class="mb-8 flex flex-wrap">
+          <div class="text-gray-400 text-sm mr-4">2021-01-27 · 9 min read</div>
+          
+            <a href="https://chiyongwu.github.io/tag/hxS_z4don/" class="text-gray-700 text-sm border-b-2 border-dotted border-gray-200 hover:border-gray-600 transition-all duration-100 inline-flex mr-2">
+              <i class="ri-hashtag"></i>
+              Redis
+            </a>
+          
+        </div>
+        <div class="markdown mb-8" v-pre>
+          <h2 id="一-redis两种持久化方式">一、Redis两种持久化方式</h2>
+<p>对Redis而言，其数据是保存在内存中的，一旦机器宕机，内存中的数据会丢失，因此需要将数据异步持久化到硬盘中保存。这样，即使机器宕机，数据能从硬盘中恢复。</p>
+<p>常见的数据持久化方式：</p>
+<p>1.快照：类似拍照记录时光，快照是某时某刻将数据库的数据做拍照记录下其数据信息。如MYSQL的Dump，Redis的RDB模式</p>
+<p>2.写日志方式：是将数据的操作全部写到日志当中，需要恢复的时候，按照日志记录的操作记录重新再执行一遍。例如MYSQL的Binlog，Redis的AAOF模式、</p>
+<h2 id="二-rdb">二、RDB</h2>
+<h3 id="说明">说明：</h3>
+<p>redis默认开启，将redis在内存中保存的数据，以快照的方式持久化到硬盘中保存。</p>
+<h3 id="触发机制">触发机制：</h3>
+<p>1.save命令：阻塞方式，需要等redis执行完save后，才能执行其他get、set等操作。同步方式</p>
+<p>2.bgsave命令：非阻塞，其原理是调用linux 的 fork()函数，创建redis的子进程，子进程进行创建 rdb 文件的操作。异步方式，</p>
+<p>3.自动方式：在redis.conf文件中配置，如下 save &lt;指定时间间隔&gt; &lt;执行指定次数更新操作&gt; ，save 60 10000 表示 60秒年内有10000次操作会自动生成rdb文件。</p>
+<pre><code># Save the DB on disk:
+#
+#   save &lt;seconds&gt; &lt;changes&gt;
+#
+#   Will save the DB if both the given number of seconds and the given
+#   number of write operations against the DB occurred.
+#
+#   In the example below the behaviour will be to save:
+#   after 900 sec (15 min) if at least 1 key changed
+#   after 300 sec (5 min) if at least 10 keys changed
+#   after 60 sec if at least 10000 keys changed
+#
+#   Note: you can disable saving at all commenting all the &quot;save&quot; lines.
+#
+#   It is also possible to remove all the previously configured save
+#   points by adding a save directive with a single empty string argument
+#   like in the following example:
+#
+#   save &quot;&quot;
+
+save 900 1
+save 300 10
+save 60 10000
+</code></pre>
+<p>4.其他方式</p>
+<ul>
+<li>4.1 执行flushall命令，清空数据，几乎不用</li>
+<li>4.2 执行shutdown命令，安全关闭redis不丢失数据，几乎用不到。</li>
+<li>4.3 主从复制，在主从复制的时候，rdb文件作为媒介来关联主节点和从节点的数据一致。</li>
+</ul>
+<h3 id="最佳配置参考">最佳配置参考：</h3>
+<pre><code>vim redis.conf
+</code></pre>
+<pre><code># 1. 将自动生成rdb文件注释掉
+# save 900 1
+# save 300 10
+# save 60 10000
+
+# The filename where to dump the DB
+# 2. rdb的文件名，改为dump+ 端口.rbd
+dbfilename dump-${port}.rdb
+
+
+# Note that you must specify a directory here, not a file name.
+# 3. 文件持久化目录，日志目录，改到分布式存储中或者放到较大的硬盘目录中。
+dir /yourbigdata/
+
+# 4. 在bgsave发生错误时停止写入
+stop-writes-on-bgsave-error yes
+
+# 5.采用压缩方式，不然生成的rdb文件可能巨大无比。压缩后主从复制拷贝文件小，速度也快。
+rdbcompression yes
+
+# 6.采用校验和
+rdbchecksum yes
+</code></pre>
+<h2 id="rdb优缺点">RDB优缺点</h2>
+<p>优点：<br>
+1 适合大规模的数据恢复。<br>
+2 如果业务对数据完整性和一致性要求不高，RDB是很好的选择。</p>
+<p>缺点：<br>
+1 不可控，容易丢失数据：数据的完整性和一致性不高，因为RDB可能在最后一次备份时宕机了。<br>
+2 耗时耗性能：备份时占用内存，因为Redis 在备份时会独立创建一个子进程，将数据写入到一个临时文件（此时内存中的数据是原来的两倍哦），最后再将临时文件替换之前的备份文件。<br>
+所以Redis 的持久化和数据的恢复要选择在夜深人静的时候执行是比较合理的。</p>
+<h2 id="三-aof">三、AOF</h2>
+<h3 id="说明-2">说明：</h3>
+<p>redis默认不开启，采用日志的形式来记录每个<strong>写操作</strong>，并<strong>追加</strong>到 .aof 文件中。Redis 重启的会根据日志文件的内容将写指令从前到后执行一次以完成数据的恢复工作</p>
+<h3 id="生成aof的三种策略">生成AOF的三种策略：</h3>
+<figure data-type="image" tabindex="1"><img src="https://img2018.cnblogs.com/blog/1289934/201906/1289934-20190624101908354-208380668.png" alt="img" loading="lazy"></figure>
+<ol>
+<li>
+<p>always : 每条命令都会刷新到缓冲区，把缓冲区fsync到硬盘，对硬盘IO压力大，一般sata盘只有几百TPS，如果redis的写入量非常大，那对硬盘的压力也横刀。</p>
+</li>
+<li>
+<p>everysec: 每秒把缓冲区fsync 到硬盘，如果出现故障，会丢失1s（默认配置是1秒）的数据。一般使用这种。</p>
+</li>
+<li>
+<p>no : 由操作系统来定什么时候fsync到硬盘中。 缺点：不可控</p>
+</li>
+</ol>
+<h3 id="aof重写">AOF重写：</h3>
+<p>把过期的，没有用的，重复的，可优化的命令简化为很小的aof文件。实际上是redis内存中的数据回溯成aof文件。</p>
+<p>如下图所示：</p>
+<figure data-type="image" tabindex="2"><img src="https://img2018.cnblogs.com/blog/1289934/201906/1289934-20190624103925241-63040943.png" alt="img" loading="lazy"></figure>
+<p>作用：</p>
+<p>1.减少硬盘占用量</p>
+<p>2.加快恢复速度</p>
+<h3 id="aof重写的实现方式">AOF重写的实现方式</h3>
+<p>1.bgrewriteaof  命令 ： 从redis的主进程fork一个子进程生成包含当前redis内存数据的最小命令集、</p>
+<p>2.AOF重写配置：</p>
+<pre><code># 1. aof文件增长率
+auto-aof-rewrite-percentage 100
+
+# 2. aof文件重写需要的尺寸
+auto-aof-rewrite-min-size 64mb
+</code></pre>
+<p>自动触发时机：（需要同时满足）</p>
+<ul>
+<li>当前的aof文件大小  &gt;  aof文件重写需要的尺寸</li>
+<li>（aof当前文件大小 - 上次aof的文件大小）/ 上次aof文件大小 &gt; aof文件增长率</li>
+</ul>
+<h3 id="最佳配置参考-2">最佳配置参考：</h3>
+<pre><code>vim redis.conf
+</code></pre>
+<pre><code># 1. 打开aof功能
+appendonly yes
+
+# 2. 重命名aof文件名,以端口号区分
+appendfilename &quot;appendonly-${port}.aof&quot;
+
+# 3. 使用everysec策略
+appendfsync everysec
+# 4. 文件持久化目录，日志目录，改到分布式存储中或者放到较大的硬盘目录中。
+dir /yourbigdata/
+# 5. 在aof重写的时候，不做aof的append（追加）操作，这里出于性能考虑
+no-appendfsync-on-rewrite yes
+</code></pre>
+<h3 id="aof优缺点">AOF优缺点</h3>
+<p>优点：</p>
+<p>1.数据的完整性和一致性更高</p>
+<p>缺点：</p>
+<ol>
+<li>
+<p>因为AOF记录的内容多，文件会越来越大，数据恢复也会越来越慢。</p>
+</li>
+<li>
+<p>AOF每秒fsync一次指令硬盘，如果硬盘IO慢，会阻塞父进程；风险是会丢失1秒多的数据；在Rewrite过程中，主进程把指令存到mem-buffer中，最后写盘时会阻塞主进程。</p>
+</li>
+</ol>
+<h2 id="四-关于redis持久化方式rdb和aof的缺点">四、关于Redis持久化方式RDB和AOF的缺点</h2>
+<p>原因是redis持久化方式的痛点，缺点比较明显。</p>
+<p>1、RDB需要定时持久化，风险是可能会丢两次持久之间的数据，量可能很大。</p>
+<p>2、AOF每秒fsync一次指令硬盘，如果硬盘IO慢，会阻塞父进程；风险是会丢失1秒多的数据；在Rewrite过程中，主进程把指令存到mem-buffer中，最后写盘时会阻塞主进程。</p>
+<p>3、这两个缺点是个很大的痛点。为了解决这些痛点，GitHub的两位工程师 Bryana Knight 和 Miguel Fernández 日前写了一篇 文章 ，讲述了将持久数据从Redis迁出的经验：</p>
+<p><a href="http://www.open-open.com/lib/view/open1487736984424.html"> http://www.open-open.com/lib/view/open1487736984424.html</a></p>
+<h2 id="五-如何选择rdb和aof">五、如何选择RDB和AOF</h2>
+<p>建议全都要。</p>
+<p>1、对于我们应该选择RDB还是AOF，官方的建议是两个同时使用。这样可以提供更可靠的持久化方案。</p>
+<p>在redis 4.0 之后，官方提供了混合持久化模式，具体如下</p>
+<h3 id="持久化文件结构">持久化文件结构</h3>
+<p>上半段RDB格式，后半段是AOF模式。<img src="https://img2018.cnblogs.com/blog/1289934/201906/1289934-20190626160208108-1516752611.png" alt="img" loading="lazy"></p>
+<h3 id="如何配置">如何配置</h3>
+<pre><code>vim redis.conf
+
+aof-use-rdb-preamble yes   
+</code></pre>
+<p>之后重启redis，运行bgrewriteaof命令，重写appendonly.aof，之后在Redis数据同步的时候，可以先加载rdb的内容，然后再执行aof指令部分使Redis数据同步</p>
+<h3 id="数据恢复过程">数据恢复过程</h3>
+<p>加载AOF文件的入口为loadAppendOnlyFile，代码如下</p>
+<pre><code>int loadAppendOnlyFile(char *filename) {
+    ...
+    /* Check if this AOF file has an RDB preamble. In that case we need to
+     * load the RDB file and later continue loading the AOF tail. */
+    char sig[5]; /* &quot;REDIS&quot; */
+    if (fread(sig,1,5,fp) != 5 || memcmp(sig,&quot;REDIS&quot;,5) != 0) {
+        /* No RDB preamble, seek back at 0 offset. */
+        if (fseek(fp,0,SEEK_SET) == -1) goto readerr;
+    } else {
+        /* RDB preamble. Pass loading the RDB functions. */
+        rio rdb;
+
+        serverLog(LL_NOTICE,&quot;Reading RDB preamble from AOF file...&quot;);
+        if (fseek(fp,0,SEEK_SET) == -1) goto readerr;
+        rioInitWithFile(&amp;rdb,fp);
+        if (rdbLoadRio(&amp;rdb,NULL) != C_OK) {
+            serverLog(LL_WARNING,&quot;Error reading the RDB preamble of the AOF file, AOF loading aborted&quot;);
+            goto readerr;
+        } else {
+            serverLog(LL_NOTICE,&quot;Reading the remaining AOF tail...&quot;);
+        }
+    }
+    ...
+}
+</code></pre>
+<ol>
+<li>
+<p>打开AOF文件之后首先读取5个字符如果是&quot;REDIS&quot; ，那么就说明这是一个混合持久化的AOF文件，执行rdbLoadRio() 函数，解析RDB格式，解析文件内容直至遇到RDB_OPCODE_EOF结束。</p>
+</li>
+<li>
+<p>执行 loadAppendOnlyFile() 函数，解析 AOF格式，直到结束整个加载过程完成。</p>
+</li>
+</ol>
+<p>说明：正确的RDB格式一定是以&quot;REDIS&quot;开头而纯AOF格式则一定以&quot;*&quot;开头此时就会进入rdbLoadRio函数来加载数据。</p>
+<p>这样就实现了混合持久化，加载aof文件时候，实现了数据文件不太大，而且能保证数据不丢失，加载效率比纯aof文件高。</p>
+<p>本文根据视频和博客归纳。</p>
+<p>参考：<a href="https://coding.imooc.com/class/chapter/151.html#Anchor">redis</a>，</p>
+<p>https://yq.aliyun.com/articles/193034</p>
+
+        </div>
+        <!-- Share to Twitter, Weibo, Telegram -->
+        <div class="flex items-center">
+          <div class="mr-4 flex items-center">
+            <i class="ri-share-forward-line text-gray-500"></i>
+          </div>
+          <div class="px-4 cursor-pointer text-blue-500 hover:bg-blue-100 dark:hover:bg-gray-600 inline-flex" @click="shareToTwitter">
+            <i class="ri-twitter-line"></i>
+          </div>
+          <div class="px-4 cursor-pointer text-red-500 hover:bg-red-100 dark:hover:bg-gray-600 inline-flex" @click="shareToWeibo">
+            <i class="ri-weibo-line"></i>
+          </div>
+          <div class="px-4 cursor-pointer text-indigo-500 hover:bg-indigo-100 dark:hover:bg-gray-600 inline-flex" @click="shareToTelegram">
+            <i class="ri-telegram-line"></i>
+          </div>
+        </div>
+      </div>
+
+      
+
+      
+
+      <footer class="py-12 text-center px-4 md:px-0" v-pre>
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+</footer>
+    </div>
+
+    <!-- TOC Container -->
+    <div class="fixed right-0 bottom-0 mb-16 mr-4 shadow w-8 h-8 rounded-full flex justify-center items-center z-10 cursor-pointer bg-white dark:bg-gray-500 dark:text-gray-200 hover:shadow-lg transition-all animated fadeInRight" @click="showToc = true">
+      <i class="ri-file-list-line"></i>
+    </div>
+
+    <div class="fixed right-0 top-0 bottom-0 overflow-y-auto w-64 bg-white dark:bg-gray-800 p-4 border-l border-gray-100 dark:border-gray-600 z-10 transition-fast" :class="{ '-mr-64': !showToc }">
+      <div class="flex mb-4 justify-end">
+        <div class="w-8 h-8 inline-flex justify-center items-center rounded-full cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition-fast" @click="showToc = false">
+          <i class="ri-close-line text-lg"></i>
+        </div>
+      </div>
+      <div class="post-toc-container">
+        <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E4%B8%80-redis%E4%B8%A4%E7%A7%8D%E6%8C%81%E4%B9%85%E5%8C%96%E6%96%B9%E5%BC%8F">一、Redis两种持久化方式</a></li>
+<li><a href="#%E4%BA%8C-rdb">二、RDB</a>
+<ul>
+<li><a href="#%E8%AF%B4%E6%98%8E">说明：</a></li>
+<li><a href="#%E8%A7%A6%E5%8F%91%E6%9C%BA%E5%88%B6">触发机制：</a></li>
+<li><a href="#%E6%9C%80%E4%BD%B3%E9%85%8D%E7%BD%AE%E5%8F%82%E8%80%83">最佳配置参考：</a></li>
+</ul>
+</li>
+<li><a href="#rdb%E4%BC%98%E7%BC%BA%E7%82%B9">RDB优缺点</a></li>
+<li><a href="#%E4%B8%89-aof">三、AOF</a>
+<ul>
+<li><a href="#%E8%AF%B4%E6%98%8E-2">说明：</a></li>
+<li><a href="#%E7%94%9F%E6%88%90aof%E7%9A%84%E4%B8%89%E7%A7%8D%E7%AD%96%E7%95%A5">生成AOF的三种策略：</a></li>
+<li><a href="#aof%E9%87%8D%E5%86%99">AOF重写：</a></li>
+<li><a href="#aof%E9%87%8D%E5%86%99%E7%9A%84%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F">AOF重写的实现方式</a></li>
+<li><a href="#%E6%9C%80%E4%BD%B3%E9%85%8D%E7%BD%AE%E5%8F%82%E8%80%83-2">最佳配置参考：</a></li>
+<li><a href="#aof%E4%BC%98%E7%BC%BA%E7%82%B9">AOF优缺点</a></li>
+</ul>
+</li>
+<li><a href="#%E5%9B%9B-%E5%85%B3%E4%BA%8Eredis%E6%8C%81%E4%B9%85%E5%8C%96%E6%96%B9%E5%BC%8Frdb%E5%92%8Caof%E7%9A%84%E7%BC%BA%E7%82%B9">四、关于Redis持久化方式RDB和AOF的缺点</a></li>
+<li><a href="#%E4%BA%94-%E5%A6%82%E4%BD%95%E9%80%89%E6%8B%A9rdb%E5%92%8Caof">五、如何选择RDB和AOF</a>
+<ul>
+<li><a href="#%E6%8C%81%E4%B9%85%E5%8C%96%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84">持久化文件结构</a></li>
+<li><a href="#%E5%A6%82%E4%BD%95%E9%85%8D%E7%BD%AE">如何配置</a></li>
+<li><a href="#%E6%95%B0%E6%8D%AE%E6%81%A2%E5%A4%8D%E8%BF%87%E7%A8%8B">数据恢复过程</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+      </div>
+    </div>
+
+    <!-- Back to top -->
+    <div class="fixed right-0 bottom-0 mb-4 mr-4 shadow w-8 h-8 rounded-full flex justify-center items-center z-10 cursor-pointer bg-white hover:shadow-lg transition-all dark:bg-gray-500 dark:text-gray-200" @click="backToUp" v-show="scrolled">
+      <i class="ri-arrow-up-line"></i>
+    </div>
+  </div>
+
+  <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+  <!-- Background of PhotoSwipe. 
+        It's a separate element as animating opacity is faster than rgba(). -->
+  <div class="pswp__bg">
+  </div>
+  <!-- Slides wrapper with overflow:hidden. -->
+  <div class="pswp__scroll-wrap">
+    <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+    <div class="pswp__container">
+      <div class="pswp__item">
+      </div>
+      <div class="pswp__item">
+      </div>
+      <div class="pswp__item">
+      </div>
+    </div>
+    <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+    <div class="pswp__ui pswp__ui--hidden">
+      <div class="pswp__top-bar">
+        <!--  Controls are self-explanatory. Order can be changed. -->
+        <div class="pswp__counter">
+        </div>
+        <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+        <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+        <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+        <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+        <!-- element will get class pswp__preloader--active when preloader is running -->
+        <div class="pswp__preloader">
+          <div class="pswp__preloader__icn">
+            <div class="pswp__preloader__cut">
+              <div class="pswp__preloader__donut">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+        <div class="pswp__share-tooltip">
+        </div>
+      </div>
+      <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+      </button>
+      <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+      </button>
+      <div class="pswp__caption">
+        <div class="pswp__caption__center">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://chiyongwu.github.io/media/scripts/main.js"></script>
+  
+  <!-- Code Highlight -->
+  
+
+  <script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+  <script>
+    //拿到预览框架，也就是上面的html代码
+    var pswpElement = document.querySelectorAll('.pswp')[0];
+    //定义图片数组变量
+    var imgitems;
+    /**
+    * 用于显示预览界面
+    * @param index 图片数组下标
+    */
+    function viewImg(index) {
+      //其它选项这里不做过多阐述，详情见官网
+      var pswpoptions = {
+        index: parseInt(index, 10), // 开始幻灯片索引。0是第一张幻灯片。必须是整数，而不是字符串。
+        bgOpacity: 0.7, // 背景透明度，0-1
+        maxSpreadZoom: 3, // 缩放级别，不要太大
+      };
+      //初始化并打开PhotoSwipe，pswpElement对应上面预览框架，PhotoSwipeUI_Default为皮肤，imgitems为图片数组，pswpoptions为选项
+      var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, imgitems, pswpoptions);
+      gallery.init()
+    }
+    /**
+    * 用于添加图片点击事件
+    * @param img 图片元素
+    * @param index 所属下标（在imgitems中的位置）
+    */
+    function addImgClick(img, index) {
+      img.onclick = function() {
+        viewImg(index)
+      }
+    }
+    /**
+    * 轮询所有图片，获取src、width、height等数据，加入imgitems，并给图片元素添加事件
+    * 最好在onload中执行该方法，本站因放在最底部，所以直接初始化
+    * 异步加载图片可在图片元素创建完成后调用此方法
+    */
+    function initImg() {
+      //重置图片数组
+      imgitems = [];
+      //查找class:markdown 下的所有img元素并遍历
+      var imgs = document.querySelectorAll('.markdown img');
+      for (var i = 0; i < imgs.length; i++) {
+        var img = imgs[i];
+        //本站相册初始为loading图片，真实图片放在data-src
+        var ds = img.getAttribute("data-src");
+        //创建image对象，用于获取图片宽高
+        var imgtemp = new Image();
+        //判断是否存在data-src
+        if (ds != null && ds.length > 0) {
+          imgtemp.src = ds
+        } else {
+          imgtemp.src = img.src
+        }
+        //判断是否存在缓存
+        if (imgtemp.complete) {
+          var imgobj = {
+            "src": imgtemp.src,
+            "w": imgtemp.width,
+            "h": imgtemp.height,
+          };
+          imgitems[i] = imgobj;
+          addImgClick(img, i);
+        } else {
+          console.log('进来了2')
+          imgtemp.index = i;
+          imgtemp.img = img;
+          imgtemp.onload = function() {
+            var imgobj = {
+              "src": this.src,
+              "w": this.width,
+              "h": this.height,
+            };
+            //不要使用push，因为onload前后顺序会不同
+            imgitems[this.index] = imgobj
+            //添加点击事件
+            addImgClick(this.img, this.index);
+          }
+        }
+      }
+    }
+    //初始化
+    initImg();
+  </script>
+  
+  
+</body>
+
+</html>

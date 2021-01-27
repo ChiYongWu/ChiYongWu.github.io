@@ -63,13 +63,80 @@
     
   </div>
   <div class="md:mx-8 flex-shrink-0 self-start rounded-full border-4 border-dotted border-transparent hover:border-yellow-50 p-2 w-32 h-32 order-1 md:order-2 mx-auto s3-dotted">
-    <img class="rounded-full object-cover" src="https://chiyongwu.github.io/images/avatar.png?v=1611462353302" alt="SwordPal&#39;s blog" width="100%" height="100%">
+    <img class="rounded-full object-cover" src="https://chiyongwu.github.io/images/avatar.png?v=1611757961278" alt="SwordPal&#39;s blog" width="100%" height="100%">
   </div>
 </header>
       
 
       <div class="shadow-box bg-white dark:bg-gray-600 border-gray-300 rounded-none md:rounded-lg -mx-1 md:mx-0 md:px-0">
         
+  <div class="p-8 border-b border-gray-200 dark:border-gray-700 flex relative overflow-hidden flex-col md:flex-row animated fadeIn">
+    
+    <div class="flex-1 order-2 md:order-1">
+      <h2 class="text-2xl font-semibold mb-4">
+        <a href="https://chiyongwu.github.io/post/redissan-redis-zhu-cong-fu-zhi/" class="text-gray-700 dark:text-gray-200 border-b-2 border-dotted border-gray-200 dark:border-gray-400 dark:hover:border-gray-200 hover:border-gray-600 transition-all duration-100">
+          Redis（三）：Redis主从复制
+        </a>
+      </h2>
+      <div class="mb-4 text-xs text-gray-500">2021-01-27</div>
+      <div class="mb-4 text-gray-500 dark:text-gray-300">
+        一、主从复制
+主从复制：主节点负责写数据，从节点负责读数据，从而实现读写分离，提高redis的高可用性。
+让一个服务器去复制（replicate）另一个服务器，我们称呼被复制的服务器为主节点（master），而对主服务器进行复制的服务器则被...
+      </div>
+      <a href="https://chiyongwu.github.io/post/redissan-redis-zhu-cong-fu-zhi/" class="btn">
+        阅读更多
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="p-8 border-b border-gray-200 dark:border-gray-700 flex relative overflow-hidden flex-col md:flex-row animated fadeIn">
+    
+    <div class="flex-1 order-2 md:order-1">
+      <h2 class="text-2xl font-semibold mb-4">
+        <a href="https://chiyongwu.github.io/post/rediser-redis-chi-jiu-hua-rdb-he-aof/" class="text-gray-700 dark:text-gray-200 border-b-2 border-dotted border-gray-200 dark:border-gray-400 dark:hover:border-gray-200 hover:border-gray-600 transition-all duration-100">
+          Redis(二)：Redis持久化RDB和AOF
+        </a>
+      </h2>
+      <div class="mb-4 text-xs text-gray-500">2021-01-27</div>
+      <div class="mb-4 text-gray-500 dark:text-gray-300">
+        一、Redis两种持久化方式
+对Redis而言，其数据是保存在内存中的，一旦机器宕机，内存中的数据会丢失，因此需要将数据异步持久化到硬盘中保存。这样，即使机器宕机，数据能从硬盘中恢复。
+常见的数据持久化方式：
+1.快照：类似拍照记录时光，快...
+      </div>
+      <a href="https://chiyongwu.github.io/post/rediser-redis-chi-jiu-hua-rdb-he-aof/" class="btn">
+        阅读更多
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="p-8 border-b border-gray-200 dark:border-gray-700 flex relative overflow-hidden flex-col md:flex-row animated fadeIn">
+    
+    <div class="flex-1 order-2 md:order-1">
+      <h2 class="text-2xl font-semibold mb-4">
+        <a href="https://chiyongwu.github.io/post/redisyi-redis-wu-chong-shu-ju-jie-gou/" class="text-gray-700 dark:text-gray-200 border-b-2 border-dotted border-gray-200 dark:border-gray-400 dark:hover:border-gray-200 hover:border-gray-600 transition-all duration-100">
+          Redis(一)：Redis五种数据结构
+        </a>
+      </h2>
+      <div class="mb-4 text-xs text-gray-500">2021-01-27</div>
+      <div class="mb-4 text-gray-500 dark:text-gray-300">
+        Redis五种数据结构如下：
+
+对redis来说，所有的key（键）都是字符串。
+1.String 字符串类型
+是redis中最基本的数据类型，一个key对应一个value。
+String类型是二进制安全的，意思是 redis 的 stri...
+      </div>
+      <a href="https://chiyongwu.github.io/post/redisyi-redis-wu-chong-shu-ju-jie-gou/" class="btn">
+        阅读更多
+      </a>
+    </div>
+    
+  </div>
+
   <div class="p-8 border-b border-gray-200 dark:border-gray-700 flex relative overflow-hidden flex-col md:flex-row animated fadeIn">
     
     <div class="flex-1 order-2 md:order-1">
@@ -234,77 +301,20 @@ git config --global https.proxy 'soc...
     </div>
     
   </div>
-
-  <div class="p-8 border-b border-gray-200 dark:border-gray-700 flex relative overflow-hidden flex-col md:flex-row animated fadeIn">
-    
-    <div class="flex-1 order-2 md:order-1">
-      <h2 class="text-2xl font-semibold mb-4">
-        <a href="https://chiyongwu.github.io/post/nvm-an-zhuang-pei-zhi-jiao-cheng/" class="text-gray-700 dark:text-gray-200 border-b-2 border-dotted border-gray-200 dark:border-gray-400 dark:hover:border-gray-200 hover:border-gray-600 transition-all duration-100">
-          nvm安装配置教程
-        </a>
-      </h2>
-      <div class="mb-4 text-xs text-gray-500">2021-01-04</div>
-      <div class="mb-4 text-gray-500 dark:text-gray-300">
-        转载：https://www.longkui.site/development/nvm%e7%9a%84%e5%ae%89%e8%a3%85%e9%85%8d%e7%bd%ae%e4%b8%8e%e4%bd%bf%e7%94%a8/
-...
-      </div>
-      <a href="https://chiyongwu.github.io/post/nvm-an-zhuang-pei-zhi-jiao-cheng/" class="btn">
-        阅读更多
-      </a>
-    </div>
-    
-  </div>
-
-  <div class="p-8 border-b border-gray-200 dark:border-gray-700 flex relative overflow-hidden flex-col md:flex-row animated fadeIn">
-    
-    <div class="flex-1 order-2 md:order-1">
-      <h2 class="text-2xl font-semibold mb-4">
-        <a href="https://chiyongwu.github.io/post/docker-jiao-cheng/" class="text-gray-700 dark:text-gray-200 border-b-2 border-dotted border-gray-200 dark:border-gray-400 dark:hover:border-gray-200 hover:border-gray-600 transition-all duration-100">
-          docker教程
-        </a>
-      </h2>
-      <div class="mb-4 text-xs text-gray-500">2021-01-04</div>
-      <div class="mb-4 text-gray-500 dark:text-gray-300">
-        一、centos 7安装docker ce
-1、安装依赖包
-yum install -y yum-utils device-mapper-persistent-data lvm2
-
-2、设置国内yum源
-yum-config-manager...
-      </div>
-      <a href="https://chiyongwu.github.io/post/docker-jiao-cheng/" class="btn">
-        阅读更多
-      </a>
-    </div>
-    
-  </div>
-
-  <div class="p-8 border-b border-gray-200 dark:border-gray-700 flex relative overflow-hidden flex-col md:flex-row animated fadeIn">
-    
-    <div class="flex-1 order-2 md:order-1">
-      <h2 class="text-2xl font-semibold mb-4">
-        <a href="https://chiyongwu.github.io/post/hello-gridea/" class="text-gray-700 dark:text-gray-200 border-b-2 border-dotted border-gray-200 dark:border-gray-400 dark:hover:border-gray-200 hover:border-gray-600 transition-all duration-100">
-          Hello Gridea
-        </a>
-      </h2>
-      <div class="mb-4 text-xs text-gray-500">2018-12-12</div>
-      <div class="mb-4 text-gray-500 dark:text-gray-300">
-        <p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
-✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
-
-      </div>
-      <a href="https://chiyongwu.github.io/post/hello-gridea/" class="btn">
-        阅读更多
-      </a>
-    </div>
-    
-      <img class="flex-shrink-0 self-start md:ml-4 mb-4 md:mb-0 rounded-sm object-cover featured-img order-1 md:order-2 w-full h-40 md:w-56 md:h-32" loading="lazy" src="https://chiyongwu.github.io/post-images/hello-gridea.png" alt="Hello Gridea">
-    
-  </div>
   
       </div>
 
       
+  <div class="my-4 flex justify-between px-4 md:px-0">
+    
+    
+      <a href="https://chiyongwu.github.io/page/2" class="btn btn-white">
+        下一页
+        <i class="ri-arrow-right-line ml-4"></i>
+      </a>
+    
+  </div>
+
       <footer class="py-12 text-center px-4 md:px-0" v-pre>
   Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
 </footer>

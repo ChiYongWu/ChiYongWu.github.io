@@ -4,37 +4,43 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="X-UA-Compatible" content="ie=edge">
-<title>Babel - SwordPal&#39;s blog</title>
+<title>Redis(一)：Redis五种数据结构 - SwordPal&#39;s blog</title>
 <link rel="shortcut icon" href="https://chiyongwu.github.io/favicon.ico">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.2.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css">
 <link rel="stylesheet" href="https://chiyongwu.github.io/media/css/tailwind.css">
 <link rel="stylesheet" href="https://chiyongwu.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="Babel - SwordPal&#39;s blog - Atom Feed" href="https://chiyongwu.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="Redis(一)：Redis五种数据结构 - SwordPal&#39;s blog - Atom Feed" href="https://chiyongwu.github.io/atom.xml">
 
     
 
-  <meta name="description" content="1. 简介
-ES6的某些高级语法在浏览器环境甚至是Node.js环境中无法执行。
-Babel是一个广泛使用的转码器，可以将ES6代码转为ES5代码，从而在现有环境执行执行。
-这意味着，你可以现在就用 ES6 编写程序，而不用担心现有环境是否..." />
-  <meta property="og:title" content="Babel - SwordPal&#39;s blog">
-  <meta property="og:description" content="1. 简介
-ES6的某些高级语法在浏览器环境甚至是Node.js环境中无法执行。
-Babel是一个广泛使用的转码器，可以将ES6代码转为ES5代码，从而在现有环境执行执行。
-这意味着，你可以现在就用 ES6 编写程序，而不用担心现有环境是否..." />
+  <meta name="description" content="Redis五种数据结构如下：
+
+对redis来说，所有的key（键）都是字符串。
+1.String 字符串类型
+是redis中最基本的数据类型，一个key对应一个value。
+String类型是二进制安全的，意思是 redis 的 stri..." />
+  <meta property="og:title" content="Redis(一)：Redis五种数据结构 - SwordPal&#39;s blog">
+  <meta property="og:description" content="Redis五种数据结构如下：
+
+对redis来说，所有的key（键）都是字符串。
+1.String 字符串类型
+是redis中最基本的数据类型，一个key对应一个value。
+String类型是二进制安全的，意思是 redis 的 stri..." />
   <meta property="og:type" content="articles">
-  <meta property="og:url" content="https://chiyongwu.github.io/post/babel/" />
+  <meta property="og:url" content="https://chiyongwu.github.io/post/redisyi-redis-wu-chong-shu-ju-jie-gou/" />
   <meta property="og:image" content="https://chiyongwu.github.io/images/avatar.png">
   <meta property="og:image:height" content="630">
   <meta property="og:image:width" content="1200">
-  <meta name="twitter:title" content="Babel - SwordPal&#39;s blog">
-  <meta name="twitter:description" content="1. 简介
-ES6的某些高级语法在浏览器环境甚至是Node.js环境中无法执行。
-Babel是一个广泛使用的转码器，可以将ES6代码转为ES5代码，从而在现有环境执行执行。
-这意味着，你可以现在就用 ES6 编写程序，而不用担心现有环境是否...">
+  <meta name="twitter:title" content="Redis(一)：Redis五种数据结构 - SwordPal&#39;s blog">
+  <meta name="twitter:description" content="Redis五种数据结构如下：
+
+对redis来说，所有的key（键）都是字符串。
+1.String 字符串类型
+是redis中最基本的数据类型，一个key对应一个value。
+String类型是二进制安全的，意思是 redis 的 stri...">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="canonical" href="https://chiyongwu.github.io/post/babel/">
+  <link rel="canonical" href="https://chiyongwu.github.io/post/redisyi-redis-wu-chong-shu-ju-jie-gou/">
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css">
@@ -52,95 +58,140 @@ Babel是一个广泛使用的转码器，可以将ES6代码转为ES5代码，从
     <div class="max-w-4xl w-full mx-auto">
       <div class="shadow-box bg-white dark:bg-gray-600 rounded-lg pt-32 md:pt-64 px-4 md:px-8 pb-8 animated fadeIn mb-8">
         <h1 class="text-5xl font-semibold leading-normal pb-8 mb-8 border-b-8 border-gray-700">
-          Babel
+          Redis(一)：Redis五种数据结构
         </h1>
         
         <div class="mb-8 flex flex-wrap">
-          <div class="text-gray-400 text-sm mr-4">2021-01-24 · 2 min read</div>
+          <div class="text-gray-400 text-sm mr-4">2021-01-27 · 6 min read</div>
           
-            <a href="https://chiyongwu.github.io/tag/hlj6GosQh/" class="text-gray-700 text-sm border-b-2 border-dotted border-gray-200 hover:border-gray-600 transition-all duration-100 inline-flex mr-2">
+            <a href="https://chiyongwu.github.io/tag/hxS_z4don/" class="text-gray-700 text-sm border-b-2 border-dotted border-gray-200 hover:border-gray-600 transition-all duration-100 inline-flex mr-2">
               <i class="ri-hashtag"></i>
-              前端
+              Redis
             </a>
           
         </div>
         <div class="markdown mb-8" v-pre>
-          <h2 id="1-简介">1. 简介</h2>
-<p>ES6的某些高级语法在浏览器环境甚至是Node.js环境中无法执行。</p>
-<p>Babel是一个广泛使用的转码器，可以将ES6代码转为ES5代码，从而在现有环境执行执行。</p>
-<p>这意味着，你可以现在就用 ES6 编写程序，而不用担心现有环境是否支持。</p>
-<h2 id="2-安装">2. 安装</h2>
-<p>安装命令行转码工具</p>
-<blockquote>
-<p>Babel提供babel-cli工具，用于命令行转码。它的安装命令如下：</p>
-</blockquote>
-<pre><code class="language-javascript">npm install -g babel-cli
-#查看是否安装成功
-babel --version
+          <h2 id="redis五种数据结构如下">Redis五种数据结构如下：</h2>
+<h3 id=""><img src="https://img2018.cnblogs.com/blog/1289934/201906/1289934-20190621163930814-1395015700.png" alt="img" loading="lazy"></h3>
+<p>对redis来说，所有的key（键）都是字符串。</p>
+<h2 id="1string-字符串类型">1.String 字符串类型</h2>
+<p>是redis中最基本的数据类型，一个key对应一个value。</p>
+<p>String类型是二进制安全的，意思是 redis 的 string 可以包含任何数据。如数字，字符串，jpg图片或者序列化的对象。</p>
+<p>使用：get 、 set 、 del 、 incr、 decr 等</p>
+<pre><code>127.0.0.1:6379&gt; set hello world
+OK
+127.0.0.1:6379&gt; get hello
+&quot;world&quot;
+127.0.0.1:6379&gt; del hello
+(integer) 1
+127.0.0.1:6379&gt; get hello
+(nil)
+127.0.0.1:6379&gt; get counter
+&quot;2&quot;
+127.0.0.1:6379&gt; incr counter
+(integer) 3
+127.0.0.1:6379&gt; get counter
+&quot;3&quot;
+127.0.0.1:6379&gt; incrby counter 100
+(integer) 103
+127.0.0.1:6379&gt; get counter
+&quot;103&quot;
+127.0.0.1:6379&gt; decr counter
+(integer) 102
+127.0.0.1:6379&gt; get counter
+&quot;102&quot;
 </code></pre>
-<h2 id="3-babel的使用">3. Babel的使用</h2>
-<p>1、创建babel文件夹</p>
-<p>2、初始化项目</p>
-<pre><code>npm init -y
+<p>实战场景：</p>
+<p>1.缓存： 经典使用场景，把常用信息，字符串，图片或者视频等信息放到redis中，redis作为缓存层，mysql做持久化层，降低mysql的读写压力。</p>
+<p>2.计数器：redis是单线程模型，一个命令执行完才会执行下一个，同时数据可以一步落地到其他的数据源。</p>
+<p>3.session：常见方案spring session + redis实现session共享，</p>
+<h2 id="2hash-哈希">2.Hash （哈希）</h2>
+<p>是一个Mapmap，指值本身又是一种键值对结构，如 value={{field1,value1},......fieldN,valueN}}</p>
+<figure data-type="image" tabindex="1"><img src="https://img2018.cnblogs.com/blog/1289934/201906/1289934-20190621232209365-1000366002.png" alt="img" loading="lazy"></figure>
+<p>使用：所有hash的命令都是 h  开头的   hget 、hset 、 hdel 等</p>
+<pre><code>127.0.0.1:6379&gt; hset user name1 hao
+(integer) 1
+127.0.0.1:6379&gt; hset user email1 hao@163.com
+(integer) 1
+127.0.0.1:6379&gt; hgetall user
+1) &quot;name1&quot;
+2) &quot;hao&quot;
+3) &quot;email1&quot;
+4) &quot;hao@163.com&quot;
+127.0.0.1:6379&gt; hget user user
+(nil)
+127.0.0.1:6379&gt; hget user name1
+&quot;hao&quot;
+127.0.0.1:6379&gt; hset user name2 xiaohao
+(integer) 1
+127.0.0.1:6379&gt; hset user email2 xiaohao@163.com
+(integer) 1
+127.0.0.1:6379&gt; hgetall user
+1) &quot;name1&quot;
+2) &quot;hao&quot;
+3) &quot;email1&quot;
+4) &quot;hao@163.com&quot;
+5) &quot;name2&quot;
+6) &quot;xiaohao&quot;
+7) &quot;email2&quot;
+8) &quot;xiaohao@163.com&quot;
 </code></pre>
-<p>3、创建文件 src/example.js ，下面是一段ES6代码：</p>
-<pre><code class="language-javascript">// 转码前
-// 定义数据
-let input = [1, 2, 3]
-// 将数组的每个元素 +1
-input = input.map(item =&gt; item + 1)
-console.log(input)
+<p>实战场景：</p>
+<p>1.缓存： 能直观，相比string更节省空间，的维护缓存信息，如用户信息，视频信息等。</p>
+<h2 id="3链表">3.链表</h2>
+<p>List 说白了就是链表（redis 使用双端链表实现的 List），是有序的，value可以重复，可以通过下标取出对应的value值，左右两边都能进行插入和删除数据。</p>
+<figure data-type="image" tabindex="2"><img src="https://img2018.cnblogs.com/blog/1289934/201906/1289934-20190621233618769-504231907.png" alt="img" loading="lazy"></figure>
+<p>使用列表的技巧</p>
+<ul>
+<li>lpush+lpop=Stack(栈)</li>
+<li>lpush+rpop=Queue（队列）</li>
+<li>lpush+ltrim=Capped Collection（有限集合）</li>
+<li>lpush+brpop=Message Queue（消息队列）</li>
+</ul>
+<p>使用：</p>
+<pre><code>127.0.0.1:6379&gt; lpush mylist 1 2 ll ls mem
+(integer) 5
+127.0.0.1:6379&gt; lrange mylist 0 -1
+1) &quot;mem&quot;
+2) &quot;ls&quot;
+3) &quot;ll&quot;
+4) &quot;2&quot;
+5) &quot;1&quot;
+127.0.0.1:6379&gt;
 </code></pre>
-<p>4、配置 .babelrc</p>
-<blockquote>
-<p>Babel的配置文件是.babelrc，存放在项目的根目录下，该文件用来设置转码规则和插件，基本格式如下。</p>
-</blockquote>
-<pre><code>{
-    &quot;presets&quot;: [],
-    &quot;plugins&quot;: []
-}
+<p>实战场景：</p>
+<p>1.timeline：例如微博的时间轴，有人发布微博，用lpush加入时间轴，展示新的列表信息。</p>
+<h2 id="4set-集合">4.Set  集合</h2>
+<p>集合类型也是用来保存多个字符串的元素，但和列表不同的是集合中 1. 不允许有重复的元素，2.集合中的元素是无序的，不能通过索引下标获取元素，3.支持集合间的操作，可以取多个集合取交集、并集、差集。</p>
+<figure data-type="image" tabindex="3"><img src="https://img2018.cnblogs.com/blog/1289934/201906/1289934-20190622001013515-677922001.png" alt="img" loading="lazy"></figure>
+<p>使用：命令都是以s开头的 sset 、srem、scard、smembers、sismember</p>
+<pre><code>127.0.0.1:6379&gt; sadd myset hao hao1 xiaohao hao
+(integer) 3
+127.0.0.1:6379&gt; SMEMBERS myset
+1) &quot;xiaohao&quot;
+2) &quot;hao1&quot;
+3) &quot;hao&quot;
+127.0.0.1:6379&gt; SISMEMBER myset hao
+(integer) 1
 </code></pre>
-<p>presets字段设定转码规则，将es2015规则加入 .babelrc：</p>
-<pre><code>{
-    &quot;presets&quot;: [&quot;es2015&quot;],
-    &quot;plugins&quot;: []
-}
+<p>实战场景;</p>
+<p>1.标签（tag）,给用户添加标签，或者用户给消息添加标签，这样有同一标签或者类似标签的可以给推荐关注的事或者关注的人。</p>
+<p>2.点赞，或点踩，收藏等，可以放到set中实现</p>
+<h2 id="5zset-有序集合">5.zset 有序集合</h2>
+<p>有序集合和集合有着必然的联系，保留了集合不能有重复成员的特性，区别是，有序集合中的元素是可以排序的，它给每个元素设置一个分数，作为排序的依据。</p>
+<p>（有序集合中的元素不可以重复，但是score 分数 可以重复，就和一个班里的同学学号不能重复，但考试成绩可以相同）。</p>
+<figure data-type="image" tabindex="4"><img src="https://img2018.cnblogs.com/blog/1289934/201906/1289934-20190622000959260-539243592.png" alt="img" loading="lazy"></figure>
+<p>使用： 有序集合的命令都是 以 z 开头  zadd 、 zrange、 zscore</p>
+<pre><code>127.0.0.1:6379&gt; zadd myscoreset 100 hao 90 xiaohao
+(integer) 2
+127.0.0.1:6379&gt; ZRANGE myscoreset 0 -1
+1) &quot;xiaohao&quot;
+2) &quot;hao&quot;
+127.0.0.1:6379&gt; ZSCORE myscoreset hao
+&quot;100&quot;
 </code></pre>
-<p>5、安装转码器，在项目中安装</p>
-<pre><code>npm install --save-dev babel-preset-es2015
-</code></pre>
-<p>6、转码</p>
-<pre><code class="language-javascript"># npm install --save-dev csv-loader xml-loader
-# 转码结果写入一个文件
-mkdir dist1
-# --out-file 或 -o 参数指定输出文件
-babel src/example.js --out-file dist1/compiled.js
-# 或者
-babel src/example.js -o dist1/compiled.js
-# 整个目录转码
-mkdir dist2
-# --out-dir 或 -d 参数指定输出目录
-babel src --out-dir dist2
-# 或者
-babel src -d dist2
-</code></pre>
-<h2 id="4-自定义脚本">4. 自定义脚本</h2>
-<p>1、改写package.json</p>
-<pre><code>{
-    // ...
-    &quot;scripts&quot;: {
-        // ...
-        &quot;build&quot;:  &quot;babel src\\example.js -o dist\\compiled.js&quot;
-    },
-}
-</code></pre>
-<p>2、转码的时候，执行下面的命令</p>
-<pre><code>mkdir dist
-npm run build
-</code></pre>
-<p>参考资料：<br>
-https://www.cnblogs.com/houjiao/p/12108060.html<br>
-https://www.jiangruitao.com/babel/quick-start/</p>
+<p>实战场景：</p>
+<p>1.排行榜：有序集合经典使用场景。例如小说视频等网站需要对用户上传的小说视频做排行榜，榜单可以按照用户关注数，更新时间，字数等打分，做排行。</p>
 
         </div>
         <!-- Share to Twitter, Weibo, Telegram -->
@@ -184,10 +235,16 @@ https://www.jiangruitao.com/babel/quick-start/</p>
         <ul class="markdownIt-TOC">
 <li>
 <ul>
-<li><a href="#1-%E7%AE%80%E4%BB%8B">1. 简介</a></li>
-<li><a href="#2-%E5%AE%89%E8%A3%85">2. 安装</a></li>
-<li><a href="#3-babel%E7%9A%84%E4%BD%BF%E7%94%A8">3. Babel的使用</a></li>
-<li><a href="#4-%E8%87%AA%E5%AE%9A%E4%B9%89%E8%84%9A%E6%9C%AC">4. 自定义脚本</a></li>
+<li><a href="#redis%E4%BA%94%E7%A7%8D%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%A6%82%E4%B8%8B">Redis五种数据结构如下：</a>
+<ul>
+<li><a href="#">!img</a></li>
+</ul>
+</li>
+<li><a href="#1string-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%B1%BB%E5%9E%8B">1.String 字符串类型</a></li>
+<li><a href="#2hash-%E5%93%88%E5%B8%8C">2.Hash （哈希）</a></li>
+<li><a href="#3%E9%93%BE%E8%A1%A8">3.链表</a></li>
+<li><a href="#4set-%E9%9B%86%E5%90%88">4.Set  集合</a></li>
+<li><a href="#5zset-%E6%9C%89%E5%BA%8F%E9%9B%86%E5%90%88">5.zset 有序集合</a></li>
 </ul>
 </li>
 </ul>

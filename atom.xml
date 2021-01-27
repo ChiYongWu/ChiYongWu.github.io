@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://chiyongwu.github.io</id>
     <title>SwordPal&apos;s blog</title>
-    <updated>2021-01-24T04:25:57.350Z</updated>
+    <updated>2021-01-27T14:32:44.893Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://chiyongwu.github.io"/>
     <link rel="self" href="https://chiyongwu.github.io/atom.xml"/>
@@ -10,6 +10,484 @@
     <logo>https://chiyongwu.github.io/images/avatar.png</logo>
     <icon>https://chiyongwu.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, SwordPal&apos;s blog</rights>
+    <entry>
+        <title type="html"><![CDATA[Redis（三）：Redis主从复制]]></title>
+        <id>https://chiyongwu.github.io/post/redissan-redis-zhu-cong-fu-zhi/</id>
+        <link href="https://chiyongwu.github.io/post/redissan-redis-zhu-cong-fu-zhi/">
+        </link>
+        <updated>2021-01-27T14:31:57.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="一-主从复制">一、主从复制</h2>
+<p>主从复制：主节点负责写数据，从节点负责读数据，从而实现读写分离，提高redis的高可用性。</p>
+<p>让一个服务器去复制（replicate）另一个服务器，我们称呼被复制的服务器为主节点（master），而对主服务器进行复制的服务器则被称为从节点（slave），</p>
+<p>如下图所示：</p>
+<figure data-type="image" tabindex="1"><img src="https://img2018.cnblogs.com/blog/1289934/201906/1289934-20190624144921705-733401084.png" alt="img" loading="lazy"></figure>
+<p>主从复制的特点：</p>
+<p>1、一个master可以有多个slave</p>
+<p>2、一个slave只能有一个master</p>
+<p>3、数据流向是单向的，master到slave</p>
+<p>主从复制的作用：</p>
+<p>1、数据副本：多一份或多份数据拷贝，保证redis高可用</p>
+<p>2、扩展性能：单机redis的性能是有限的，主从复制能横向扩展 如容量、QPS等</p>
+<h2 id="二-主从复制实现方式">二、主从复制实现方式</h2>
+<h3 id="客户端命令slaveof">客户端命令：slaveof</h3>
+<figure data-type="image" tabindex="2"><img src="https://img2018.cnblogs.com/blog/1289934/201906/1289934-20190624151816311-1648676415.png" alt="img" loading="lazy"></figure>
+<h3 id="配置方式">配置方式：</h3>
+<p>新建redis-6380.conf，加入配置</p>
+<pre><code># 1.指明谁是主节点
+slaveof  your-master-ip  your-master-port
+
+# 2.让从节点只做读的操作，保证主节点和从节点数据同步一致性和读写分离。
+slave-ready-only yes
+</code></pre>
+<h2 id="三-全量复制和增量复制">三、全量复制和增量复制</h2>
+<pre><code> 1. runId：Redis每次启动时，都会生成一个不同的id来标示当前运行的Redis。从节点中会保存主节点的run_id标示，如果主节点的Redis发生了重启，那么从节点依据ip和端口号连接到主节点时，就会发现主节点的run_id标示的改变（这种改变意味着主节点中的数据可能发生的大量的改动），所以此时就会引起全量复制，也就是将主节点中的所有数据全部复制过来。
+root@f9eb2360ed36:/usr/local/bin# ./redis-cli -p 6379 info server
+# Server
+redis_version:4.0.14
+redis_git_sha1:00000000
+redis_git_dirty:0
+redis_build_id:9ac979c18029eef1
+redis_mode:standalone
+os:Linux 3.10.0-514.26.2.el7.x86_64 x86_64
+arch_bits:64
+multiplexing_api:epoll
+atomicvar_api:atomic-builtin
+gcc_version:6.3.0
+process_id:1
+run_id:49dbc223587cbdadd158adc21816979722b65ae1
+tcp_port:6379
+uptime_in_seconds:105535
+uptime_in_days:1
+hz:10
+lru_clock:1086433
+executable:/data/redis-server
+config_file:
+
+2. 偏移量：每当主节点增删改一个数据时，主节点中就会有一个数值来记录这种变化，偏移量就是记录Redis中数据改变的一个标示，当主节点更改一个数据时，偏移量也会发生对应的改变，而且主节点在将数据更改命令同步给从节点时，也会将该偏移量发送给从节点，这样就可以对比主从节点的偏移量，来观察是否出现主从不一致的问题。使用 ./redis-cli -p 6379 info replication 该命令即可在主节点中查看主从节点的偏移量
+</code></pre>
+<h3 id="31-全量复制">3.1  全量复制</h3>
+<h4 id="过程">过程：</h4>
+<ol>
+<li>
+<p>向主节点发送psync，有两个参数，第一个参数是runId，第二个参数是偏移量，第一次发送不知道主节点的runId，也不知道偏移量，因此从节点发送 ？ -1</p>
+</li>
+<li>
+<p>主节点收到消息，根据？ -1 能判断出来是第一次复制，主节点把runId和offset 发送给Slave节点，</p>
+</li>
+<li>
+<p>从节点保存主节点基本信息</p>
+</li>
+</ol>
+<p>4-5-6. Master节点执行bgsave生成快照，在此期间会记录后续执行的数据更改命令所更改的数据，直到主节点将生成的RDB文件传输到从节点为止，</p>
+<p>​      期间Master节点执行的写操作，主节点会将缓冲区中记录的新更改的数据发送给从节点</p>
+<p>7-8   从节点清空此前的所有数据，加载RDB文件恢复数据并存入新更改的数据</p>
+<figure data-type="image" tabindex="3"><img src="https://img2018.cnblogs.com/blog/1289934/201906/1289934-20190624163101212-1340503749.png" alt="img" loading="lazy"></figure>
+<p>说明：</p>
+<ul>
+<li>全量复制的性能开销：1. bgsave生成RDB文件需要的时间，2. RDB文件在网络间的传输时间，3. 从节点的数据清空时间 ， 4. 加载RDB文件的时间 5. 可能的 AOF  重写时间</li>
+<li>数据更改命令缓冲区repl_back_buffer用于：当Redis通过Linux中的fork()函数开辟一个子进程处理其他事务（比如主进程执行bgsave生成一个RDB文件时，或者主进程执行bgrewriteaof生成一个AOF文件时）， 而主进程（即处理客户端命令的进程）后续执行的一些数据更改命令会被暂时保存在该区域，而且该区域空间有限（配置文件中repl-backlog-size 1mb即可配置该处空间大小）</li>
+</ul>
+<h3 id="32-部分复制">3.2  部分复制</h3>
+<p>部分复制解决的问题：在实际环境中，主节点与从节点之间可能会发生一些网络波动等情况，导致从节点与主节点之间的网络连接断开（主从节点的Redis均未关闭），如果重新连接上后，可以使用全量复制来重新进行一次主从节点数据同步，但是全量复制会带来一个性能开销的问题，而且从节点中可能有大量数据是主节点中没有更该过的，也就是不需要进行再次同步的数据，如果使用全量复制肯定是带来了一些不必要的浪费。所以，部分复制功能就是为了解决该问题的。</p>
+<h4 id="过程-2">过程：</h4>
+<ol>
+<li>
+<p>主从节点直接连接断开，</p>
+</li>
+<li>
+<p>此时主节点继续执行的数据更改命令会被记录在一个缓冲区 repl_back_buffer 中</p>
+</li>
+<li>
+<p>当从节点重新连接主节点时，</p>
+</li>
+<li>
+<p>自动发出一条命令(psync offset run_id)，将从节点中存储的主节点的Redis运行时id和从节点中保存的偏移量发送给主节点</p>
+</li>
+<li>
+<p>主节点接收从节点发送的偏移量和id，对比此时主节点的偏移量和接收的偏移量，如果两个偏移量之差大于repl_back_buffer中的数据，那么就表示在断开连接期间从节点已经丢失了超出规定数量的数据，此时就需要进行全量复制了，否则就进行部分复制</p>
+</li>
+<li>
+<p>将主节点缓冲区中的数据同步更新到从节点中，这样就实现了部分数据的复制同步，降低了性能开销</p>
+</li>
+</ol>
+<figure data-type="image" tabindex="4"><img src="https://img2018.cnblogs.com/blog/1289934/201906/1289934-20190624174156107-191597742.png" alt="img" loading="lazy"></figure>
+<h2 id="四-主从节点的故障处理">四、主从节点的故障处理</h2>
+<ol>
+<li>故障发生时服务自动转移（自动故障转移）：即当某个节点发生故障导致停止服务时，该节点提供的服务会有另一个节点自动代替提供，这样就实现了一个高可用的效果</li>
+<li>从节点故障：即如果某个从节点发生了故障，导致无法向在该节点上的客户端提供读服务，解决办法就是使该客户端转移到另一个可用从节点上，但是在转移时，应该考虑该从节点能承受几个客户端的压力</li>
+<li>主节点故障：如果主节点发生故障，在使用主节点进行读写操作的客户端就无法使用了，而使用从节点只进行读操作的客户端还是可以继续使用的，解决办法就是从从节点中选一个节点更改为主节点，并且将原主节点的客户端连接到新的主节点上，然后通过该客户端将其他从节点连接到新的主节点中</li>
+<li>主从复制确实可以解决故障问题，但是主从复制不能实现自动故障转移，其必须要通过一些手动操作，而且非常麻烦，所以要实现自动故障转移还需要另一个功能，Redis中提供了sentinel功能来实现自动故障转移。</li>
+</ol>
+<h2 id="五-主从节点的故障处理">五、主从节点的故障处理</h2>
+<ol>
+<li>读写分离：即客户端发来的读写命令分开，写命令交给主节点执行，读命令交给从节点执行，不仅减少了主节点的压力，而且增强了读操作的能力；但也会造成一些问题</li>
+</ol>
+<ul>
+<li>但是主从节点之间数据复制造成的阻塞延迟也可能会导致主从不一致的情况，也就是主节点先进行了写操作，但可能因为数据复制造成的阻塞延迟，导致在从节点上进行的读操作获取的数据与主节点不一致</li>
+<li>读取过期数据：主从复制会将带有过期时间的数据一并复制到从节点中，但是从节点是没有删除数据的能力的，即使是过期数据，所以主节点中的已经删除了过期数据，但是因为主从复制的阻塞延迟问题导致从节点中的过期数据没有删除，此时客户端就会读到一个过期数据</li>
+</ul>
+<ol start="2">
+<li>主从配置不一致：造成的问题有</li>
+</ol>
+<ul>
+<li>比如配置中的maxmemory参数如果配置不一致，比如主节点2Gb，从节点1Gb，那么就可能会导致数据丢失；以及一些其他配置问题</li>
+</ul>
+<ol start="3">
+<li>规避全量复制：全量复制的性能开销较大，所以要尽量避免全量复制，</li>
+</ol>
+<ul>
+<li>在第一次建立主从节点关系式一定会发生全量复制；可以适当减小Redis的maxmemory参数，这样可以使得RDB更快，或者选择在客户端操作低峰期进行，比如深夜</li>
+<li>从节点中保存的主节点run_id不一致时也一定会发生全量复制（比如主节点的重启）；可以通过故障转移来尽量避免，例如Redis Sentinel 与 Redis Cluster</li>
+<li>当主从节点的偏移量之差大于命令缓冲区repl_back_buffer中对应数据的偏移差时，也会发生全量复制，也就是上面的部分复制的复制过程中所说的；可以适当增大配置文件中repl-backlog-size即数据缓冲区可尽量避免</li>
+</ul>
+<ol start="4">
+<li>规避复制风暴：</li>
+</ol>
+<ul>
+<li>单主节点导致的复制风暴，即当主节点重启后，要向其所有的从节点都进行一次全量复制，这非常消耗性能；可以更换主从节点的拓扑结构，更换为类似树形的结构，一个主节点只与少量的从节点建立主从关系，而而这些主节点又与其他从节点构成主从关系，</li>
+<li>如图所示<img src="https://img2018.cnblogs.com/blog/1289934/201906/1289934-20190624175939473-823111126.png" alt="img" loading="lazy"></li>
+<li>单主节点机器复制风暴：即如果过一台机器专门用来部署多个主节点，然后其他机器部署从节点，那么一旦主节点机器宕机重启，就会引起所有的主从节点之间的全量复制，造成非常大的性能开销；可以采用多台机器，分散部署主节点，或者使用自动故障转移来将某个从节点变为主节点实现一个高可用</li>
+</ul>
+<p>感谢支持，感谢观看。</p>
+<p>参考：https://my.oschina.net/ProgramerLife/blog/2254321</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Redis(二)：Redis持久化RDB和AOF]]></title>
+        <id>https://chiyongwu.github.io/post/rediser-redis-chi-jiu-hua-rdb-he-aof/</id>
+        <link href="https://chiyongwu.github.io/post/rediser-redis-chi-jiu-hua-rdb-he-aof/">
+        </link>
+        <updated>2021-01-27T14:31:17.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="一-redis两种持久化方式">一、Redis两种持久化方式</h2>
+<p>对Redis而言，其数据是保存在内存中的，一旦机器宕机，内存中的数据会丢失，因此需要将数据异步持久化到硬盘中保存。这样，即使机器宕机，数据能从硬盘中恢复。</p>
+<p>常见的数据持久化方式：</p>
+<p>1.快照：类似拍照记录时光，快照是某时某刻将数据库的数据做拍照记录下其数据信息。如MYSQL的Dump，Redis的RDB模式</p>
+<p>2.写日志方式：是将数据的操作全部写到日志当中，需要恢复的时候，按照日志记录的操作记录重新再执行一遍。例如MYSQL的Binlog，Redis的AAOF模式、</p>
+<h2 id="二-rdb">二、RDB</h2>
+<h3 id="说明">说明：</h3>
+<p>redis默认开启，将redis在内存中保存的数据，以快照的方式持久化到硬盘中保存。</p>
+<h3 id="触发机制">触发机制：</h3>
+<p>1.save命令：阻塞方式，需要等redis执行完save后，才能执行其他get、set等操作。同步方式</p>
+<p>2.bgsave命令：非阻塞，其原理是调用linux 的 fork()函数，创建redis的子进程，子进程进行创建 rdb 文件的操作。异步方式，</p>
+<p>3.自动方式：在redis.conf文件中配置，如下 save &lt;指定时间间隔&gt; &lt;执行指定次数更新操作&gt; ，save 60 10000 表示 60秒年内有10000次操作会自动生成rdb文件。</p>
+<pre><code># Save the DB on disk:
+#
+#   save &lt;seconds&gt; &lt;changes&gt;
+#
+#   Will save the DB if both the given number of seconds and the given
+#   number of write operations against the DB occurred.
+#
+#   In the example below the behaviour will be to save:
+#   after 900 sec (15 min) if at least 1 key changed
+#   after 300 sec (5 min) if at least 10 keys changed
+#   after 60 sec if at least 10000 keys changed
+#
+#   Note: you can disable saving at all commenting all the &quot;save&quot; lines.
+#
+#   It is also possible to remove all the previously configured save
+#   points by adding a save directive with a single empty string argument
+#   like in the following example:
+#
+#   save &quot;&quot;
+
+save 900 1
+save 300 10
+save 60 10000
+</code></pre>
+<p>4.其他方式</p>
+<ul>
+<li>4.1 执行flushall命令，清空数据，几乎不用</li>
+<li>4.2 执行shutdown命令，安全关闭redis不丢失数据，几乎用不到。</li>
+<li>4.3 主从复制，在主从复制的时候，rdb文件作为媒介来关联主节点和从节点的数据一致。</li>
+</ul>
+<h3 id="最佳配置参考">最佳配置参考：</h3>
+<pre><code>vim redis.conf
+</code></pre>
+<pre><code># 1. 将自动生成rdb文件注释掉
+# save 900 1
+# save 300 10
+# save 60 10000
+
+# The filename where to dump the DB
+# 2. rdb的文件名，改为dump+ 端口.rbd
+dbfilename dump-${port}.rdb
+
+
+# Note that you must specify a directory here, not a file name.
+# 3. 文件持久化目录，日志目录，改到分布式存储中或者放到较大的硬盘目录中。
+dir /yourbigdata/
+
+# 4. 在bgsave发生错误时停止写入
+stop-writes-on-bgsave-error yes
+
+# 5.采用压缩方式，不然生成的rdb文件可能巨大无比。压缩后主从复制拷贝文件小，速度也快。
+rdbcompression yes
+
+# 6.采用校验和
+rdbchecksum yes
+</code></pre>
+<h2 id="rdb优缺点">RDB优缺点</h2>
+<p>优点：<br>
+1 适合大规模的数据恢复。<br>
+2 如果业务对数据完整性和一致性要求不高，RDB是很好的选择。</p>
+<p>缺点：<br>
+1 不可控，容易丢失数据：数据的完整性和一致性不高，因为RDB可能在最后一次备份时宕机了。<br>
+2 耗时耗性能：备份时占用内存，因为Redis 在备份时会独立创建一个子进程，将数据写入到一个临时文件（此时内存中的数据是原来的两倍哦），最后再将临时文件替换之前的备份文件。<br>
+所以Redis 的持久化和数据的恢复要选择在夜深人静的时候执行是比较合理的。</p>
+<h2 id="三-aof">三、AOF</h2>
+<h3 id="说明-2">说明：</h3>
+<p>redis默认不开启，采用日志的形式来记录每个<strong>写操作</strong>，并<strong>追加</strong>到 .aof 文件中。Redis 重启的会根据日志文件的内容将写指令从前到后执行一次以完成数据的恢复工作</p>
+<h3 id="生成aof的三种策略">生成AOF的三种策略：</h3>
+<figure data-type="image" tabindex="1"><img src="https://img2018.cnblogs.com/blog/1289934/201906/1289934-20190624101908354-208380668.png" alt="img" loading="lazy"></figure>
+<ol>
+<li>
+<p>always : 每条命令都会刷新到缓冲区，把缓冲区fsync到硬盘，对硬盘IO压力大，一般sata盘只有几百TPS，如果redis的写入量非常大，那对硬盘的压力也横刀。</p>
+</li>
+<li>
+<p>everysec: 每秒把缓冲区fsync 到硬盘，如果出现故障，会丢失1s（默认配置是1秒）的数据。一般使用这种。</p>
+</li>
+<li>
+<p>no : 由操作系统来定什么时候fsync到硬盘中。 缺点：不可控</p>
+</li>
+</ol>
+<h3 id="aof重写">AOF重写：</h3>
+<p>把过期的，没有用的，重复的，可优化的命令简化为很小的aof文件。实际上是redis内存中的数据回溯成aof文件。</p>
+<p>如下图所示：</p>
+<figure data-type="image" tabindex="2"><img src="https://img2018.cnblogs.com/blog/1289934/201906/1289934-20190624103925241-63040943.png" alt="img" loading="lazy"></figure>
+<p>作用：</p>
+<p>1.减少硬盘占用量</p>
+<p>2.加快恢复速度</p>
+<h3 id="aof重写的实现方式">AOF重写的实现方式</h3>
+<p>1.bgrewriteaof  命令 ： 从redis的主进程fork一个子进程生成包含当前redis内存数据的最小命令集、</p>
+<p>2.AOF重写配置：</p>
+<pre><code># 1. aof文件增长率
+auto-aof-rewrite-percentage 100
+
+# 2. aof文件重写需要的尺寸
+auto-aof-rewrite-min-size 64mb
+</code></pre>
+<p>自动触发时机：（需要同时满足）</p>
+<ul>
+<li>当前的aof文件大小  &gt;  aof文件重写需要的尺寸</li>
+<li>（aof当前文件大小 - 上次aof的文件大小）/ 上次aof文件大小 &gt; aof文件增长率</li>
+</ul>
+<h3 id="最佳配置参考-2">最佳配置参考：</h3>
+<pre><code>vim redis.conf
+</code></pre>
+<pre><code># 1. 打开aof功能
+appendonly yes
+
+# 2. 重命名aof文件名,以端口号区分
+appendfilename &quot;appendonly-${port}.aof&quot;
+
+# 3. 使用everysec策略
+appendfsync everysec
+# 4. 文件持久化目录，日志目录，改到分布式存储中或者放到较大的硬盘目录中。
+dir /yourbigdata/
+# 5. 在aof重写的时候，不做aof的append（追加）操作，这里出于性能考虑
+no-appendfsync-on-rewrite yes
+</code></pre>
+<h3 id="aof优缺点">AOF优缺点</h3>
+<p>优点：</p>
+<p>1.数据的完整性和一致性更高</p>
+<p>缺点：</p>
+<ol>
+<li>
+<p>因为AOF记录的内容多，文件会越来越大，数据恢复也会越来越慢。</p>
+</li>
+<li>
+<p>AOF每秒fsync一次指令硬盘，如果硬盘IO慢，会阻塞父进程；风险是会丢失1秒多的数据；在Rewrite过程中，主进程把指令存到mem-buffer中，最后写盘时会阻塞主进程。</p>
+</li>
+</ol>
+<h2 id="四-关于redis持久化方式rdb和aof的缺点">四、关于Redis持久化方式RDB和AOF的缺点</h2>
+<p>原因是redis持久化方式的痛点，缺点比较明显。</p>
+<p>1、RDB需要定时持久化，风险是可能会丢两次持久之间的数据，量可能很大。</p>
+<p>2、AOF每秒fsync一次指令硬盘，如果硬盘IO慢，会阻塞父进程；风险是会丢失1秒多的数据；在Rewrite过程中，主进程把指令存到mem-buffer中，最后写盘时会阻塞主进程。</p>
+<p>3、这两个缺点是个很大的痛点。为了解决这些痛点，GitHub的两位工程师 Bryana Knight 和 Miguel Fernández 日前写了一篇 文章 ，讲述了将持久数据从Redis迁出的经验：</p>
+<p><a href="http://www.open-open.com/lib/view/open1487736984424.html"> http://www.open-open.com/lib/view/open1487736984424.html</a></p>
+<h2 id="五-如何选择rdb和aof">五、如何选择RDB和AOF</h2>
+<p>建议全都要。</p>
+<p>1、对于我们应该选择RDB还是AOF，官方的建议是两个同时使用。这样可以提供更可靠的持久化方案。</p>
+<p>在redis 4.0 之后，官方提供了混合持久化模式，具体如下</p>
+<h3 id="持久化文件结构">持久化文件结构</h3>
+<p>上半段RDB格式，后半段是AOF模式。<img src="https://img2018.cnblogs.com/blog/1289934/201906/1289934-20190626160208108-1516752611.png" alt="img" loading="lazy"></p>
+<h3 id="如何配置">如何配置</h3>
+<pre><code>vim redis.conf
+
+aof-use-rdb-preamble yes   
+</code></pre>
+<p>之后重启redis，运行bgrewriteaof命令，重写appendonly.aof，之后在Redis数据同步的时候，可以先加载rdb的内容，然后再执行aof指令部分使Redis数据同步</p>
+<h3 id="数据恢复过程">数据恢复过程</h3>
+<p>加载AOF文件的入口为loadAppendOnlyFile，代码如下</p>
+<pre><code>int loadAppendOnlyFile(char *filename) {
+    ...
+    /* Check if this AOF file has an RDB preamble. In that case we need to
+     * load the RDB file and later continue loading the AOF tail. */
+    char sig[5]; /* &quot;REDIS&quot; */
+    if (fread(sig,1,5,fp) != 5 || memcmp(sig,&quot;REDIS&quot;,5) != 0) {
+        /* No RDB preamble, seek back at 0 offset. */
+        if (fseek(fp,0,SEEK_SET) == -1) goto readerr;
+    } else {
+        /* RDB preamble. Pass loading the RDB functions. */
+        rio rdb;
+
+        serverLog(LL_NOTICE,&quot;Reading RDB preamble from AOF file...&quot;);
+        if (fseek(fp,0,SEEK_SET) == -1) goto readerr;
+        rioInitWithFile(&amp;rdb,fp);
+        if (rdbLoadRio(&amp;rdb,NULL) != C_OK) {
+            serverLog(LL_WARNING,&quot;Error reading the RDB preamble of the AOF file, AOF loading aborted&quot;);
+            goto readerr;
+        } else {
+            serverLog(LL_NOTICE,&quot;Reading the remaining AOF tail...&quot;);
+        }
+    }
+    ...
+}
+</code></pre>
+<ol>
+<li>
+<p>打开AOF文件之后首先读取5个字符如果是&quot;REDIS&quot; ，那么就说明这是一个混合持久化的AOF文件，执行rdbLoadRio() 函数，解析RDB格式，解析文件内容直至遇到RDB_OPCODE_EOF结束。</p>
+</li>
+<li>
+<p>执行 loadAppendOnlyFile() 函数，解析 AOF格式，直到结束整个加载过程完成。</p>
+</li>
+</ol>
+<p>说明：正确的RDB格式一定是以&quot;REDIS&quot;开头而纯AOF格式则一定以&quot;*&quot;开头此时就会进入rdbLoadRio函数来加载数据。</p>
+<p>这样就实现了混合持久化，加载aof文件时候，实现了数据文件不太大，而且能保证数据不丢失，加载效率比纯aof文件高。</p>
+<p>本文根据视频和博客归纳。</p>
+<p>参考：<a href="https://coding.imooc.com/class/chapter/151.html#Anchor">redis</a>，</p>
+<p>https://yq.aliyun.com/articles/193034</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Redis(一)：Redis五种数据结构]]></title>
+        <id>https://chiyongwu.github.io/post/redisyi-redis-wu-chong-shu-ju-jie-gou/</id>
+        <link href="https://chiyongwu.github.io/post/redisyi-redis-wu-chong-shu-ju-jie-gou/">
+        </link>
+        <updated>2021-01-27T14:30:30.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="redis五种数据结构如下">Redis五种数据结构如下：</h2>
+<h3 id=""><img src="https://img2018.cnblogs.com/blog/1289934/201906/1289934-20190621163930814-1395015700.png" alt="img" loading="lazy"></h3>
+<p>对redis来说，所有的key（键）都是字符串。</p>
+<h2 id="1string-字符串类型">1.String 字符串类型</h2>
+<p>是redis中最基本的数据类型，一个key对应一个value。</p>
+<p>String类型是二进制安全的，意思是 redis 的 string 可以包含任何数据。如数字，字符串，jpg图片或者序列化的对象。</p>
+<p>使用：get 、 set 、 del 、 incr、 decr 等</p>
+<pre><code>127.0.0.1:6379&gt; set hello world
+OK
+127.0.0.1:6379&gt; get hello
+&quot;world&quot;
+127.0.0.1:6379&gt; del hello
+(integer) 1
+127.0.0.1:6379&gt; get hello
+(nil)
+127.0.0.1:6379&gt; get counter
+&quot;2&quot;
+127.0.0.1:6379&gt; incr counter
+(integer) 3
+127.0.0.1:6379&gt; get counter
+&quot;3&quot;
+127.0.0.1:6379&gt; incrby counter 100
+(integer) 103
+127.0.0.1:6379&gt; get counter
+&quot;103&quot;
+127.0.0.1:6379&gt; decr counter
+(integer) 102
+127.0.0.1:6379&gt; get counter
+&quot;102&quot;
+</code></pre>
+<p>实战场景：</p>
+<p>1.缓存： 经典使用场景，把常用信息，字符串，图片或者视频等信息放到redis中，redis作为缓存层，mysql做持久化层，降低mysql的读写压力。</p>
+<p>2.计数器：redis是单线程模型，一个命令执行完才会执行下一个，同时数据可以一步落地到其他的数据源。</p>
+<p>3.session：常见方案spring session + redis实现session共享，</p>
+<h2 id="2hash-哈希">2.Hash （哈希）</h2>
+<p>是一个Mapmap，指值本身又是一种键值对结构，如 value={{field1,value1},......fieldN,valueN}}</p>
+<figure data-type="image" tabindex="1"><img src="https://img2018.cnblogs.com/blog/1289934/201906/1289934-20190621232209365-1000366002.png" alt="img" loading="lazy"></figure>
+<p>使用：所有hash的命令都是 h  开头的   hget 、hset 、 hdel 等</p>
+<pre><code>127.0.0.1:6379&gt; hset user name1 hao
+(integer) 1
+127.0.0.1:6379&gt; hset user email1 hao@163.com
+(integer) 1
+127.0.0.1:6379&gt; hgetall user
+1) &quot;name1&quot;
+2) &quot;hao&quot;
+3) &quot;email1&quot;
+4) &quot;hao@163.com&quot;
+127.0.0.1:6379&gt; hget user user
+(nil)
+127.0.0.1:6379&gt; hget user name1
+&quot;hao&quot;
+127.0.0.1:6379&gt; hset user name2 xiaohao
+(integer) 1
+127.0.0.1:6379&gt; hset user email2 xiaohao@163.com
+(integer) 1
+127.0.0.1:6379&gt; hgetall user
+1) &quot;name1&quot;
+2) &quot;hao&quot;
+3) &quot;email1&quot;
+4) &quot;hao@163.com&quot;
+5) &quot;name2&quot;
+6) &quot;xiaohao&quot;
+7) &quot;email2&quot;
+8) &quot;xiaohao@163.com&quot;
+</code></pre>
+<p>实战场景：</p>
+<p>1.缓存： 能直观，相比string更节省空间，的维护缓存信息，如用户信息，视频信息等。</p>
+<h2 id="3链表">3.链表</h2>
+<p>List 说白了就是链表（redis 使用双端链表实现的 List），是有序的，value可以重复，可以通过下标取出对应的value值，左右两边都能进行插入和删除数据。</p>
+<figure data-type="image" tabindex="2"><img src="https://img2018.cnblogs.com/blog/1289934/201906/1289934-20190621233618769-504231907.png" alt="img" loading="lazy"></figure>
+<p>使用列表的技巧</p>
+<ul>
+<li>lpush+lpop=Stack(栈)</li>
+<li>lpush+rpop=Queue（队列）</li>
+<li>lpush+ltrim=Capped Collection（有限集合）</li>
+<li>lpush+brpop=Message Queue（消息队列）</li>
+</ul>
+<p>使用：</p>
+<pre><code>127.0.0.1:6379&gt; lpush mylist 1 2 ll ls mem
+(integer) 5
+127.0.0.1:6379&gt; lrange mylist 0 -1
+1) &quot;mem&quot;
+2) &quot;ls&quot;
+3) &quot;ll&quot;
+4) &quot;2&quot;
+5) &quot;1&quot;
+127.0.0.1:6379&gt;
+</code></pre>
+<p>实战场景：</p>
+<p>1.timeline：例如微博的时间轴，有人发布微博，用lpush加入时间轴，展示新的列表信息。</p>
+<h2 id="4set-集合">4.Set  集合</h2>
+<p>集合类型也是用来保存多个字符串的元素，但和列表不同的是集合中 1. 不允许有重复的元素，2.集合中的元素是无序的，不能通过索引下标获取元素，3.支持集合间的操作，可以取多个集合取交集、并集、差集。</p>
+<figure data-type="image" tabindex="3"><img src="https://img2018.cnblogs.com/blog/1289934/201906/1289934-20190622001013515-677922001.png" alt="img" loading="lazy"></figure>
+<p>使用：命令都是以s开头的 sset 、srem、scard、smembers、sismember</p>
+<pre><code>127.0.0.1:6379&gt; sadd myset hao hao1 xiaohao hao
+(integer) 3
+127.0.0.1:6379&gt; SMEMBERS myset
+1) &quot;xiaohao&quot;
+2) &quot;hao1&quot;
+3) &quot;hao&quot;
+127.0.0.1:6379&gt; SISMEMBER myset hao
+(integer) 1
+</code></pre>
+<p>实战场景;</p>
+<p>1.标签（tag）,给用户添加标签，或者用户给消息添加标签，这样有同一标签或者类似标签的可以给推荐关注的事或者关注的人。</p>
+<p>2.点赞，或点踩，收藏等，可以放到set中实现</p>
+<h2 id="5zset-有序集合">5.zset 有序集合</h2>
+<p>有序集合和集合有着必然的联系，保留了集合不能有重复成员的特性，区别是，有序集合中的元素是可以排序的，它给每个元素设置一个分数，作为排序的依据。</p>
+<p>（有序集合中的元素不可以重复，但是score 分数 可以重复，就和一个班里的同学学号不能重复，但考试成绩可以相同）。</p>
+<figure data-type="image" tabindex="4"><img src="https://img2018.cnblogs.com/blog/1289934/201906/1289934-20190622000959260-539243592.png" alt="img" loading="lazy"></figure>
+<p>使用： 有序集合的命令都是 以 z 开头  zadd 、 zrange、 zscore</p>
+<pre><code>127.0.0.1:6379&gt; zadd myscoreset 100 hao 90 xiaohao
+(integer) 2
+127.0.0.1:6379&gt; ZRANGE myscoreset 0 -1
+1) &quot;xiaohao&quot;
+2) &quot;hao&quot;
+127.0.0.1:6379&gt; ZSCORE myscoreset hao
+&quot;100&quot;
+</code></pre>
+<p>实战场景：</p>
+<p>1.排行榜：有序集合经典使用场景。例如小说视频等网站需要对用户上传的小说视频做排行榜，榜单可以按照用户关注数，更新时间，字数等打分，做排行。</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Babel]]></title>
         <id>https://chiyongwu.github.io/post/babel/</id>
@@ -89,7 +567,9 @@ babel src -d dist2
 <pre><code>mkdir dist
 npm run build
 </code></pre>
-<p>参考资料：https://www.cnblogs.com/houjiao/p/12108060.html</p>
+<p>参考资料：<br>
+https://www.cnblogs.com/houjiao/p/12108060.html<br>
+https://www.jiangruitao.com/babel/quick-start/</p>
 ]]></content>
     </entry>
     <entry>
@@ -648,170 +1128,6 @@ https://gitclone.com/
 <h4 id="方法5利用gitee克隆导入github项目">方法5：利用gitee克隆/导入github项目</h4>
 <pre><code>https://zhuanlan.zhihu.com/p/112697807
 </code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[nvm安装配置教程]]></title>
-        <id>https://chiyongwu.github.io/post/nvm-an-zhuang-pei-zhi-jiao-cheng/</id>
-        <link href="https://chiyongwu.github.io/post/nvm-an-zhuang-pei-zhi-jiao-cheng/">
-        </link>
-        <updated>2021-01-03T16:36:21.000Z</updated>
-        <content type="html"><![CDATA[<p>转载：https://www.longkui.site/development/nvm%e7%9a%84%e5%ae%89%e8%a3%85%e9%85%8d%e7%bd%ae%e4%b8%8e%e4%bd%bf%e7%94%a8/</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[docker教程]]></title>
-        <id>https://chiyongwu.github.io/post/docker-jiao-cheng/</id>
-        <link href="https://chiyongwu.github.io/post/docker-jiao-cheng/">
-        </link>
-        <updated>2021-01-03T16:28:58.000Z</updated>
-        <content type="html"><![CDATA[<h3 id="一-centos-7安装docker-ce">一、centos 7安装docker ce</h3>
-<p>1、安装依赖包</p>
-<pre><code>yum install -y yum-utils device-mapper-persistent-data lvm2
-</code></pre>
-<p>2、设置国内yum源</p>
-<pre><code>yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
-</code></pre>
-<p>3、安装docker</p>
-<pre><code>yum install -y docker-ce
-</code></pre>
-<p>4、启动/关闭docker服务</p>
-<pre><code>systemctl start docker
-systemctl stop docker
-</code></pre>
-<h3 id="二-常用命令">二、常用命令</h3>
-<pre><code>搜索镜像：docker search [imageName]
-拉取镜像: docker pull [imageName]:[image Tag]
-查看本地镜像: docker images
-运行容器: docker run [imageId]
-查看运行中的docker：docker ps
-查看所有历史容器：docker ps -a
-查看docker容器日志：docker logs [-f] [containerId]
-进入容器：docker exec -it [containerId] /bin/bash
-docker拷贝文件：docker cp [localPath] [containerId]:[containerPath]
-启动/停止/重启已存在的容器：docker start/stop/restart [containerId]
-移除docker容器：docker rm [containerId]（容器必须在停止状态才能移除）
-删除镜像：docker rmi [imageId]
-
--d：后台运行镜像
--t：启动一个终端
--i：标准输入
--p：容器內的端口映射到本机端口
--v：文件映射
-</code></pre>
-<h3 id="三-项目部署">三、项目部署</h3>
-<p>原则：不要把配置文件和数据放在容器中，请在宿主机上创建配置文件目录和数据文件目录，再通过文件映射方式提供容器使用。</p>
-<p>dockerhub网站可以搜镜像的使用方法，比如mysql：https://hub.docker.com/_/mysql</p>
-<p>注意：</p>
-<p>从宿主机外面访问宿主机上的容器，IP地址只需要填宿主机，端口填映射端口即可访问容器。若是容器间的通信，则不能填宿主机的IP和映射端口。同一个宿主机中的docker间通信，可以通过docker内部IP来访问。容器间的通信有如下3种方法：</p>
-<ul>
-<li>docker inspect [containerId]</li>
-<li>每次重启容器都会变更IP，因此应进行docker网络创建。通过在docker run命令中让容器加入已有的docker网络，并起容器网络别名的方式，实现容器网络创建</li>
-</ul>
-<h3 id="四-docker网络创建">四、docker网络创建</h3>
-<pre><code>docker network create beihe-network //创建docker网络
-docker network ls //查看网络
-</code></pre>
-<p>举例：</p>
-<pre><code>docker run -d -p 3306:3306 --network beihe-network --network-alias mysql-network --privileged=true -v /home/docker/mysql/conf/my.cnf:/etc/mysql/my.cnf -v /home/docker/mysql /data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=123456 mysql:5.7.21
-	
-
---network-alias：网络别名，当IP使用，直接写在配置文件中的ip位置
-</code></pre>
-<h3 id="五-dockerfile创建镜像">五、dockerfile创建镜像</h3>
-<p>若要做镜像，请基于别人做好的镜像再做。比如java项目，去dockerhub下载java镜像，步骤如下：</p>
-<pre><code>FROM hub.c.163.com/library/java  //拉取java容器镜像
-RUN mkdir -p /home/app  //为容器创建目录
-COPY pinter.jar /home/app  //将java项目拷贝到容器目录
-WORKDIR /home/app  //设置工作目录
-EXPOSE 8080  //设置端口号
-CMD java -jar pinter.jar  //执行命令
-</code></pre>
-<p>生成镜像：</p>
-<pre><code>docker build -t pinter:tagName .  //.是路径上下文
-</code></pre>
-<p>更多命令参考：https://www.runoob.com/docker/docker-dockerfile.html</p>
-<p>RUN命令和CMD命令的区别：</p>
-<p>RUN命令只在build时执行，CMD是每次容器运行时执行。</p>
-<h3 id="六-docker-compose">六、docker-compose</h3>
-<p>直接去http://get.daocloud.io/#install-compose下载docker compose，验证是否安装成功：</p>
-<pre><code>docker-compose -v
-</code></pre>
-<p>docker-compose文件是yaml配置文件，模板：</p>
-<pre><code>version: '2'
-services:
-  web:
-    image: dockercloud/hello-world
-    ports:
-      - 8080
-    networks:
-      - front-tier
-      - back-tier
- 
-  redis:
-    image: redis
-    links:
-      - web
-    networks:
-      - back-tier
- 
-  lb:
-    image: dockercloud/haproxy
-    ports:
-      - 80:80
-    links:
-      - web
-    networks:
-      - front-tier
-      - back-tier
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
- 
-networks:
-  front-tier:
-    driver: bridge
-  back-tier:
-    driver: bridge
-</code></pre>
-<p>常用命令：</p>
-<pre><code>后台启动容器：docker-compose up -d compose文件路径
-查看容器：docker-compose ps
-停止容器：docker-compose stop
-查看日志：docker-compose logs
-</code></pre>
-<p>更多命令参考：https://www.cnblogs.com/minseo/p/11548177.html</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Hello Gridea]]></title>
-        <id>https://chiyongwu.github.io/post/hello-gridea/</id>
-        <link href="https://chiyongwu.github.io/post/hello-gridea/">
-        </link>
-        <updated>2018-12-11T16:00:00.000Z</updated>
-        <summary type="html"><![CDATA[<p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
-✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
-✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
-<!-- more -->
-<p><a href="https://github.com/getgridea/gridea">Github</a><br>
-<a href="https://gridea.dev/">Gridea 主页</a><br>
-<a href="http://fehey.com/">示例网站</a></p>
-<h2 id="特性">特性👇</h2>
-<p>📝  你可以使用最酷的 <strong>Markdown</strong> 语法，进行快速创作</p>
-<p>🌉  你可以给文章配上精美的封面图和在文章任意位置插入图片</p>
-<p>🏷️  你可以对文章进行标签分组</p>
-<p>📋  你可以自定义菜单，甚至可以创建外部链接菜单</p>
-<p>💻  你可以在 <strong>Windows</strong>，<strong>MacOS</strong> 或 <strong>Linux</strong> 设备上使用此客户端</p>
-<p>🌎  你可以使用 <strong>𝖦𝗂𝗍𝗁𝗎𝖻 𝖯𝖺𝗀𝖾𝗌</strong> 或 <strong>Coding Pages</strong> 向世界展示，未来将支持更多平台</p>
-<p>💬  你可以进行简单的配置，接入 <a href="https://github.com/gitalk/gitalk">Gitalk</a> 或 <a href="https://github.com/SukkaW/DisqusJS">DisqusJS</a> 评论系统</p>
-<p>🇬🇧  你可以使用<strong>中文简体</strong>或<strong>英语</strong></p>
-<p>🌁  你可以任意使用应用内默认主题或任意第三方主题，强大的主题自定义能力</p>
-<p>🖥  你可以自定义源文件夹，利用 OneDrive、百度网盘、iCloud、Dropbox 等进行多设备同步</p>
-<p>🌱 当然 <strong>Gridea</strong> 还很年轻，有很多不足，但请相信，它会不停向前 🏃</p>
-<p>未来，它一定会成为你离不开的伙伴</p>
-<p>尽情发挥你的才华吧！</p>
-<p>😘 Enjoy~</p>
 ]]></content>
     </entry>
 </feed>

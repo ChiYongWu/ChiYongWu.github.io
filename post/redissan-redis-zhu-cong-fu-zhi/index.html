@@ -1,0 +1,427 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Redis（三）：Redis主从复制 - SwordPal&#39;s blog</title>
+<link rel="shortcut icon" href="https://chiyongwu.github.io/favicon.ico">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.2.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css">
+<link rel="stylesheet" href="https://chiyongwu.github.io/media/css/tailwind.css">
+<link rel="stylesheet" href="https://chiyongwu.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="Redis（三）：Redis主从复制 - SwordPal&#39;s blog - Atom Feed" href="https://chiyongwu.github.io/atom.xml">
+
+    
+
+  <meta name="description" content="一、主从复制
+主从复制：主节点负责写数据，从节点负责读数据，从而实现读写分离，提高redis的高可用性。
+让一个服务器去复制（replicate）另一个服务器，我们称呼被复制的服务器为主节点（master），而对主服务器进行复制的服务器则被..." />
+  <meta property="og:title" content="Redis（三）：Redis主从复制 - SwordPal&#39;s blog">
+  <meta property="og:description" content="一、主从复制
+主从复制：主节点负责写数据，从节点负责读数据，从而实现读写分离，提高redis的高可用性。
+让一个服务器去复制（replicate）另一个服务器，我们称呼被复制的服务器为主节点（master），而对主服务器进行复制的服务器则被..." />
+  <meta property="og:type" content="articles">
+  <meta property="og:url" content="https://chiyongwu.github.io/post/redissan-redis-zhu-cong-fu-zhi/" />
+  <meta property="og:image" content="https://chiyongwu.github.io/images/avatar.png">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:width" content="1200">
+  <meta name="twitter:title" content="Redis（三）：Redis主从复制 - SwordPal&#39;s blog">
+  <meta name="twitter:description" content="一、主从复制
+主从复制：主节点负责写数据，从节点负责读数据，从而实现读写分离，提高redis的高可用性。
+让一个服务器去复制（replicate）另一个服务器，我们称呼被复制的服务器为主节点（master），而对主服务器进行复制的服务器则被...">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://chiyongwu.github.io/post/redissan-redis-zhu-cong-fu-zhi/">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css">
+ 
+  
+
+  
+</head>
+
+<body>
+  <div class="antialiased flex flex-col min-h-screen" id="app">
+    <a href="https://chiyongwu.github.io" class="fixed top-0 left-0 mt-4 bg-black text-white dark:text-gray-700 dark:bg-yellow-50 dark:hover:bg-black dark:hover:text-white inline-flex p-2 pl-8 hover:text-gray-700 hover:bg-yellow-50 font-bold z-10 transition-fast animated fadeInLeft">
+      SwordPal&#39;s blog
+    </a>
+    <div class="max-w-4xl w-full mx-auto">
+      <div class="shadow-box bg-white dark:bg-gray-600 rounded-lg pt-32 md:pt-64 px-4 md:px-8 pb-8 animated fadeIn mb-8">
+        <h1 class="text-5xl font-semibold leading-normal pb-8 mb-8 border-b-8 border-gray-700">
+          Redis（三）：Redis主从复制
+        </h1>
+        
+        <div class="mb-8 flex flex-wrap">
+          <div class="text-gray-400 text-sm mr-4">2021-01-27 · 10 min read</div>
+          
+            <a href="https://chiyongwu.github.io/tag/hxS_z4don/" class="text-gray-700 text-sm border-b-2 border-dotted border-gray-200 hover:border-gray-600 transition-all duration-100 inline-flex mr-2">
+              <i class="ri-hashtag"></i>
+              Redis
+            </a>
+          
+        </div>
+        <div class="markdown mb-8" v-pre>
+          <h2 id="一-主从复制">一、主从复制</h2>
+<p>主从复制：主节点负责写数据，从节点负责读数据，从而实现读写分离，提高redis的高可用性。</p>
+<p>让一个服务器去复制（replicate）另一个服务器，我们称呼被复制的服务器为主节点（master），而对主服务器进行复制的服务器则被称为从节点（slave），</p>
+<p>如下图所示：</p>
+<figure data-type="image" tabindex="1"><img src="https://img2018.cnblogs.com/blog/1289934/201906/1289934-20190624144921705-733401084.png" alt="img" loading="lazy"></figure>
+<p>主从复制的特点：</p>
+<p>1、一个master可以有多个slave</p>
+<p>2、一个slave只能有一个master</p>
+<p>3、数据流向是单向的，master到slave</p>
+<p>主从复制的作用：</p>
+<p>1、数据副本：多一份或多份数据拷贝，保证redis高可用</p>
+<p>2、扩展性能：单机redis的性能是有限的，主从复制能横向扩展 如容量、QPS等</p>
+<h2 id="二-主从复制实现方式">二、主从复制实现方式</h2>
+<h3 id="客户端命令slaveof">客户端命令：slaveof</h3>
+<figure data-type="image" tabindex="2"><img src="https://img2018.cnblogs.com/blog/1289934/201906/1289934-20190624151816311-1648676415.png" alt="img" loading="lazy"></figure>
+<h3 id="配置方式">配置方式：</h3>
+<p>新建redis-6380.conf，加入配置</p>
+<pre><code># 1.指明谁是主节点
+slaveof  your-master-ip  your-master-port
+
+# 2.让从节点只做读的操作，保证主节点和从节点数据同步一致性和读写分离。
+slave-ready-only yes
+</code></pre>
+<h2 id="三-全量复制和增量复制">三、全量复制和增量复制</h2>
+<pre><code> 1. runId：Redis每次启动时，都会生成一个不同的id来标示当前运行的Redis。从节点中会保存主节点的run_id标示，如果主节点的Redis发生了重启，那么从节点依据ip和端口号连接到主节点时，就会发现主节点的run_id标示的改变（这种改变意味着主节点中的数据可能发生的大量的改动），所以此时就会引起全量复制，也就是将主节点中的所有数据全部复制过来。
+root@f9eb2360ed36:/usr/local/bin# ./redis-cli -p 6379 info server
+# Server
+redis_version:4.0.14
+redis_git_sha1:00000000
+redis_git_dirty:0
+redis_build_id:9ac979c18029eef1
+redis_mode:standalone
+os:Linux 3.10.0-514.26.2.el7.x86_64 x86_64
+arch_bits:64
+multiplexing_api:epoll
+atomicvar_api:atomic-builtin
+gcc_version:6.3.0
+process_id:1
+run_id:49dbc223587cbdadd158adc21816979722b65ae1
+tcp_port:6379
+uptime_in_seconds:105535
+uptime_in_days:1
+hz:10
+lru_clock:1086433
+executable:/data/redis-server
+config_file:
+
+2. 偏移量：每当主节点增删改一个数据时，主节点中就会有一个数值来记录这种变化，偏移量就是记录Redis中数据改变的一个标示，当主节点更改一个数据时，偏移量也会发生对应的改变，而且主节点在将数据更改命令同步给从节点时，也会将该偏移量发送给从节点，这样就可以对比主从节点的偏移量，来观察是否出现主从不一致的问题。使用 ./redis-cli -p 6379 info replication 该命令即可在主节点中查看主从节点的偏移量
+</code></pre>
+<h3 id="31-全量复制">3.1  全量复制</h3>
+<h4 id="过程">过程：</h4>
+<ol>
+<li>
+<p>向主节点发送psync，有两个参数，第一个参数是runId，第二个参数是偏移量，第一次发送不知道主节点的runId，也不知道偏移量，因此从节点发送 ？ -1</p>
+</li>
+<li>
+<p>主节点收到消息，根据？ -1 能判断出来是第一次复制，主节点把runId和offset 发送给Slave节点，</p>
+</li>
+<li>
+<p>从节点保存主节点基本信息</p>
+</li>
+</ol>
+<p>4-5-6. Master节点执行bgsave生成快照，在此期间会记录后续执行的数据更改命令所更改的数据，直到主节点将生成的RDB文件传输到从节点为止，</p>
+<p>​      期间Master节点执行的写操作，主节点会将缓冲区中记录的新更改的数据发送给从节点</p>
+<p>7-8   从节点清空此前的所有数据，加载RDB文件恢复数据并存入新更改的数据</p>
+<figure data-type="image" tabindex="3"><img src="https://img2018.cnblogs.com/blog/1289934/201906/1289934-20190624163101212-1340503749.png" alt="img" loading="lazy"></figure>
+<p>说明：</p>
+<ul>
+<li>全量复制的性能开销：1. bgsave生成RDB文件需要的时间，2. RDB文件在网络间的传输时间，3. 从节点的数据清空时间 ， 4. 加载RDB文件的时间 5. 可能的 AOF  重写时间</li>
+<li>数据更改命令缓冲区repl_back_buffer用于：当Redis通过Linux中的fork()函数开辟一个子进程处理其他事务（比如主进程执行bgsave生成一个RDB文件时，或者主进程执行bgrewriteaof生成一个AOF文件时）， 而主进程（即处理客户端命令的进程）后续执行的一些数据更改命令会被暂时保存在该区域，而且该区域空间有限（配置文件中repl-backlog-size 1mb即可配置该处空间大小）</li>
+</ul>
+<h3 id="32-部分复制">3.2  部分复制</h3>
+<p>部分复制解决的问题：在实际环境中，主节点与从节点之间可能会发生一些网络波动等情况，导致从节点与主节点之间的网络连接断开（主从节点的Redis均未关闭），如果重新连接上后，可以使用全量复制来重新进行一次主从节点数据同步，但是全量复制会带来一个性能开销的问题，而且从节点中可能有大量数据是主节点中没有更该过的，也就是不需要进行再次同步的数据，如果使用全量复制肯定是带来了一些不必要的浪费。所以，部分复制功能就是为了解决该问题的。</p>
+<h4 id="过程-2">过程：</h4>
+<ol>
+<li>
+<p>主从节点直接连接断开，</p>
+</li>
+<li>
+<p>此时主节点继续执行的数据更改命令会被记录在一个缓冲区 repl_back_buffer 中</p>
+</li>
+<li>
+<p>当从节点重新连接主节点时，</p>
+</li>
+<li>
+<p>自动发出一条命令(psync offset run_id)，将从节点中存储的主节点的Redis运行时id和从节点中保存的偏移量发送给主节点</p>
+</li>
+<li>
+<p>主节点接收从节点发送的偏移量和id，对比此时主节点的偏移量和接收的偏移量，如果两个偏移量之差大于repl_back_buffer中的数据，那么就表示在断开连接期间从节点已经丢失了超出规定数量的数据，此时就需要进行全量复制了，否则就进行部分复制</p>
+</li>
+<li>
+<p>将主节点缓冲区中的数据同步更新到从节点中，这样就实现了部分数据的复制同步，降低了性能开销</p>
+</li>
+</ol>
+<figure data-type="image" tabindex="4"><img src="https://img2018.cnblogs.com/blog/1289934/201906/1289934-20190624174156107-191597742.png" alt="img" loading="lazy"></figure>
+<h2 id="四-主从节点的故障处理">四、主从节点的故障处理</h2>
+<ol>
+<li>故障发生时服务自动转移（自动故障转移）：即当某个节点发生故障导致停止服务时，该节点提供的服务会有另一个节点自动代替提供，这样就实现了一个高可用的效果</li>
+<li>从节点故障：即如果某个从节点发生了故障，导致无法向在该节点上的客户端提供读服务，解决办法就是使该客户端转移到另一个可用从节点上，但是在转移时，应该考虑该从节点能承受几个客户端的压力</li>
+<li>主节点故障：如果主节点发生故障，在使用主节点进行读写操作的客户端就无法使用了，而使用从节点只进行读操作的客户端还是可以继续使用的，解决办法就是从从节点中选一个节点更改为主节点，并且将原主节点的客户端连接到新的主节点上，然后通过该客户端将其他从节点连接到新的主节点中</li>
+<li>主从复制确实可以解决故障问题，但是主从复制不能实现自动故障转移，其必须要通过一些手动操作，而且非常麻烦，所以要实现自动故障转移还需要另一个功能，Redis中提供了sentinel功能来实现自动故障转移。</li>
+</ol>
+<h2 id="五-主从节点的故障处理">五、主从节点的故障处理</h2>
+<ol>
+<li>读写分离：即客户端发来的读写命令分开，写命令交给主节点执行，读命令交给从节点执行，不仅减少了主节点的压力，而且增强了读操作的能力；但也会造成一些问题</li>
+</ol>
+<ul>
+<li>但是主从节点之间数据复制造成的阻塞延迟也可能会导致主从不一致的情况，也就是主节点先进行了写操作，但可能因为数据复制造成的阻塞延迟，导致在从节点上进行的读操作获取的数据与主节点不一致</li>
+<li>读取过期数据：主从复制会将带有过期时间的数据一并复制到从节点中，但是从节点是没有删除数据的能力的，即使是过期数据，所以主节点中的已经删除了过期数据，但是因为主从复制的阻塞延迟问题导致从节点中的过期数据没有删除，此时客户端就会读到一个过期数据</li>
+</ul>
+<ol start="2">
+<li>主从配置不一致：造成的问题有</li>
+</ol>
+<ul>
+<li>比如配置中的maxmemory参数如果配置不一致，比如主节点2Gb，从节点1Gb，那么就可能会导致数据丢失；以及一些其他配置问题</li>
+</ul>
+<ol start="3">
+<li>规避全量复制：全量复制的性能开销较大，所以要尽量避免全量复制，</li>
+</ol>
+<ul>
+<li>在第一次建立主从节点关系式一定会发生全量复制；可以适当减小Redis的maxmemory参数，这样可以使得RDB更快，或者选择在客户端操作低峰期进行，比如深夜</li>
+<li>从节点中保存的主节点run_id不一致时也一定会发生全量复制（比如主节点的重启）；可以通过故障转移来尽量避免，例如Redis Sentinel 与 Redis Cluster</li>
+<li>当主从节点的偏移量之差大于命令缓冲区repl_back_buffer中对应数据的偏移差时，也会发生全量复制，也就是上面的部分复制的复制过程中所说的；可以适当增大配置文件中repl-backlog-size即数据缓冲区可尽量避免</li>
+</ul>
+<ol start="4">
+<li>规避复制风暴：</li>
+</ol>
+<ul>
+<li>单主节点导致的复制风暴，即当主节点重启后，要向其所有的从节点都进行一次全量复制，这非常消耗性能；可以更换主从节点的拓扑结构，更换为类似树形的结构，一个主节点只与少量的从节点建立主从关系，而而这些主节点又与其他从节点构成主从关系，</li>
+<li>如图所示<img src="https://img2018.cnblogs.com/blog/1289934/201906/1289934-20190624175939473-823111126.png" alt="img" loading="lazy"></li>
+<li>单主节点机器复制风暴：即如果过一台机器专门用来部署多个主节点，然后其他机器部署从节点，那么一旦主节点机器宕机重启，就会引起所有的主从节点之间的全量复制，造成非常大的性能开销；可以采用多台机器，分散部署主节点，或者使用自动故障转移来将某个从节点变为主节点实现一个高可用</li>
+</ul>
+<p>感谢支持，感谢观看。</p>
+<p>参考：https://my.oschina.net/ProgramerLife/blog/2254321</p>
+
+        </div>
+        <!-- Share to Twitter, Weibo, Telegram -->
+        <div class="flex items-center">
+          <div class="mr-4 flex items-center">
+            <i class="ri-share-forward-line text-gray-500"></i>
+          </div>
+          <div class="px-4 cursor-pointer text-blue-500 hover:bg-blue-100 dark:hover:bg-gray-600 inline-flex" @click="shareToTwitter">
+            <i class="ri-twitter-line"></i>
+          </div>
+          <div class="px-4 cursor-pointer text-red-500 hover:bg-red-100 dark:hover:bg-gray-600 inline-flex" @click="shareToWeibo">
+            <i class="ri-weibo-line"></i>
+          </div>
+          <div class="px-4 cursor-pointer text-indigo-500 hover:bg-indigo-100 dark:hover:bg-gray-600 inline-flex" @click="shareToTelegram">
+            <i class="ri-telegram-line"></i>
+          </div>
+        </div>
+      </div>
+
+      
+
+      
+
+      <footer class="py-12 text-center px-4 md:px-0" v-pre>
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+</footer>
+    </div>
+
+    <!-- TOC Container -->
+    <div class="fixed right-0 bottom-0 mb-16 mr-4 shadow w-8 h-8 rounded-full flex justify-center items-center z-10 cursor-pointer bg-white dark:bg-gray-500 dark:text-gray-200 hover:shadow-lg transition-all animated fadeInRight" @click="showToc = true">
+      <i class="ri-file-list-line"></i>
+    </div>
+
+    <div class="fixed right-0 top-0 bottom-0 overflow-y-auto w-64 bg-white dark:bg-gray-800 p-4 border-l border-gray-100 dark:border-gray-600 z-10 transition-fast" :class="{ '-mr-64': !showToc }">
+      <div class="flex mb-4 justify-end">
+        <div class="w-8 h-8 inline-flex justify-center items-center rounded-full cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition-fast" @click="showToc = false">
+          <i class="ri-close-line text-lg"></i>
+        </div>
+      </div>
+      <div class="post-toc-container">
+        <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E4%B8%80-%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6">一、主从复制</a></li>
+<li><a href="#%E4%BA%8C-%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F">二、主从复制实现方式</a>
+<ul>
+<li><a href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%91%BD%E4%BB%A4slaveof">客户端命令：slaveof</a></li>
+<li><a href="#%E9%85%8D%E7%BD%AE%E6%96%B9%E5%BC%8F">配置方式：</a></li>
+</ul>
+</li>
+<li><a href="#%E4%B8%89-%E5%85%A8%E9%87%8F%E5%A4%8D%E5%88%B6%E5%92%8C%E5%A2%9E%E9%87%8F%E5%A4%8D%E5%88%B6">三、全量复制和增量复制</a>
+<ul>
+<li><a href="#31-%E5%85%A8%E9%87%8F%E5%A4%8D%E5%88%B6">3.1  全量复制</a>
+<ul>
+<li><a href="#%E8%BF%87%E7%A8%8B">过程：</a></li>
+</ul>
+</li>
+<li><a href="#32-%E9%83%A8%E5%88%86%E5%A4%8D%E5%88%B6">3.2  部分复制</a>
+<ul>
+<li><a href="#%E8%BF%87%E7%A8%8B-2">过程：</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#%E5%9B%9B-%E4%B8%BB%E4%BB%8E%E8%8A%82%E7%82%B9%E7%9A%84%E6%95%85%E9%9A%9C%E5%A4%84%E7%90%86">四、主从节点的故障处理</a></li>
+<li><a href="#%E4%BA%94-%E4%B8%BB%E4%BB%8E%E8%8A%82%E7%82%B9%E7%9A%84%E6%95%85%E9%9A%9C%E5%A4%84%E7%90%86">五、主从节点的故障处理</a></li>
+</ul>
+</li>
+</ul>
+
+      </div>
+    </div>
+
+    <!-- Back to top -->
+    <div class="fixed right-0 bottom-0 mb-4 mr-4 shadow w-8 h-8 rounded-full flex justify-center items-center z-10 cursor-pointer bg-white hover:shadow-lg transition-all dark:bg-gray-500 dark:text-gray-200" @click="backToUp" v-show="scrolled">
+      <i class="ri-arrow-up-line"></i>
+    </div>
+  </div>
+
+  <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+  <!-- Background of PhotoSwipe. 
+        It's a separate element as animating opacity is faster than rgba(). -->
+  <div class="pswp__bg">
+  </div>
+  <!-- Slides wrapper with overflow:hidden. -->
+  <div class="pswp__scroll-wrap">
+    <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+    <div class="pswp__container">
+      <div class="pswp__item">
+      </div>
+      <div class="pswp__item">
+      </div>
+      <div class="pswp__item">
+      </div>
+    </div>
+    <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+    <div class="pswp__ui pswp__ui--hidden">
+      <div class="pswp__top-bar">
+        <!--  Controls are self-explanatory. Order can be changed. -->
+        <div class="pswp__counter">
+        </div>
+        <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+        <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+        <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+        <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+        <!-- element will get class pswp__preloader--active when preloader is running -->
+        <div class="pswp__preloader">
+          <div class="pswp__preloader__icn">
+            <div class="pswp__preloader__cut">
+              <div class="pswp__preloader__donut">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+        <div class="pswp__share-tooltip">
+        </div>
+      </div>
+      <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+      </button>
+      <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+      </button>
+      <div class="pswp__caption">
+        <div class="pswp__caption__center">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://chiyongwu.github.io/media/scripts/main.js"></script>
+  
+  <!-- Code Highlight -->
+  
+
+  <script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+  <script>
+    //拿到预览框架，也就是上面的html代码
+    var pswpElement = document.querySelectorAll('.pswp')[0];
+    //定义图片数组变量
+    var imgitems;
+    /**
+    * 用于显示预览界面
+    * @param index 图片数组下标
+    */
+    function viewImg(index) {
+      //其它选项这里不做过多阐述，详情见官网
+      var pswpoptions = {
+        index: parseInt(index, 10), // 开始幻灯片索引。0是第一张幻灯片。必须是整数，而不是字符串。
+        bgOpacity: 0.7, // 背景透明度，0-1
+        maxSpreadZoom: 3, // 缩放级别，不要太大
+      };
+      //初始化并打开PhotoSwipe，pswpElement对应上面预览框架，PhotoSwipeUI_Default为皮肤，imgitems为图片数组，pswpoptions为选项
+      var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, imgitems, pswpoptions);
+      gallery.init()
+    }
+    /**
+    * 用于添加图片点击事件
+    * @param img 图片元素
+    * @param index 所属下标（在imgitems中的位置）
+    */
+    function addImgClick(img, index) {
+      img.onclick = function() {
+        viewImg(index)
+      }
+    }
+    /**
+    * 轮询所有图片，获取src、width、height等数据，加入imgitems，并给图片元素添加事件
+    * 最好在onload中执行该方法，本站因放在最底部，所以直接初始化
+    * 异步加载图片可在图片元素创建完成后调用此方法
+    */
+    function initImg() {
+      //重置图片数组
+      imgitems = [];
+      //查找class:markdown 下的所有img元素并遍历
+      var imgs = document.querySelectorAll('.markdown img');
+      for (var i = 0; i < imgs.length; i++) {
+        var img = imgs[i];
+        //本站相册初始为loading图片，真实图片放在data-src
+        var ds = img.getAttribute("data-src");
+        //创建image对象，用于获取图片宽高
+        var imgtemp = new Image();
+        //判断是否存在data-src
+        if (ds != null && ds.length > 0) {
+          imgtemp.src = ds
+        } else {
+          imgtemp.src = img.src
+        }
+        //判断是否存在缓存
+        if (imgtemp.complete) {
+          var imgobj = {
+            "src": imgtemp.src,
+            "w": imgtemp.width,
+            "h": imgtemp.height,
+          };
+          imgitems[i] = imgobj;
+          addImgClick(img, i);
+        } else {
+          console.log('进来了2')
+          imgtemp.index = i;
+          imgtemp.img = img;
+          imgtemp.onload = function() {
+            var imgobj = {
+              "src": this.src,
+              "w": this.width,
+              "h": this.height,
+            };
+            //不要使用push，因为onload前后顺序会不同
+            imgitems[this.index] = imgobj
+            //添加点击事件
+            addImgClick(this.img, this.index);
+          }
+        }
+      }
+    }
+    //初始化
+    initImg();
+  </script>
+  
+  
+</body>
+
+</html>
