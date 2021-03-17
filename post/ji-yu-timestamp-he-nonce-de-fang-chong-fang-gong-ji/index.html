@@ -1,0 +1,338 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>基于timestamp和nonce的防重放攻击 - SwordPal&#39;s blog</title>
+<link rel="shortcut icon" href="https://chiyongwu.github.io/favicon.ico">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.2.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css">
+<link rel="stylesheet" href="https://chiyongwu.github.io/media/css/tailwind.css">
+<link rel="stylesheet" href="https://chiyongwu.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="基于timestamp和nonce的防重放攻击 - SwordPal&#39;s blog - Atom Feed" href="https://chiyongwu.github.io/atom.xml">
+
+    
+
+  <meta name="description" content="基于timestamp和nonce的防重放攻击
+ 以前总是通过timestamp来防止重放攻击，但是这样并不能保证每次请求都是一次性的。今天看到了一篇文章介绍的通过nonce（Number used once）来保证一次有效，感觉两者结合一..." />
+  <meta property="og:title" content="基于timestamp和nonce的防重放攻击 - SwordPal&#39;s blog">
+  <meta property="og:description" content="基于timestamp和nonce的防重放攻击
+ 以前总是通过timestamp来防止重放攻击，但是这样并不能保证每次请求都是一次性的。今天看到了一篇文章介绍的通过nonce（Number used once）来保证一次有效，感觉两者结合一..." />
+  <meta property="og:type" content="articles">
+  <meta property="og:url" content="https://chiyongwu.github.io/post/ji-yu-timestamp-he-nonce-de-fang-chong-fang-gong-ji/" />
+  <meta property="og:image" content="https://chiyongwu.github.io/images/avatar.png">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:width" content="1200">
+  <meta name="twitter:title" content="基于timestamp和nonce的防重放攻击 - SwordPal&#39;s blog">
+  <meta name="twitter:description" content="基于timestamp和nonce的防重放攻击
+ 以前总是通过timestamp来防止重放攻击，但是这样并不能保证每次请求都是一次性的。今天看到了一篇文章介绍的通过nonce（Number used once）来保证一次有效，感觉两者结合一...">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://chiyongwu.github.io/post/ji-yu-timestamp-he-nonce-de-fang-chong-fang-gong-ji/">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css">
+ 
+  
+
+  
+</head>
+
+<body>
+  <div class="antialiased flex flex-col min-h-screen" id="app">
+    <a href="https://chiyongwu.github.io" class="fixed top-0 left-0 mt-4 bg-black text-white dark:text-gray-700 dark:bg-yellow-50 dark:hover:bg-black dark:hover:text-white inline-flex p-2 pl-8 hover:text-gray-700 hover:bg-yellow-50 font-bold z-10 transition-fast animated fadeInLeft">
+      SwordPal&#39;s blog
+    </a>
+    <div class="max-w-4xl w-full mx-auto">
+      <div class="shadow-box bg-white dark:bg-gray-600 rounded-lg pt-32 md:pt-64 px-4 md:px-8 pb-8 animated fadeIn mb-8">
+        <h1 class="text-5xl font-semibold leading-normal pb-8 mb-8 border-b-8 border-gray-700">
+          基于timestamp和nonce的防重放攻击
+        </h1>
+        
+        <div class="mb-8 flex flex-wrap">
+          <div class="text-gray-400 text-sm mr-4">2021-03-09 · 6 min read</div>
+          
+            <a href="https://chiyongwu.github.io/tag/YFT-9Afne/" class="text-gray-700 text-sm border-b-2 border-dotted border-gray-200 hover:border-gray-600 transition-all duration-100 inline-flex mr-2">
+              <i class="ri-hashtag"></i>
+              web安全
+            </a>
+          
+        </div>
+        <div class="markdown mb-8" v-pre>
+          <h3 id="基于timestamp和nonce的防重放攻击">基于timestamp和nonce的防重放攻击</h3>
+<p> 以前总是通过timestamp来防止重放攻击，但是这样并不能保证每次请求都是一次性的。今天看到了一篇文章介绍的通过nonce（Number used once）来保证一次有效，感觉两者结合一下，就能达到一个非常好的效果了。</p>
+<pre><code>  重放攻击是计算机世界黑客常用的攻击方式之一，所谓重放攻击就是攻击者发送一个目的主机已接收过的包，来达到欺骗系统的目的，主要用于身份认证过程。
+</code></pre>
+<p> 首先要明确一个事情，重放攻击是二次请求，黑客通过抓包获取到了请求的HTTP报文，然后黑客自己编写了一个类似的HTTP请求，发送给服务器。也就是说服务器处理了两个请求，先处理了正常的HTTP请求，然后又处理了黑客发送的篡改过的HTTP请求。</p>
+<h4 id="1-基于timestamp的方案">1. 基于timestamp的方案</h4>
+<p> 每次HTTP请求，都需要加上timestamp参数，然后把timestamp和其他参数一起进行数字签名。因为一次正常的HTTP请求，从发出到达服务器一般都不会超过60s，所以服务器收到HTTP请求之后，首先判断时间戳参数与当前时间相比较，是否超过了60s，如果超过了则认为是非法的请求。</p>
+<p> 假如黑客通过抓包得到了我们的请求url： http://koastal.site/index/Info?uid=ZX07&amp;stime=1480862753&amp;sign=80b886d71449cb33355d017893720666</p>
+<pre><code class="language-javascript">$sign=md5($uid.$token.$stime);
+// 服务器通过uid从数据库中可读出token
+</code></pre>
+<p> 一般情况下，黑客从抓包重放请求耗时远远超过了60s，所以此时请求中的stime参数已经失效了。<br>
+如果黑客修改stime参数为当前的时间戳，则sign参数对应的数字签名就会失效，因为黑客不知道token值，没有办法生成新的数字签名。但这种方式的漏洞也是显而易见的，如果在60s之后进行重放攻击，那就没办法了，所以这种方式不能保证请求仅一次有效。</p>
+<h4 id="2-基于nonce的方案">2. 基于nonce的方案</h4>
+<p> nonce的意思是仅一次有效的随机字符串，要求每次请求时，该参数要保证不同，所以该参数一般与时间戳有关，我们这里为了方便起见，直接使用时间戳的16进制，实际使用时可以加上客户端的ip地址，mac地址等信息做个哈希之后，作为nonce参数。<br>
+ 我们将每次请求的nonce参数存储到一个“集合”中，可以json格式存储到<a href="http://lib.csdn.net/base/mysql">数据库</a>或缓存中。<br>
+ 每次处理HTTP请求时，首先判断该请求的nonce参数是否在该“集合”中，如果存在则认为是非法请求。</p>
+<p> 假如黑客通过抓包得到了我们的请求url： http://koastal.site/index/Info?uid=ZX07&amp;nonce=58442c21&amp;sign=80b886d71449cb33355d017893720666</p>
+<pre><code class="language-javascript">$sign=md5($uid.$token.$nonce);
+// 服务器通过uid从数据库中可读出token
+</code></pre>
+<p> nonce参数在首次请求时，已经被存储到了服务器上的“集合”中，再次发送请求会被识别并拒绝。<br>
+ nonce参数作为数字签名的一部分，是无法篡改的，因为黑客不清楚token，所以不能生成新的sign。</p>
+<p> 这种方式也有很大的问题，那就是存储nonce参数的“集合”会越来越大，验证nonce是否存在“集合”中的耗时会越来越长。我们不能让nonce“集合”无限大，所以需要定期清理该“集合”，但是一旦该“集合”被清理，我们就无法验证被清理了的nonce参数了。也就是说，假设该“集合”平均1天清理一次的话，我们抓取到的该url，虽然当时无法进行重放攻击，但是我们还是可以每隔一天进行一次重放攻击的。而且存储24小时内，所有请求的“nonce”参数，也是一笔不小的开销。</p>
+<h4 id="3-基于timestamp和nonce的方案">3. 基于timestamp和nonce的方案</h4>
+<p> 那我们如果同时使用timestamp和nonce参数呢？<br>
+ nonce的一次性可以解决timestamp参数60s的问题，timestamp可以解决nonce参数“集合”越来越大的问题。<br>
+ 我们在timestamp方案的基础上，加上nonce参数，因为timstamp参数对于超过60s的请求，都认为非法请求，所以我们只需要存储60s的nonce参数的“集合”即可。</p>
+<p> 假如黑客通过抓包得到了我们的请求url： http://koastal.site/index/Info?uid=ZX07&amp;stime=1480862753&amp;nonce=58442c21&amp;sign=80b886d71449cb33355d017893720666</p>
+<p>其中：</p>
+<pre><code class="language-javascript">$sign=md5($uid.$token.$stime.$nonce);
+// 服务器通过uid从数据库中可读出token
+</code></pre>
+<p> 如果在60s内，重放该HTTP请求，因为nonce参数已经在首次请求的时候被记录在服务器的nonce参数“集合”中，所以会被判断为非法请求。超过60s之后，stime参数就会失效，此时因为黑客不清楚token的值，所以无法重新生成签名。</p>
+<p> 综上，我们认为一次正常的HTTP请求发送不会超过60s，在60s之内的重放攻击可以由nonce参数保证，超过60s的重放攻击可以由stime参数保证。</p>
+<p> 因为nonce参数只会在60s之内起作用，所以只需要保存60s之内的nonce参数即可。</p>
+<p> 我们并不一定要每个60s去清理该nonce参数的集合，只需要在新的nonce到来时，判断nonce集合最后一次修改时间，超过60s的话，就清空该集合，存放新的nonce参数集合。其实nonce参数集合可以存放的时间更久一些，但是最少是60s。</p>
+<p> 验证流程：</p>
+<pre><code class="language-java">//判断stime参数是否有效
+if( $now - $stime &gt; 60){
+    die(&quot;请求超时&quot;);
+}
+//判断nonce参数是否在“集合”已存在
+if( in_array($nonce,$nonceArray) ){
+    die(&quot;请求仅一次有效&quot;);
+}
+//验证数字签名   
+if ( $sign != md5($uid.$token.$stime.$nonce) ){
+    die(&quot;数字签名验证失败&quot;);
+}
+//判断是否需要清理nonce集合
+if( $now - $nonceArray-&gt;lastModifyTime &gt; 60 ){
+    $nonceArray = null;
+}
+//记录本次请求的nonce参数
+$nonceArray.push($nonce);
+ 
+ 
+//开始处理合法的请求
+</code></pre>
+
+        </div>
+        <!-- Share to Twitter, Weibo, Telegram -->
+        <div class="flex items-center">
+          <div class="mr-4 flex items-center">
+            <i class="ri-share-forward-line text-gray-500"></i>
+          </div>
+          <div class="px-4 cursor-pointer text-blue-500 hover:bg-blue-100 dark:hover:bg-gray-600 inline-flex" @click="shareToTwitter">
+            <i class="ri-twitter-line"></i>
+          </div>
+          <div class="px-4 cursor-pointer text-red-500 hover:bg-red-100 dark:hover:bg-gray-600 inline-flex" @click="shareToWeibo">
+            <i class="ri-weibo-line"></i>
+          </div>
+          <div class="px-4 cursor-pointer text-indigo-500 hover:bg-indigo-100 dark:hover:bg-gray-600 inline-flex" @click="shareToTelegram">
+            <i class="ri-telegram-line"></i>
+          </div>
+        </div>
+      </div>
+
+      
+
+      
+
+      <footer class="py-12 text-center px-4 md:px-0" v-pre>
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+</footer>
+    </div>
+
+    <!-- TOC Container -->
+    <div class="fixed right-0 bottom-0 mb-16 mr-4 shadow w-8 h-8 rounded-full flex justify-center items-center z-10 cursor-pointer bg-white dark:bg-gray-500 dark:text-gray-200 hover:shadow-lg transition-all animated fadeInRight" @click="showToc = true">
+      <i class="ri-file-list-line"></i>
+    </div>
+
+    <div class="fixed right-0 top-0 bottom-0 overflow-y-auto w-64 bg-white dark:bg-gray-800 p-4 border-l border-gray-100 dark:border-gray-600 z-10 transition-fast" :class="{ '-mr-64': !showToc }">
+      <div class="flex mb-4 justify-end">
+        <div class="w-8 h-8 inline-flex justify-center items-center rounded-full cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition-fast" @click="showToc = false">
+          <i class="ri-close-line text-lg"></i>
+        </div>
+      </div>
+      <div class="post-toc-container">
+        <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#%E5%9F%BA%E4%BA%8Etimestamp%E5%92%8Cnonce%E7%9A%84%E9%98%B2%E9%87%8D%E6%94%BE%E6%94%BB%E5%87%BB">基于timestamp和nonce的防重放攻击</a>
+<ul>
+<li><a href="#1-%E5%9F%BA%E4%BA%8Etimestamp%E7%9A%84%E6%96%B9%E6%A1%88">1. 基于timestamp的方案</a></li>
+<li><a href="#2-%E5%9F%BA%E4%BA%8Enonce%E7%9A%84%E6%96%B9%E6%A1%88">2. 基于nonce的方案</a></li>
+<li><a href="#3-%E5%9F%BA%E4%BA%8Etimestamp%E5%92%8Cnonce%E7%9A%84%E6%96%B9%E6%A1%88">3. 基于timestamp和nonce的方案</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+      </div>
+    </div>
+
+    <!-- Back to top -->
+    <div class="fixed right-0 bottom-0 mb-4 mr-4 shadow w-8 h-8 rounded-full flex justify-center items-center z-10 cursor-pointer bg-white hover:shadow-lg transition-all dark:bg-gray-500 dark:text-gray-200" @click="backToUp" v-show="scrolled">
+      <i class="ri-arrow-up-line"></i>
+    </div>
+  </div>
+
+  <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+  <!-- Background of PhotoSwipe. 
+        It's a separate element as animating opacity is faster than rgba(). -->
+  <div class="pswp__bg">
+  </div>
+  <!-- Slides wrapper with overflow:hidden. -->
+  <div class="pswp__scroll-wrap">
+    <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+    <div class="pswp__container">
+      <div class="pswp__item">
+      </div>
+      <div class="pswp__item">
+      </div>
+      <div class="pswp__item">
+      </div>
+    </div>
+    <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+    <div class="pswp__ui pswp__ui--hidden">
+      <div class="pswp__top-bar">
+        <!--  Controls are self-explanatory. Order can be changed. -->
+        <div class="pswp__counter">
+        </div>
+        <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+        <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+        <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+        <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+        <!-- element will get class pswp__preloader--active when preloader is running -->
+        <div class="pswp__preloader">
+          <div class="pswp__preloader__icn">
+            <div class="pswp__preloader__cut">
+              <div class="pswp__preloader__donut">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+        <div class="pswp__share-tooltip">
+        </div>
+      </div>
+      <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+      </button>
+      <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+      </button>
+      <div class="pswp__caption">
+        <div class="pswp__caption__center">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://chiyongwu.github.io/media/scripts/main.js"></script>
+  
+  <!-- Code Highlight -->
+  
+
+  <script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+  <script>
+    //拿到预览框架，也就是上面的html代码
+    var pswpElement = document.querySelectorAll('.pswp')[0];
+    //定义图片数组变量
+    var imgitems;
+    /**
+    * 用于显示预览界面
+    * @param index 图片数组下标
+    */
+    function viewImg(index) {
+      //其它选项这里不做过多阐述，详情见官网
+      var pswpoptions = {
+        index: parseInt(index, 10), // 开始幻灯片索引。0是第一张幻灯片。必须是整数，而不是字符串。
+        bgOpacity: 0.7, // 背景透明度，0-1
+        maxSpreadZoom: 3, // 缩放级别，不要太大
+      };
+      //初始化并打开PhotoSwipe，pswpElement对应上面预览框架，PhotoSwipeUI_Default为皮肤，imgitems为图片数组，pswpoptions为选项
+      var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, imgitems, pswpoptions);
+      gallery.init()
+    }
+    /**
+    * 用于添加图片点击事件
+    * @param img 图片元素
+    * @param index 所属下标（在imgitems中的位置）
+    */
+    function addImgClick(img, index) {
+      img.onclick = function() {
+        viewImg(index)
+      }
+    }
+    /**
+    * 轮询所有图片，获取src、width、height等数据，加入imgitems，并给图片元素添加事件
+    * 最好在onload中执行该方法，本站因放在最底部，所以直接初始化
+    * 异步加载图片可在图片元素创建完成后调用此方法
+    */
+    function initImg() {
+      //重置图片数组
+      imgitems = [];
+      //查找class:markdown 下的所有img元素并遍历
+      var imgs = document.querySelectorAll('.markdown img');
+      for (var i = 0; i < imgs.length; i++) {
+        var img = imgs[i];
+        //本站相册初始为loading图片，真实图片放在data-src
+        var ds = img.getAttribute("data-src");
+        //创建image对象，用于获取图片宽高
+        var imgtemp = new Image();
+        //判断是否存在data-src
+        if (ds != null && ds.length > 0) {
+          imgtemp.src = ds
+        } else {
+          imgtemp.src = img.src
+        }
+        //判断是否存在缓存
+        if (imgtemp.complete) {
+          var imgobj = {
+            "src": imgtemp.src,
+            "w": imgtemp.width,
+            "h": imgtemp.height,
+          };
+          imgitems[i] = imgobj;
+          addImgClick(img, i);
+        } else {
+          console.log('进来了2')
+          imgtemp.index = i;
+          imgtemp.img = img;
+          imgtemp.onload = function() {
+            var imgobj = {
+              "src": this.src,
+              "w": this.width,
+              "h": this.height,
+            };
+            //不要使用push，因为onload前后顺序会不同
+            imgitems[this.index] = imgobj
+            //添加点击事件
+            addImgClick(this.img, this.index);
+          }
+        }
+      }
+    }
+    //初始化
+    initImg();
+  </script>
+  
+  
+</body>
+
+</html>

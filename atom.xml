@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://chiyongwu.github.io</id>
     <title>SwordPal&apos;s blog</title>
-    <updated>2021-02-07T03:36:10.983Z</updated>
+    <updated>2021-03-17T03:33:29.508Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://chiyongwu.github.io"/>
     <link rel="self" href="https://chiyongwu.github.io/atom.xml"/>
@@ -10,6 +10,139 @@
     <logo>https://chiyongwu.github.io/images/avatar.png</logo>
     <icon>https://chiyongwu.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, SwordPal&apos;s blog</rights>
+    <entry>
+        <title type="html"><![CDATA[Cookie安全]]></title>
+        <id>https://chiyongwu.github.io/post/cookie-an-quan/</id>
+        <link href="https://chiyongwu.github.io/post/cookie-an-quan/">
+        </link>
+        <updated>2021-03-17T03:32:42.000Z</updated>
+        <content type="html"><![CDATA[<p>Cookie特性：域名、路径、过期时间、http-only、secure、Same-Site</p>
+<ul>
+<li>
+<p>域名：Cookie生效的域名</p>
+</li>
+<li>
+<p>路径：Cookie生效的具体路径</p>
+</li>
+<li>
+<p>http-only：Cookie只可被http、https协议读写，JavaScript代码无法读写Cookie，从而降低了Xss的风险。</p>
+</li>
+<li>
+<p>secure：当设置为true时，表示创建的 Cookie 会被以安全的形式向服务器传输，也就是只能在 HTTPS 连接中被浏览器传递到服务器端进行会话验证，如果是 HTTP 连接则不会传递该信息，所以不会被窃取到Cookie 的具体内容。</p>
+</li>
+<li>
+<p>SameSite：用来限制第三方 Cookie，从而减少安全风险。</p>
+<p>关于SameSite的参考资料：http://www.ruanyifeng.com/blog/2019/09/cookie-samesite.html</p>
+</li>
+</ul>
+<figure data-type="image" tabindex="1"><img src="https://gitee.com/WuChiYong/markdown_picture/raw/master/img/20210317095408.png" alt="image-20210317095407842" loading="lazy"></figure>
+<p> 在浏览器中查看到的Cookie，满足域名、路径都符合当前页面路径下，不满足这两个条件的Cookie是不会显示在当前页面。</p>
+<p>Cookie的增删改查</p>
+<ul>
+<li>增/查：document.cookie</li>
+<li>删：设置Cookie的过期时间</li>
+</ul>
+<p>Cookie作用</p>
+<ul>
+<li>存储个性化设置</li>
+<li>存储未登录时用户唯一标识</li>
+<li>存储已登录用户的凭证</li>
+<li>存储其他业务数据：比如某一个业务拉取之后缓存到Cookie，下次访问时直接走缓存。</li>
+</ul>
+<p>Cookie安全案例</p>
+<p> 某学校教务系统使用了开源CMS，该CMS使用username作为唯一标识，该CMS文章作者暴露了username，可篡改成任意已有的username，如admin登录后台。</p>
+<p>Cookie安全策略</p>
+<ul>
+<li>签名防篡改</li>
+<li>私有变换（加密）</li>
+</ul>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[基于timestamp和nonce的防重放攻击]]></title>
+        <id>https://chiyongwu.github.io/post/ji-yu-timestamp-he-nonce-de-fang-chong-fang-gong-ji/</id>
+        <link href="https://chiyongwu.github.io/post/ji-yu-timestamp-he-nonce-de-fang-chong-fang-gong-ji/">
+        </link>
+        <updated>2021-03-09T15:33:57.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="基于timestamp和nonce的防重放攻击">基于timestamp和nonce的防重放攻击</h3>
+<p> 以前总是通过timestamp来防止重放攻击，但是这样并不能保证每次请求都是一次性的。今天看到了一篇文章介绍的通过nonce（Number used once）来保证一次有效，感觉两者结合一下，就能达到一个非常好的效果了。</p>
+<pre><code>  重放攻击是计算机世界黑客常用的攻击方式之一，所谓重放攻击就是攻击者发送一个目的主机已接收过的包，来达到欺骗系统的目的，主要用于身份认证过程。
+</code></pre>
+<p> 首先要明确一个事情，重放攻击是二次请求，黑客通过抓包获取到了请求的HTTP报文，然后黑客自己编写了一个类似的HTTP请求，发送给服务器。也就是说服务器处理了两个请求，先处理了正常的HTTP请求，然后又处理了黑客发送的篡改过的HTTP请求。</p>
+<h4 id="1-基于timestamp的方案">1. 基于timestamp的方案</h4>
+<p> 每次HTTP请求，都需要加上timestamp参数，然后把timestamp和其他参数一起进行数字签名。因为一次正常的HTTP请求，从发出到达服务器一般都不会超过60s，所以服务器收到HTTP请求之后，首先判断时间戳参数与当前时间相比较，是否超过了60s，如果超过了则认为是非法的请求。</p>
+<p> 假如黑客通过抓包得到了我们的请求url： http://koastal.site/index/Info?uid=ZX07&amp;stime=1480862753&amp;sign=80b886d71449cb33355d017893720666</p>
+<pre><code class="language-javascript">$sign=md5($uid.$token.$stime);
+// 服务器通过uid从数据库中可读出token
+</code></pre>
+<p> 一般情况下，黑客从抓包重放请求耗时远远超过了60s，所以此时请求中的stime参数已经失效了。<br>
+如果黑客修改stime参数为当前的时间戳，则sign参数对应的数字签名就会失效，因为黑客不知道token值，没有办法生成新的数字签名。但这种方式的漏洞也是显而易见的，如果在60s之后进行重放攻击，那就没办法了，所以这种方式不能保证请求仅一次有效。</p>
+<h4 id="2-基于nonce的方案">2. 基于nonce的方案</h4>
+<p> nonce的意思是仅一次有效的随机字符串，要求每次请求时，该参数要保证不同，所以该参数一般与时间戳有关，我们这里为了方便起见，直接使用时间戳的16进制，实际使用时可以加上客户端的ip地址，mac地址等信息做个哈希之后，作为nonce参数。<br>
+ 我们将每次请求的nonce参数存储到一个“集合”中，可以json格式存储到<a href="http://lib.csdn.net/base/mysql">数据库</a>或缓存中。<br>
+ 每次处理HTTP请求时，首先判断该请求的nonce参数是否在该“集合”中，如果存在则认为是非法请求。</p>
+<p> 假如黑客通过抓包得到了我们的请求url： http://koastal.site/index/Info?uid=ZX07&amp;nonce=58442c21&amp;sign=80b886d71449cb33355d017893720666</p>
+<pre><code class="language-javascript">$sign=md5($uid.$token.$nonce);
+// 服务器通过uid从数据库中可读出token
+</code></pre>
+<p> nonce参数在首次请求时，已经被存储到了服务器上的“集合”中，再次发送请求会被识别并拒绝。<br>
+ nonce参数作为数字签名的一部分，是无法篡改的，因为黑客不清楚token，所以不能生成新的sign。</p>
+<p> 这种方式也有很大的问题，那就是存储nonce参数的“集合”会越来越大，验证nonce是否存在“集合”中的耗时会越来越长。我们不能让nonce“集合”无限大，所以需要定期清理该“集合”，但是一旦该“集合”被清理，我们就无法验证被清理了的nonce参数了。也就是说，假设该“集合”平均1天清理一次的话，我们抓取到的该url，虽然当时无法进行重放攻击，但是我们还是可以每隔一天进行一次重放攻击的。而且存储24小时内，所有请求的“nonce”参数，也是一笔不小的开销。</p>
+<h4 id="3-基于timestamp和nonce的方案">3. 基于timestamp和nonce的方案</h4>
+<p> 那我们如果同时使用timestamp和nonce参数呢？<br>
+ nonce的一次性可以解决timestamp参数60s的问题，timestamp可以解决nonce参数“集合”越来越大的问题。<br>
+ 我们在timestamp方案的基础上，加上nonce参数，因为timstamp参数对于超过60s的请求，都认为非法请求，所以我们只需要存储60s的nonce参数的“集合”即可。</p>
+<p> 假如黑客通过抓包得到了我们的请求url： http://koastal.site/index/Info?uid=ZX07&amp;stime=1480862753&amp;nonce=58442c21&amp;sign=80b886d71449cb33355d017893720666</p>
+<p>其中：</p>
+<pre><code class="language-javascript">$sign=md5($uid.$token.$stime.$nonce);
+// 服务器通过uid从数据库中可读出token
+</code></pre>
+<p> 如果在60s内，重放该HTTP请求，因为nonce参数已经在首次请求的时候被记录在服务器的nonce参数“集合”中，所以会被判断为非法请求。超过60s之后，stime参数就会失效，此时因为黑客不清楚token的值，所以无法重新生成签名。</p>
+<p> 综上，我们认为一次正常的HTTP请求发送不会超过60s，在60s之内的重放攻击可以由nonce参数保证，超过60s的重放攻击可以由stime参数保证。</p>
+<p> 因为nonce参数只会在60s之内起作用，所以只需要保存60s之内的nonce参数即可。</p>
+<p> 我们并不一定要每个60s去清理该nonce参数的集合，只需要在新的nonce到来时，判断nonce集合最后一次修改时间，超过60s的话，就清空该集合，存放新的nonce参数集合。其实nonce参数集合可以存放的时间更久一些，但是最少是60s。</p>
+<p> 验证流程：</p>
+<pre><code class="language-java">//判断stime参数是否有效
+if( $now - $stime &gt; 60){
+    die(&quot;请求超时&quot;);
+}
+//判断nonce参数是否在“集合”已存在
+if( in_array($nonce,$nonceArray) ){
+    die(&quot;请求仅一次有效&quot;);
+}
+//验证数字签名   
+if ( $sign != md5($uid.$token.$stime.$nonce) ){
+    die(&quot;数字签名验证失败&quot;);
+}
+//判断是否需要清理nonce集合
+if( $now - $nonceArray-&gt;lastModifyTime &gt; 60 ){
+    $nonceArray = null;
+}
+//记录本次请求的nonce参数
+$nonceArray.push($nonce);
+ 
+ 
+//开始处理合法的请求
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[解决Navicat Premium 15破解失败]]></title>
+        <id>https://chiyongwu.github.io/post/jie-jue-navicat-premium-15-po-jie-shi-bai/</id>
+        <link href="https://chiyongwu.github.io/post/jie-jue-navicat-premium-15-po-jie-shi-bai/">
+        </link>
+        <updated>2021-03-05T14:36:51.000Z</updated>
+        <content type="html"><![CDATA[<p>问题：Navicat Premium 15破解时提示“rsa public key not find”</p>
+<p>解决步骤：</p>
+<ol>
+<li>卸载Premium</li>
+<li>删除：C:\Program Files\PremiumSoft\Navicat Premium 15</li>
+<li>删除：C:\Users\用户名\Documents\Navicat</li>
+<li>通过win+r，输入regedit打开注册表。找到：计算机\HKEY_CURRENT_USER\Software\PremiumSoft将PremiumSoft全部删除即可。</li>
+<li>重新安装Premium，重新破解，问题解决。</li>
+</ol>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[PicGo+Gitee搭建个人图床]]></title>
         <id>https://chiyongwu.github.io/post/picgogitee-da-jian-ge-ren-tu-chuang/</id>
@@ -896,211 +1029,6 @@ upstream dynamic_zuoyu {
 </code></pre>
 <h1 id="三-总结">三、总结</h1>
 <p>以上便是6种负载均衡策略的实现方式，其中除了轮询和轮询权重外，都是Nginx根据不同的算法实现的。在实际运用中，需要根据不同的场景选择性运用，大都是多种策略结合使用以达到实际需求。</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[【Nginx】实现动静分离]]></title>
-        <id>https://chiyongwu.github.io/post/nginx-shi-xian-dong-jing-fen-chi/</id>
-        <link href="https://chiyongwu.github.io/post/nginx-shi-xian-dong-jing-fen-chi/">
-        </link>
-        <updated>2021-01-22T05:13:41.000Z</updated>
-        <content type="html"><![CDATA[<h2 id="一-概述">一、概述</h2>
-<h3 id="11-动态页面与静态页面区别">1.1 动态页面与静态页面区别</h3>
-<ul>
-<li>静态资源： 当用户多次访问这个资源，资源的源代码永远不会改变的资源。</li>
-<li>动态资源：当用户多次访问这个资源，资源的源代码可能会发送改变。</li>
-</ul>
-<h3 id="12-什么是动静分离">1.2 什么是动静分离</h3>
-<ul>
-<li>动静分离是让动态网站里的动态网页根据一定规则把不变的资源和经常变的资源区分开来，动静资源做好了拆分以后，我们就可以根据静态资源的特点将其做缓存操作，这就是网站静态化处理的核心思路</li>
-<li>动静分离简单的概括是：动态文件与静态文件的分离。</li>
-<li>伪静态：网站如果想被搜索引擎搜素到，动态页面静态技术freemarker等模版引擎技术</li>
-</ul>
-<h3 id="13-为什么要用动静分离">1.3 为什么要用动静分离</h3>
-<ul>
-<li>在我们的软件开发中，有些请求是需要后台处理的（如：.jsp,.do等等），有些请求是不需要经过后台处理的（如：css、html、jpg、js等等文件），这些不需要经过后台处理的文件称为静态文件，否则动态文件。因此我们后台处理忽略静态文件。这会有人又说那我后台忽略静态文件不就完了吗。当然这是可以的，但是这样后台的请求次数就明显增多了。在我们对资源的响应速度有要求的时候，我们应该使用这种动静分离的策略去解决。</li>
-<li>动静分离将网站静态资源（HTML，JavaScript，CSS，img等文件）与后台应用分开部署，提高用户访问静态代码的速度，降低对后台应用访问。这里我们将静态资源放到nginx中，动态资源转发到tomcat服务器中。</li>
-<li>因此，动态资源转发到tomcat服务器我们就使用到了前面讲到的反向代理了。</li>
-</ul>
-<h2 id="二-nginx实现动静分离">二、Nginx实现动静分离</h2>
-<h3 id="21-架构分析">2.1 架构分析</h3>
-<figure data-type="image" tabindex="1"><img src="https://gitee.com/WuChiYong/markdown_picture/raw/master/img/20210122125440.jpg" alt="img" loading="lazy"></figure>
-<h3 id="22-配置">2.2 配置</h3>
-<p>动静分离的原理很简单，通过location对请求url进行匹配即可，在**/Users/Hao/Desktop/Test**（任意目录）下创建 <strong>/static/imgs</strong> 配置如下：</p>
-<pre><code class="language-shell">###静态资源访问
-server {
-  listen       80;
-  server_name  static.haoworld.com;
-  location /static/imgs {
-       root /Users/Hao/Desktop/Test;
-       index  index.html index.htm;
-   }
-}
-###动态资源访问
- server {
-  listen       80;
-  server_name  www.haoworld.com;
-    
-  location / {
-    proxy_pass http://127.0.0.1:8080;
-     index  index.html index.htm;
-   }
-}
-</code></pre>
-<h2 id="三-动静分离与前后分离区别">三、动静分离与前后分离区别:</h2>
-<ol>
-<li>动静分离动态资源与静态资源分离，不会部署在同一台服务器上。</li>
-<li>前后分离:网站架构模式，微服务开发基于<code>SOA</code>面向于服务器开发，后台和前端都采用调用接口方式。将一个项目拆分成一个控制<code>Web</code>(前端)和接口(后端),最终使用rpc远程调用技术。视图层和业务逻辑层拆分，中间采用<code>RPC</code>远程调用技术</li>
-</ol>
-<h2 id="四-一些问题">四、一些问题</h2>
-<ol>
-<li>为什么互联网公司项目中，静态资源URL后面会加上一个时间戳？他的作用：控制缓存
-<ul>
-<li>目的：最终的目的是为了控制项目上线的时候，新静态资源与老的浏览器缓存静态资源避免冲突问题。</li>
-<li>解决办法:加上时间戳规范t = 项目上线</li>
-</ul>
-</li>
-<li>304走本地缓存状态码原理:
-<ul>
-<li>默认浏览器图片缓存是7天。</li>
-<li>第一次下载资源的时候，客户端保存修改资源时间</li>
-<li>第二次下载资源的时候，服务端判断客户端上一次修改的时间是否需返回200还是304</li>
-<li>第二次下载资源的时候，服务端判断当前资源文件与客户端上一次修改的时间是否需返回200还是304客户端第二次下载资源最后修改时间 2018/6/28 下午11:07:11</li>
-<li>服务端最后一次修改时间大于客户端最后一次修改的时间200重 新加载资源</li>
-<li>服务器端最后一次修改的时间小于客户端最后修改的时间返回304走本地缓存</li>
-</ul>
-</li>
-</ol>
-<p>生产环境中js css最后一次的修改时间与客户端缓存的最后一次修改的时间可能会产生<br>
-冲突。服务器在2018年5月22日上线，用户在2018年6月01日访问，用户上线新js文件在2018年06月5日最后一次修改时间还是保留上次上线时间。所以一般来说在服务器上线的时候，都会在静态资源上加上时间戳 强制最新的资源</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Win下Nginx安装部署实战]]></title>
-        <id>https://chiyongwu.github.io/post/win-xia-nginx-an-zhuang-bu-shu-shi-zhan/</id>
-        <link href="https://chiyongwu.github.io/post/win-xia-nginx-an-zhuang-bu-shu-shi-zhan/">
-        </link>
-        <updated>2021-01-21T03:30:27.000Z</updated>
-        <content type="html"><![CDATA[<h3 id="安装">安装</h3>
-<p>http://nginx.org/</p>
-<h3 id="启动">启动</h3>
-<p>启动方式很多，可以双击nginx解压目录下的nginx.exe启动nginx，出现一闪而过的窗口，是正常的，表示nginx服务器已经启动；</p>
-<p>也可以在cmd命令窗口输入命令 nginx，使用命令到达nginx的加压缩后的目录，然后输入nginx命令，如下所示。</p>
-<figure data-type="image" tabindex="1"><img src="https://gitee.com/WuChiYong/markdown_picture/raw/master/img/20210121111022" alt="图片" loading="lazy"></figure>
-<p>在浏览器地址框输入地址，</p>
-<p>http://localhost:80</p>
-<p>或者http://127.0.0.1:80</p>
-<p>或者http://localhost</p>
-<p>或者http://127.0.0.1</p>
-<p>然后浏览器出现如下信息，说明nginx启动成功。</p>
-<figure data-type="image" tabindex="2"><img src="https://gitee.com/WuChiYong/markdown_picture/raw/master/img/20210121111321" alt="图片" loading="lazy"></figure>
-<h3 id="配置">配置</h3>
-<ol>
-<li>
-<p>修改端口号</p>
-<p>conf目录下的nginx.conf，默认配置的nginx监听的端口为80，如果80端口被占用可以修改为未被占用的端口即可。</p>
-</li>
-</ol>
-<figure data-type="image" tabindex="3"><img src="https://gitee.com/WuChiYong/markdown_picture/raw/master/img/20210121111953" alt="图片" loading="lazy"></figure>
-<p><strong>注意：</strong></p>
-<ol>
-<li>
-<p>检查80端口是否被占用的命令是：netstat -ano | findstr “80”</p>
-<p>当我们修改了nginx的配置文件nginx.conf 时，不需要关闭nginx后重新启动nginx，只需要执行命令 nginx -s reload 即可让改动生效。</p>
-</li>
-<li>
-<p>配置静态资源</p>
-<p>在解压缩的nginx目录下新建static目录，在该目录下拷贝粘贴一张图片资源1.jpg。</p>
-</li>
-</ol>
-<figure data-type="image" tabindex="4"><img src="https://gitee.com/WuChiYong/markdown_picture/raw/master/img/20210121112653.png" alt="image-20210121112653634" loading="lazy"></figure>
-<p>​		然后执行命令 nginx -s reload 即可实现修改生效，然后在浏览器地址栏输入访问地址：http://localhost/1.jpg</p>
-<h3 id="停止">停止</h3>
-<p>​		如果使用cmd命令窗口启动nginx，关闭cmd窗口是不能结束nginx进程的，可使用如下三种方法关闭nginx。</p>
-<ol>
-<li>nginx -s stop(快速停止nginx)  或nginx -s quit(完整有序的停止nginx)</li>
-<li>taskkill /f /t /im nginx.exe</li>
-<li>任务管理器中结束nginx任务</li>
-</ol>
-<p>总结：以上是windows环境下常用的下载、安装、启动、配置、停止等操作步骤。</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[yarn使用教程]]></title>
-        <id>https://chiyongwu.github.io/post/yarn-shi-yong-jiao-cheng/</id>
-        <link href="https://chiyongwu.github.io/post/yarn-shi-yong-jiao-cheng/">
-        </link>
-        <updated>2021-01-17T06:09:19.000Z</updated>
-        <content type="html"><![CDATA[<h3 id="一-yarn的简介">一、yarn的简介：</h3>
-<p>Yarn是facebook发布的一款取代npm的包管理工具。</p>
-<h3 id="二-yarn的特点">二、yarn的特点：</h3>
-<p>1.速度超快。<br>
-Yarn 缓存了每个下载过的包，所以再次使用时无需重复下载。 同时利用并行下载以最大化资源利用率，因此安装速度更快。<br>
-2.超级安全。<br>
-在执行代码之前，Yarn 会通过算法校验每个安装包的完整性。<br>
-3.超级可靠。<br>
-使用详细、简洁的锁文件格式和明确的安装算法，Yarn 能够保证在不同系统上无差异的工作。</p>
-<h3 id="三-yarn的安装">三、yarn的安装:</h3>
-<h5 id="下载nodejs使用npm安装">下载node.js，使用npm安装</h5>
-<p>npm install -g yarn</p>
-<h5 id="查看版本">查看版本：</h5>
-<p>yarn --version</p>
-<h5 id="yarn-淘宝源安装">Yarn 淘宝源安装</h5>
-<p>yarn config set registry <a href="https://registry.npm.taobao.org/">https://registry.npm.taobao.org</a> -g<br>
-yarn config set sass_binary_site http://cdn.npm.taobao.org/dist/node-sass -g</p>
-<h3 id="四-yarn的常用命令">四、yarn的常用命令：</h3>
-<p>安装yarn<br>
-npm install -g yarn<br>
-安装成功后，查看版本号：<br>
-yarn --version<br>
-创建文件夹 yarn<br>
-md yarn<br>
-进入yarn文件夹<br>
-cd yarn<br>
-初始化项目<br>
-yarn init // 同npm init，执行输入信息后，会生成package.json文件<br>
-yarn的配置项：<br>
-yarn config list // 显示所有配置项<br>
-yarn config get //显示某配置项<br>
-yarn config delete //删除某配置项<br>
-yarn config set [-g|--global] //设置配置项<br>
-安装包：<br>
-yarn install <a href="https://xn--package-4g6m3574a.xn--json-8h0gt02f9uhek3g/">//安装package.json里所有包</a>，并将包及它的所有依赖项保存进yarn.lock<br>
-yarn install --flat //安装一个包的单一版本<br>
-yarn install --force //强制重新下载所有包<br>
-yarn install --production //只安装dependencies里的包<br>
-yarn install --no-lockfile <a href="https://xn--yarn-fb5fm02ao2zmbx542a609b.lock/">//不读取或生成yarn.lock</a><br>
-yarn install --pure-lockfile <a href="https://xn--yarn-fb5f137h141a.lock/">//不生成yarn.lock</a><br>
-添加包（会更新package.json和yarn.lock）：</p>
-<p>yarn add [package] // 在当前的项目中添加一个依赖包，会自动更新到package.json和yarn.lock文件中<br>
-yarn add [package]@[version] // 安装指定版本，这里指的是主要版本，如果需要精确到小版本，使用-E参数<br>
-yarn add [package]@[tag] // 安装某个tag（比如beta,next或者latest）<br>
-//不指定依赖类型默认安装到dependencies里，你也可以指定依赖类型：</p>
-<p>yarn add --dev/-D // 加到 devDependencies<br>
-yarn add --peer/-P // 加到 peerDependencies<br>
-yarn add --optional/-O // 加到 optionalDependencies<br>
-//默认安装包的主要版本里的最新版本，下面两个命令可以指定版本：</p>
-<p>yarn add --exact/-E // 安装包的精确版本。例如yarn add foo@1.2.3会接受1.9.1版，但是yarn add foo@1.2.3 --exact只会接受1.2.3版<br>
-yarn add --tilde/-T // 安装包的次要版本里的最新版。例如yarn add foo@1.2.3 --tilde会接受1.2.9，但不接受1.3.0<br>
-发布包</p>
-<p>yarn publish<br>
-移除一个包<br>
-yarn remove ：移除一个包，会自动更新package.json和yarn.lock<br>
-更新一个依赖<br>
-yarn upgrade 用于更新包到基于规范范围的最新版本<br>
-运行脚本<br>
-yarn run 用来执行在 package.json 中 scripts 属性下定义的脚本<br>
-显示某个包的信息<br>
-yarn info 可以用来查看某个模块的最新版本信息<br>
-缓存<br>
-yarn cache<br>
-yarn cache list # 列出已缓存的每个包<br>
-yarn cache dir # 返回 全局缓存位置<br>
-yarn cache clean # 清除缓存</p>
-<h3 id="五-npm-与-yarn命令比较">五、npm 与 yarn命令比较:</h3>
-<p>比如说你的项目模块依赖是图中描述的，@1.2.1代表这个模块的版本。在你安装A的时候需要安装依赖C和D，很多依赖不会指定版本号，默认会安装最新的版本，这样就会出现问题：比如今天安装模块的时候C和D是某一个版本，而当以后C、D更新的时候，再次安装模块就会安装C和D的最新版本，如果新的版本无法兼容你的项目，你的程序可能就会出BUG，甚至无法运行。这就是npm的弊端，而yarn为了解决这个问题推出了yarn.lock的机制，这是作者项目中的yarn.lock文件。</p>
-<p>大家会看到，这个文件已经把依赖模块的版本号全部锁定，当你执行yarn install的时候，yarn会读取这个文件获得依赖的版本号，然后依照这个版本号去安装对应的依赖模块，这样依赖就会被锁定，以后再也不用担心版本号的问题了。其他人或者其他环境下使用的时候，把这个yarn.lock拷贝到相应的环境项目下再安装即可。<br>
-注意：这个文件不要手动修改它，当你使用一些操作如yarn add时，yarn会自动更新yarn.lock。</p>
 ]]></content>
     </entry>
 </feed>
