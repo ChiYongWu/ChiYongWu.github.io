@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://chiyongwu.github.io</id>
     <title>SwordPal&apos;s blog</title>
-    <updated>2021-05-15T23:15:06.285Z</updated>
+    <updated>2021-05-15T23:16:47.928Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://chiyongwu.github.io"/>
     <link rel="self" href="https://chiyongwu.github.io/atom.xml"/>
@@ -10,6 +10,122 @@
     <logo>https://chiyongwu.github.io/images/avatar.png</logo>
     <icon>https://chiyongwu.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, SwordPal&apos;s blog</rights>
+    <entry>
+        <title type="html"><![CDATA[python实现字符串反转的几种方法]]></title>
+        <id>https://chiyongwu.github.io/post/python-shi-xian-zi-fu-chuan-fan-zhuan-de-ji-chong-fang-fa/</id>
+        <link href="https://chiyongwu.github.io/post/python-shi-xian-zi-fu-chuan-fan-zhuan-de-ji-chong-fang-fa/">
+        </link>
+        <updated>2021-05-15T23:15:45.000Z</updated>
+        <summary type="html"><![CDATA[<h4 id="python实现字符串反转的几种方法">Python实现字符串反转的几种方法</h4>
+<ul>
+<li>第一种：使用字符串切片</li>
+</ul>
+<pre><code class="language-python">result = s[::-1]
+</code></pre>
+<ul>
+<li>第二种：使用列表的reverse方法</li>
+</ul>
+<pre><code class="language-python">l = list(s)
+l.reverse()
+result = &quot;&quot;.join(l)
+</code></pre>
+<p>当然下面也行</p>
+<pre><code class="language-python">l = list(s)
+result = &quot;&quot;.join(l[::-1])
+</code></pre>
+<ul>
+<li>第三种：使用reduce</li>
+</ul>
+<pre><code class="language-python">result = reduce(lambda x,y:y+x,s)
+</code></pre>
+<ul>
+<li>第四种：使用递归函数</li>
+</ul>
+<pre><code class="language-python">def func(s):
+    if len(s) &lt;1:
+        return s
+    return func(s[1:])+s[0]
+result = func(s)
+</code></pre>
+<ul>
+<li>第五种：使用栈</li>
+</ul>
+<pre><code class="language-python">def func(s):
+    l = list(s) #模拟全部入栈
+    result = &quot;&quot;
+    while len(l)&gt;0:
+        result += l.pop() #模拟出栈
+    return result
+result = func(s)
+</code></pre>
+<ul>
+<li>第六种：for循环</li>
+</ul>
+<pre><code class="language-python">def func(s):
+    result = &quot;&quot;
+    max_index = len(s)-1
+    for index,value in enumerate(s):
+        result += s[max_index-index]
+    return result
+result = func(s)
+</code></pre>
+]]></summary>
+        <content type="html"><![CDATA[<h4 id="python实现字符串反转的几种方法">Python实现字符串反转的几种方法</h4>
+<ul>
+<li>第一种：使用字符串切片</li>
+</ul>
+<pre><code class="language-python">result = s[::-1]
+</code></pre>
+<ul>
+<li>第二种：使用列表的reverse方法</li>
+</ul>
+<pre><code class="language-python">l = list(s)
+l.reverse()
+result = &quot;&quot;.join(l)
+</code></pre>
+<p>当然下面也行</p>
+<pre><code class="language-python">l = list(s)
+result = &quot;&quot;.join(l[::-1])
+</code></pre>
+<ul>
+<li>第三种：使用reduce</li>
+</ul>
+<pre><code class="language-python">result = reduce(lambda x,y:y+x,s)
+</code></pre>
+<ul>
+<li>第四种：使用递归函数</li>
+</ul>
+<pre><code class="language-python">def func(s):
+    if len(s) &lt;1:
+        return s
+    return func(s[1:])+s[0]
+result = func(s)
+</code></pre>
+<ul>
+<li>第五种：使用栈</li>
+</ul>
+<pre><code class="language-python">def func(s):
+    l = list(s) #模拟全部入栈
+    result = &quot;&quot;
+    while len(l)&gt;0:
+        result += l.pop() #模拟出栈
+    return result
+result = func(s)
+</code></pre>
+<ul>
+<li>第六种：for循环</li>
+</ul>
+<pre><code class="language-python">def func(s):
+    result = &quot;&quot;
+    max_index = len(s)-1
+    for index,value in enumerate(s):
+        result += s[max_index-index]
+    return result
+result = func(s)
+</code></pre>
+<!-- more -->
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[常用的linux命令]]></title>
         <id>https://chiyongwu.github.io/post/chang-yong-de-linux-ming-ling/</id>
@@ -747,90 +863,6 @@ OK
 </code></pre>
 <p>实战场景：</p>
 <p>1.排行榜：有序集合经典使用场景。例如小说视频等网站需要对用户上传的小说视频做排行榜，榜单可以按照用户关注数，更新时间，字数等打分，做排行。</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Babel]]></title>
-        <id>https://chiyongwu.github.io/post/babel/</id>
-        <link href="https://chiyongwu.github.io/post/babel/">
-        </link>
-        <updated>2021-01-24T03:55:51.000Z</updated>
-        <content type="html"><![CDATA[<h2 id="1-简介">1. 简介</h2>
-<p>ES6的某些高级语法在浏览器环境甚至是Node.js环境中无法执行。</p>
-<p>Babel是一个广泛使用的转码器，可以将ES6代码转为ES5代码，从而在现有环境执行执行。</p>
-<p>这意味着，你可以现在就用 ES6 编写程序，而不用担心现有环境是否支持。</p>
-<h2 id="2-安装">2. 安装</h2>
-<p>安装命令行转码工具</p>
-<blockquote>
-<p>Babel提供babel-cli工具，用于命令行转码。它的安装命令如下：</p>
-</blockquote>
-<pre><code class="language-javascript">npm install -g babel-cli
-#查看是否安装成功
-babel --version
-</code></pre>
-<h2 id="3-babel的使用">3. Babel的使用</h2>
-<p>1、创建babel文件夹</p>
-<p>2、初始化项目</p>
-<pre><code>npm init -y
-</code></pre>
-<p>3、创建文件 src/example.js ，下面是一段ES6代码：</p>
-<pre><code class="language-javascript">// 转码前
-// 定义数据
-let input = [1, 2, 3]
-// 将数组的每个元素 +1
-input = input.map(item =&gt; item + 1)
-console.log(input)
-</code></pre>
-<p>4、配置 .babelrc</p>
-<blockquote>
-<p>Babel的配置文件是.babelrc，存放在项目的根目录下，该文件用来设置转码规则和插件，基本格式如下。</p>
-</blockquote>
-<pre><code>{
-    &quot;presets&quot;: [],
-    &quot;plugins&quot;: []
-}
-</code></pre>
-<p>presets字段设定转码规则，将es2015规则加入 .babelrc：</p>
-<pre><code>{
-    &quot;presets&quot;: [&quot;es2015&quot;],
-    &quot;plugins&quot;: []
-}
-</code></pre>
-<p>5、安装转码器，在项目中安装</p>
-<pre><code>npm install --save-dev babel-preset-es2015
-</code></pre>
-<p>6、转码</p>
-<pre><code class="language-javascript"># npm install --save-dev csv-loader xml-loader
-# 转码结果写入一个文件
-mkdir dist1
-# --out-file 或 -o 参数指定输出文件
-babel src/example.js --out-file dist1/compiled.js
-# 或者
-babel src/example.js -o dist1/compiled.js
-# 整个目录转码
-mkdir dist2
-# --out-dir 或 -d 参数指定输出目录
-babel src --out-dir dist2
-# 或者
-babel src -d dist2
-</code></pre>
-<h2 id="4-自定义脚本">4. 自定义脚本</h2>
-<p>1、改写package.json</p>
-<pre><code>{
-    // ...
-    &quot;scripts&quot;: {
-        // ...
-        &quot;build&quot;:  &quot;babel src\\example.js -o dist\\compiled.js&quot;
-    },
-}
-</code></pre>
-<p>2、转码的时候，执行下面的命令</p>
-<pre><code>mkdir dist
-npm run build
-</code></pre>
-<p>参考资料：<br>
-https://www.cnblogs.com/houjiao/p/12108060.html<br>
-https://www.jiangruitao.com/babel/quick-start/</p>
 ]]></content>
     </entry>
 </feed>
